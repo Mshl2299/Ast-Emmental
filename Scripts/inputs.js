@@ -6,56 +6,58 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
     delete keys[e.key];
 });
 
+let speedMultiplier = 1.2;
+
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
     if (keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) { //sBHeight is scoreboard height
-        ship.y -= ship.speed;
+        ship.y -= ship.speed * speedMultiplier;
         ship.direction = 1;
         ship.frameX = 0;
         ship.frameY = 0;
     }
     if (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0) {
-        ship.x -= ship.speed;
+        ship.x -= ship.speed * speedMultiplier;
         ship.direction = 4;
         ship.frameX = 3;
         ship.frameY = 0;
     }
     if (keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) {
-        ship.y += ship.speed;
+        ship.y += ship.speed * speedMultiplier;
         ship.direction = 3;
         ship.frameX = 2;
         ship.frameY = 0;
     }
     if (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width) {
-        ship.x += ship.speed;
+        ship.x += ship.speed * speedMultiplier;
         ship.direction = 2;
         ship.frameX = 1;
         ship.frameY = 0;
     }
     //diagonals
     if ((keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) && (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0)) {
-        ship.y -= ship.speed / 16;
-        ship.x -= ship.speed / 16;
+        ship.y -= ship.speed / 16 * speedMultiplier;
+        ship.x -= ship.speed / 16 * speedMultiplier;
         ship.direction = 8;
         ship.frameX = 3;
         ship.frameY = 1;
     }
     if ((keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) && (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width)) {
-        ship.y -= ship.speed / 16;
-        ship.x += ship.speed / 16;
+        ship.y -= ship.speed / 16 * speedMultiplier;
+        ship.x += ship.speed / 16 * speedMultiplier;
         ship.direction = 5;
         ship.frameX = 0;
         ship.frameY = 1;
     }
     if ((keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) && (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0)) {
-        ship.y += ship.speed / 16;
-        ship.x -= ship.speed / 16;
+        ship.y += ship.speed / 16 * speedMultiplier;
+        ship.x -= ship.speed / 16 * speedMultiplier;
         ship.direction = 7;
         ship.frameX = 2;
         ship.frameY = 1;
     }
     if ((keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) && (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width)) {
-        ship.y += ship.speed / 16;
-        ship.x += ship.speed / 16;
+        ship.y += ship.speed / 16 * speedMultiplier;
+        ship.x += ship.speed / 16 * speedMultiplier;
         ship.direction = 6;
         ship.frameX = 1;
         ship.frameY = 1;
