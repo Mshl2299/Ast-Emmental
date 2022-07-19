@@ -13,6 +13,7 @@ I will try my best to fix these issues, although it may take a while.
 *Note: The asteroid hitboxes are squares, so watch out for the corners!*
 
 Feedback and suggestions are very welcome! Please head over to the **Discussions** tab if you have something you want to share.
+If I have time, I will try to update the game.
 
 ## How to Play :video_game:
 Head over to this link: \
@@ -27,4 +28,4 @@ If something isn't working, feel free to send a message in the Discussion tab.
 ## Connect with Me: :speech_balloon:
 [<img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" width="100" height="100">](https://instagram.com/mshl_1209_)\
 Discord: Mshl#3896\
-(If you are requesting to follow/friend me, please send me a message request saying that you came from "Ast-Emmental")
+(If you are requesting to follow/friend me, please send me a message request saying that you came from "Ast-Emmental" or from my GitHub)
