@@ -4,7 +4,7 @@ function givePlayerImmunity(duration) {
 }
 
 function cycleExplosionFrame() {
-    if (ship.exploded) {
+    if (ship.exploded && !firstDeath) {
         setInterval(function () {
             if (ship.explosionFrame < 10) {
                 ship.explosionFrame ++;
@@ -12,7 +12,11 @@ function cycleExplosionFrame() {
             else {
                 ship.explosionFrame = 1;
             }
-        }, 100)
+        }, 100);
+        ship.exploded = false;
+        firstDeath = true;
+    }
+    else if (ship.exploded && firstDeath) {
         ship.exploded = false;
     }
 }
@@ -37,7 +41,7 @@ function animate() {
     if (gameOverT && skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
         explode1.src = "BlueExplosion/blue"+ JSON.stringify(ship.explosionFrame) + ".png";
         cycleExplosionFrame();
-        drawShip(explode1, 0, 0, 256, 256, ship.x, ship.y, ship.width+10, ship.height+10);
+        drawShip(explode1, 0, 0, 256, 256, ship.x, ship.y, ship.width + 10, ship.height + 10);
     }
     else {
         shipSprite.src = currentSkin;
