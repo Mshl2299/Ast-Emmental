@@ -31,6 +31,7 @@ let backgroundMusicOn = false;
 let menuMusicOn = false;
 let menuMusicPaused = false;
 let slowDown = false;
+let userInteracted = false;
 let keys = [];
 let currentSpeed = 1.5;
 
@@ -149,6 +150,10 @@ menuMusic.addEventListener('pause', function() {
     menuMusicPaused = true;
 })
 
+document.body.addEventListener('click', function () {
+    userInteracted = true;
+})
+
 function playSoundFX(source) {
     soundFX.src = source;
     soundFX.play();
@@ -178,7 +183,7 @@ function playMenuMusic() {
     if (!menuMusic.src) {
         menuMusic.src = "Audio/BrandonMorrisLSL.wav";
     }
-    if (!menuMusicOn || menuMusicPaused) {
+    if (userInteracted && (!menuMusicOn || menuMusicPaused)) {
         menuMusic.play();
     }
 }
