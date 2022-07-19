@@ -10,6 +10,8 @@ Issues and bugs are likely abundant within this project, as it is my first proje
 Please go to the **Issues** tab if you experience any major bugs, and press "New Issue" if you do not see your bug already there.
 I will try my best to fix these issues, although it may take a while.
 
+*Note: The asteroid hitboxes are squares, so watch out for the corners!*
+
 Feedback and suggestions are very welcome! Please head over to the **Discussions** tab if you have something you want to share.
 
 ## How to Play :video_game:
