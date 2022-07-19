@@ -26,13 +26,14 @@ Congratulations! The files should now be downloaded.
 
 ### To launch the game:
 - Open the "Ast-Emmental-main" folder 
-- Open "index.html"
+- Open "index.html" (it should launch in your default browser)
 
 Now the game should be running. Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!
+If something isn't working, feel free to send a message in the Discussion tab.
 
 ### Thanks for checking my game out! :star:
 
-(P.S. "Emmental" is a type of cheese :)
+(Fun fact: "Emmental" is a type of cheese... Yum!)
 
 ## Connect with Me: :speech_balloon:
 [<img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" width="100" height="100">](https://instagram.com/mshl_1209_)\
