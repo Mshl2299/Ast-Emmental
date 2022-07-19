@@ -34,7 +34,7 @@ function animate() {
         bkgMusic.pause();
     }
 
-    if (gameOverT) { //required for UI to work when opening skin menu
+    if (gameOverT && skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
         explode1.src = "BlueExplosion/blue"+ JSON.stringify(ship.explosionFrame) + ".png";
         cycleExplosionFrame();
         drawShip(explode1, 0, 0, 256, 256, ship.x, ship.y, ship.width+10, ship.height+10);
