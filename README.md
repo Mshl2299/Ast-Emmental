@@ -1,15 +1,32 @@
-# Ast-Emmental
+# :rocket: Ast-Emmental :cheese:
 ![AstEmmental Title](AstEmmentalTitle.png)
 ---
 Ast-Emmental is an arcade-style game inspired by classics like Asteroids and Snake. 
 This game, coded mostly from scratch in HTML/CSS/JS was made as part of my Capstone Project.
 
-## Issues, bugs, feedback, suggestions
+## Issues, bugs, feedback, suggestions :ant:
 Issues and bugs are likely abundant within this project, as it is the first project I have ever created.
-Please go to the Issues tab and press "New issue" if any bugs are present.
+Please go to the Issues tab if any bugs are present, and press "New Issue" if you do not see your bug already there.
 
-## Installation
-(I don't know this part yet- If I ever figure it out I will update this!)
+## How to Play :video_game:
+To play my game, you will first need to download the files. 
 
-## Connect with Me:
+### Steps:
+1. Press the green "**Code**" button around the top right
+2. Press "**Download ZIP**" and download it to your computer 
+3. **Open the .zip folder** on your computer
+4. Press "**Extract all**" near the top (*If it's not there, right click on the grey area in the .zip folder then press "Extract All..."*)
+5. Press **Extract** to extract the files to a new folder on your computer 
+
+Congratulations! The files should now be downloaded.
+
+### To launch the game:
+- Open the "Ast-Emmental-main" folder 
+- Open "index.html"
+
+Now the game should be running. Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!
+
+### Thanks for checking my game out! :star:
+
+## Connect with Me: :speech_balloon:
 [<img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" width="100" height="100">](https://instagram.com/mshl_1209_)
