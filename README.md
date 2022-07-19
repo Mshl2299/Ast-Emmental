@@ -13,22 +13,9 @@ I will try my best to fix these issues, although it may take a while.
 Feedback and suggestions are very welcome! Please head over to the **Discussions** tab if you have something you want to share.
 
 ## How to Play :video_game:
-To play "Ast-Emmental", you will first need to download the files. 
-
-### Steps:
-1. Press the green "**Code**" button around the top right
-2. Press "**Download ZIP**" and download it to your computer 
-3. **Open the .zip folder** on your computer
-4. Press "**Extract all**" near the top (*If it's not there, right click on the grey area in the .zip folder then press "Extract All..."*)
-5. Press **Extract** to extract the files to a new folder on your computer 
-
-Congratulations! The files should now be downloaded.
-
-### To launch the game:
-- Open the "Ast-Emmental-main" folder 
-- Open "index.html" (it should launch in your default browser)
-
-Now the game should be running. Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!
+Head over to this link: \
+https://mshl2299.github.io/Ast-Emmental/ \
+Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!\
 If something isn't working, feel free to send a message in the Discussion tab.
 
 ### Thanks for checking my game out! :star:
