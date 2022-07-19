@@ -32,6 +32,7 @@ let menuMusicOn = false;
 let menuMusicPaused = false;
 let slowDown = false;
 let userInteracted = false;
+let firstDeath = false;
 let keys = [];
 let currentSpeed = 1.5;
 
