@@ -13,7 +13,7 @@ I will try my best to fix these issues, although it may take a while.
 Feedback and suggestions are very welcome! Please head over to the **Discussions** tab if you have something you want to share.
 
 ## How to Play :video_game:
-To play my game, you will first need to download the files. 
+To play "Ast-Emmental", you will first need to download the files. 
 
 ### Steps:
 1. Press the green "**Code**" button around the top right
@@ -31,6 +31,8 @@ Congratulations! The files should now be downloaded.
 Now the game should be running. Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!
 
 ### Thanks for checking my game out! :star:
+
+(P.S. "Emmental" is a type of cheese :)
 
 ## Connect with Me: :speech_balloon:
 [<img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" width="100" height="100">](https://instagram.com/mshl_1209_)\
