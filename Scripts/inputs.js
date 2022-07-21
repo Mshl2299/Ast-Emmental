@@ -69,12 +69,14 @@ function toggleAudio() {
         bkgMusic.volume = 0;
         soundFX.volume = 0;
         popSound.volume = 0;
+        menuMusic.volume= 0;
         muteIcon.src = "Audio/audioMuted.png";
     }   
     else if (bkgMusic.volume == 0) {
-        bkgMusic.volume = 0.2;
+        bkgMusic.volume = 0.3;
         soundFX.volume = 1;
         popSound.volume = 1;
+        menuMusic.volume= 0.3;
         muteIcon.src = "Audio/audioUnmuted.png";
         playSoundFX("Audio/click.wav");
     }   
