@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ast-Emmental - A game by Marcus Lim</title>
+    <meta name="description"
+        content="Welcome to Ast-Emmental Mining Co. Collect precious space minerals, avoid dangerous Asteroids, and seek the greatest Score!">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="Sprites/shipAlpha.png">
+</head>
+
+<body style="background-color: #33758a;">
+    <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
+    <p>A game developed in html by Marcus Lim</p>
+
+    <div class="canvas-container">
+        <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
+        <!--Buttons on left side-->
+        <div class="buttonsFlex1">
+            <button class="howToButton">HOW TO</button>
+            <button class="musicButton">MUSIC</button>
+        </div>
+        <!--Sound Adjustment-->
+        <div class="audioMenu">
+            <div class="flex">
+                <div class="flex"><img src="Audio/audioUnmuted.png" class="sFXButton" onclick="toggleSFX()">
+                </div>
+                <div class="flex"><img src="Audio/musicUnmuted.jpg" class="musicToggleButton" onclick="toggleMusic()">
+                </div>
+            </div>
+            </br>
+            <div class="flex">
+                <div class="flex container">
+                    <input type="range" min="0" max="100" value="100" class="slider" id="sFXRange">
+                </div>
+                <div class="flex container">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="musicRange">
+                </div>
+            </div>
+        </div>
+        <!--Buttons on right side-->
+        <div class="buttonsFlex2">
+            <button class="skinsButton">SKINS</button>
+            <button class="audioButton"><img
+                    style="height: 40px; width: 40px; background-color:#cf8619; vertical-align: middle;"
+                    src="Audio/musicUnmuted.jpg"></button>
+            <button class="closeButton">X</button>
+        </div>
+        <div>
+            <button class="rightButton">◀</button>
+            <div class="scoreDisplay">
+                <h1 style="text-align: center;"><u>HIGHSCORES</u></h1>
+                </br>
+                <ol style="padding-left: 24px;">
+                    <li class="scoreVal score0">000</li>
+                    <li class="scoreVal score1">000</li>
+                    <li class="scoreVal score2">000</li>
+                    <li class="scoreVal score3">000</li>
+                    <li class="scoreVal score4">000</li>
+                </ol>
+            </div>
+        </div>
+        <div>
+            <button class="leftButton">▶</button>
+        </div>
+        <div class="endGameText">
+            <p>End the current game first!</p>
+        </div>
+    </div>
+
+    <!--put first so that they will go behind any of the other menus-->
+    <button class="startButton">START</button>
+    <h1 class="gameOverScreen">
+        GAME OVER
+    </h1>
+
+    <!--How To Play-->
+    <div class="howToScreen">
+        <h2><u style="background-color: #cf8619;">HOW TO PLAY</u></h2>
+        <div class="flex Keys">
+            <div class="flex"><img src="WASDkeys.jpg" style="border-radius: 12px; padding: 5px; margin: 2px;"></div>
+            <p class="orText">OR</p>
+            <div class="flex"><img src="ArrowKeys.jpg" style="border-radius: 12px; padding: 5px; margin: 2px;"></div>
+        </div>
+        <div style="background-color: #cf8619;">
+            <ul style="margin-left: 50px;">
+                <li>Welcome! You are from <a>Ast-Emmental Mining Company™</a>, mining asteroids in space!</li>
+                <li>Collect Grey Asteroids; avoid Red ones</li>
+                <li>Collect the <a style="color: rgb(96, 48, 14);">Heavy</a> Yellow Asteroids too!</li>
+                <li>Customize <a>music</a> and <a>skins</a> at the top</li>
+                <li>Press the "X" button to <a style="color:darkred;"><u>RESET</u></a></li>
+                <li>Try to get a high <a>score</a>! Good luck!</li>
+                <li>GitHub page <a href="https://github.com/Mshl2299/Ast-Emmental">Here</a> || Thanks for playing!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--Customization-->
+    <div class="skinsMenuScreen">
+        <h2><u style="background-color: #cf8619;">SKINS</u></h2>
+        <div class="flex">
+            <div class="flex"><img src="Sprites/shipAlpha.png" class="skin"
+                    onclick="changeShipSkin('Sprites/alphaSS1.png', 1)"></div>
+            <div class="flex"><img src="Sprites/shipBeta.png" class="skin"
+                    onclick="changeShipSkin('Sprites/betaSS1.png', 2)"></div>
+            <div class="flex"><img src="Sprites/shipSnake.png" class="skin"
+                    onclick="changeShipSkin('Sprites/snakeSS1.png', 3)"></div>
+            <div class="flex"><img src="Sprites/Asteroid.png" class="skin"
+                    onclick="changeShipSkin('Sprites/asteroidSS1.png', 4)"></div>
+            <div class="flex"><img src="Sprites/shipAlphaInverted.png" class="skin"
+                    onclick="changeShipSkin('Sprites/alphaInvertedSS1.png', 5)"></div>
+            <div class="flex"><img src="Sprites/shipUFO.png" class="skin"
+                    onclick="changeShipSkin('Sprites/ufoSS1.png', 6)"></div>
+        </div>
+        <br />
+        <div class="flex">
+            <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(src)"></div>
+            <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="Bkg" onclick="changeBkgSkin(src)"></div>
+            <div class="flex"><img src="Backgrounds/JamesWebb.jpg" class="Bkg" onclick="changeBkgSkin(src)"></div>
+        </div>
+    </div>
+
+    <!--Music Selection-->
+    <div class="musicScreen">
+        <h2><u style="background-color: #cf8619;">MUSIC</u></h2>
+        <p style="background-color: #cf8619; padding: 2px;">*Music plays upon game start*</p>
+        <div class="flex">
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/DelishusFunkLMMS.ogg')">"Funk" (Delishus)</h6>
+            </div>
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/CenturionOfWarStartOfRise.ogg')">"Start of Rise" (Centurion of war)
+                </h6>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/cynicmusicET86.mp3')">"Enchanted Tiki 86" (cynicmusic)</h6>
+            </div>
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/JothCyberSonata.mp3')">"Cyberpunk Moonlight Sonata" (Joth)</h6>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/fast.ogg')">"Fast Battle" (Ville Nousiainen/ Xythe/ mutkanto)</h6>
+            </div>
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/ZNFtuwc.mp3')">"Fight Them Until We Can't" (ZanderNoriega) [Heavy
+                    Guitar]</h6>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/MPOrbitalColossus.mp3')">"Orbital Colossus" (Matthew Pablo)</h6>
+            </div>
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/JothBossa.mp3')">"Bossa Nova" (Joth)</h6>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/cynicmusicAwake.mp3')">"Awake!" (cynicmusic)</h6>
+            </div>
+            <div class="flex">
+                <h6 onclick="changeBkgMusic('Audio/pbondoerJourney.mp3')">"A Journey Awaits!" (pbondoer)</h6>
+            </div>
+        </div>
+    </div>
+
+    <script src="Scripts/setup.js"></script>
+    <script src="Scripts/audio.js"></script>
+    <script src="Scripts/inputs.js"></script>
+    <script src="Scripts/detections.js"></script>
+    <script src="Scripts/asteroids.js"></script>
+    <script src="Scripts/functions.js"></script>
+</body>
+
+</html>
