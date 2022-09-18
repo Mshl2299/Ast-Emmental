@@ -33,7 +33,7 @@ function detectAllCollisions() {
             console.log("grey asteroid regenerated");
         }
         givePlayerImmunity(500);
-        score += 10;
+        score += 1;
         playPopSound();
         detectLevelUp();
     }
