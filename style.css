@@ -1,0 +1,378 @@
+/* general html elements */
+* {
+    font-family: monospace;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+    outline: none;
+    user-select: none;
+}
+
+p {
+    font-size: 18px;
+}
+
+h2 {
+    background-color: #cf8619;
+}
+
+h6 {
+    text-align: left;
+    padding: 5px;
+    border: 3px solid black;
+    border-radius: 12px;
+    margin: 5px;
+    background-color: #cf8619;
+}
+
+a {
+    background: #cf8619;
+    color: darkblue;
+}
+
+button {
+    background-color: #cf8619;
+    color: darkblue;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 3px;
+}
+
+li {
+    background-color: #cf8619;
+    font-size: 24px;
+    text-align: left;
+    font-weight: bold;
+    padding-right: 5px;
+
+}
+
+/* classes & id elements */
+.title {
+    margin-top: 15px;
+    height: 10%;
+}
+
+#canvas {
+    border: 5px solid rgb(0, 1, 86);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 700px;
+    width: 1000px;
+    background: rgb(55, 55, 55);
+    overflow: hidden;
+}
+
+.canvas-container {
+    position: absolute;
+    width: 1000px;
+    height: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.Bkg {
+    width: 175px;
+    height: 120px;
+    border: 2px solid black;
+    border-radius: 12px;
+    background-color: #cf8619;
+    padding: 5px;
+    margin: 2px;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    background-color: #cf8619;
+    border: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.greyed {
+    background: grey;
+}
+
+/* buttons & respective screens */
+.buttonsFlex1 {
+    display: flex;
+    width: 360px;
+    border-radius: 12px;
+    position: absolute;
+    background-color: transparent;
+    left: 1.5%;
+    top: 1%;
+}
+
+.buttonsFlex2 {
+    display: flex;
+    width: 260px;
+    border-radius: 12px;
+    position: absolute;
+    background-color: transparent;
+    left: 72%;
+    top: 1%;
+}
+
+.startButton {
+    border: 3px solid black;
+    border-radius: 12px;
+    padding: 5px;
+    height: 70px;
+    width: 150px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+}
+
+.closeButton {
+    width: 55px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+}
+
+.gameOverScreen {
+    height: 200px;
+    width: 400px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    font-weight: lighter;
+    letter-spacing: -5px;
+    border: 8px solid black;
+    border-radius: 25px;
+    text-align: center;
+    padding-top: 42px;
+    background: #cf8619;
+}
+
+/* how to */
+.howToButton {
+    width: 145px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.howToScreen {
+    height: 520px;
+    width: 650px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: lighter;
+    border: 3px solid black;
+    border-radius: 25px;
+    text-align: center;
+    padding-top: 20px;
+    background: #cf8619;
+}
+
+.orText {
+    background-color: #cf8619;
+    position: absolute;
+    top: 30%;
+    transform: translate(0, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+/* music selection */
+.musicButton {
+    width: 120px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.musicScreen {
+    height: 530px;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    border: 3px solid black;
+    border-radius: 25px;
+    text-align: center;
+    padding-top: 20px;
+    background: #cf8619;
+}
+
+/* skin selection */
+.skinsButton {
+    width: 135px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    outline: none;
+    user-select: none;
+    padding: 5px;
+}
+
+.skinsMenuScreen {
+    height: 400px;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: lighter;
+    border: 8px solid black;
+    border-radius: 25px;
+    text-align: center;
+    padding-top: 20px;
+    background: #cf8619;
+}
+
+.skin {
+    border: 2px solid black;
+    border-radius: 12px;
+    background: #cf8619;
+    padding: 5px;
+    margin: 2px;
+}
+
+/* audio manipulation */
+.audioButton {
+    width: 50px;
+    height: 50px;
+    background-color: #cf8619;
+    border: none;
+    border-radius: 12px;
+}
+
+.audioMenu {
+    height: 190px;
+    width: 160px;
+    position: absolute;
+    top: 23%;
+    left: 86%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    border: none;
+    border-radius: 25px;
+    text-align: center;
+    padding-top: 20px;
+    background: #cf8619;
+}
+
+.sFXButton {
+    width: 50px;
+    height: 50px;
+    border: 2px solid darkblue;
+    border-radius: 12px;
+    background-color: #cf8619;
+    padding: 5px;
+    margin: 2px;
+}
+
+.musicToggleButton {
+    width: 50px;
+    height: 50px;
+    border: 2px solid darkblue;
+    border-radius: 12px;
+    background-color: #cf8619;
+    padding: 5px;
+    margin: 2px;
+}
+
+.container {
+    width: 52px;
+    height: 30px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 90px;
+    height: 18px;
+    background: #d3d3d3;
+    transform: rotate(-90deg);
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 28px;
+    border-radius: 8px;
+    background: darkblue;
+    cursor: pointer;
+}
+
+/* right trapezoid button */
+.rightButton {
+    width: 20px;
+    height: 380px;
+    position: absolute;
+    top: 50%;
+    left: 98%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-right: 20px solid #cf8619;
+    border-left: 0px solid red;
+    background: none;
+    transition: 0.3s; 
+    opacity: 0.88;
+}
+.scoreDisplay {
+    height: 400px;
+    width: 200px;
+    position: absolute;
+    top: 50.5%;
+    left: 100%;
+    transform: translate(0, -50%);
+    padding-top: 50px;
+    border: 5px solid darkblue;
+    background: #cf8619;
+    transition: 0.3s; 
+    opacity: 0.88;
+}
+.scoreVal {
+    list-style-position: inside;
+    text-align: center;
+    width: 140px;
+    padding: 0;
+    font-size: 36px;
+    word-spacing: -16px;
+}
+
+/* other */
+.endGameText {
+    width: 180px;
+    height: 50px;
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 2px;
+    text-align: center;
+    background: grey;
+}
