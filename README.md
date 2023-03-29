@@ -17,7 +17,7 @@ If I have time, I will try to update the game.
 
 ## How to Play :video_game:
 Head over to this link: \
-[AstEmmental](https://mshl2299.github.io/Ast-Emmental/) \
+## [AstEmmental](https://mshl2299.github.io/Ast-Emmental/) \
 Make sure to press the "**How To**" button, and you can mute audio by pressing the **speaker icon**!\
 If something isn't working, feel free to send a message in the Discussion tab.\
 ***Note: Mobile is not supported. Chrome is the recommended browser as the others have not been tested.***
