@@ -19,7 +19,7 @@ Head over to this link:
 # [AST-Emmental](https://mshl2299.github.io/Ast-Emmental/) 
 Check out the "**How To**" menu, and mute audio in the **audio menu** (music notes)!\
 If something isn't working, feel free to send a message in the Discussion tab.\
-***Note: Mobile is not supported. Chrome is the recommended browser as the others have not been tested.***
+***Note: Mobile is not supported (yet). Firefox works the best, followed by Chrome.***
 
 ### Thanks for checking my game out! :star:
 
