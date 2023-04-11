@@ -1,0 +1,175 @@
+/* buttons & respective screens */
+button {
+    background-color: #cf8619;
+    font-size: 32px;
+    letter-spacing: -1px;
+    font-weight: bold;
+    margin: 3px;
+}
+button:hover {
+    background-color: #d28f29;
+    cursor: pointer;
+}
+
+/*Left Buttons & Menus*/
+.buttonsFlex1 {
+    display: flex;
+    width: 360px;
+    position: absolute;
+    left: 1.5%;
+    top: 1%;
+}
+/* how to */
+.howToButton {
+    width: 145px;
+    height: 50px;
+    padding: 5px;
+}
+.howToScreen {
+    height: 520px;
+    width: 650px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    border-radius: 25px;
+    padding-top: 20px;
+    background: #cf8619;
+}
+.orText {
+    position: absolute;
+    top: 25%;
+    transform: translate(0, -50%);
+    border: 2px solid black;
+    padding: 5px;
+}
+
+/* music selection */
+.musicButton {
+    width: 120px;
+    height: 50px;
+    padding: 5px;
+}
+.musicScreen {
+    height: 530px;
+    width: 700px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    border-radius: 25px;
+    padding: 20px;
+    background: #cf8619;
+}
+.musicTile {
+    width: 180px;
+    height: 180px;
+    border: 3px solid black;
+    border-radius: 15px;
+    margin: 5px;
+    background-color: #dbdbdb;
+}
+.musicIcon {
+    display: block;
+    height: 90px;
+    width: 130px;
+    font-size: 70px;
+    line-height: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    background: transparent;
+}
+
+/*Right Buttons & Menus*/
+.buttonsFlex2 {
+    display: flex;
+    width: 300px;
+    position: absolute;
+    left: 68%;
+    top: 1%;
+}
+/*desktop-mobile switching*/
+.deviceButton {
+    width: 60px;
+    height: 51px;
+    background-color: #cf8619;
+    cursor: pointer;
+}
+/* skin menu */
+.skinsButton {
+    width: 135px;
+    height: 50px;
+    outline: none;
+    user-select: none;
+    padding: 5px;
+}
+.skinsMenuScreen {
+    height: 400px;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    border-radius: 25px;
+    padding-top: 20px;
+    background: #cf8619;
+}
+.skin {
+    border: 3px solid black;
+    background: #cf8619;
+    padding: 2px;
+    margin: 2px;
+}
+.Bkg {
+    width: 150px;
+    height: 100px;
+    border: 3px solid black;
+    padding: 0;
+    margin: 2px;
+}
+
+/* audio menu */
+.audioButton {
+    width: 60px;
+    height: 50px;
+    background-color: #cf8619;
+}
+.audioMenu {
+    height: 230px;
+    width: 160px;
+    position: absolute;
+    top: 26%;
+    left: 86%;
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    border-radius: 25px;
+    padding-top: 20px;
+    background: #cf8619;
+}
+.border {
+    border: 1px solid black;
+}
+.resetDataButton {
+    border: 3px solid black;
+    cursor: pointer;
+}
+/*End game/Explode player/Close all menus*/
+.closeButton {
+    width: 56px;
+    height: 50px;
+}
+
+/* toggled classes - need to be at bottom so they can override other styles */
+.hidden {
+    display: none;
+}
+.greyed {
+    background-color: grey;
+    opacity: 90%;
+}
+.greyed:hover {
+    background-color: grey;
+}
