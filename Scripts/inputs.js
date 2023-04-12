@@ -100,8 +100,8 @@ function changeDevice() {
         if (!mobile) { //if switching to mobile
             deviceButton.src = "mobile.png";
             //canvas & css
-            canvas.width = 600;
-            canvas.height = 420; 
+            canvas.width = 500;
+            canvas.height = 350; 
             mobileCSS.setAttribute("href", "mobile.css");
             //sprites
             ship.x = canvas.width/2 - 33,
