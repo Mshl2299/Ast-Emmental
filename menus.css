@@ -148,6 +148,7 @@ button:hover {
     border-radius: 25px;
     padding-top: 20px;
     background: #cf8619;
+    opacity: 0.9;
 }
 .border {
     border: 1px solid black;
