@@ -135,7 +135,7 @@ function animate() {
         }
         else {
             ship.sprite.src = currentSkin;
-            drawShip(ship.sprite, ship.width * ship.frameX, ship.height * ship.frameY, ship.width, ship.height, ship.x, ship.y, ship.width, ship.height);
+            drawShip(ship.sprite, 67 * ship.frameX, 66 * ship.frameY, 67, 66, ship.x, ship.y, ship.width, ship.height);
         }
 
         if (playerControl) {
@@ -158,10 +158,15 @@ function animate() {
         ctx.stroke();
 
         //Score text ("SCORE=___")
-        ctx.font = "bold 38px impact";
+        if (!mobile) {
+            ctx.font = "bold 38px impact";
+        }
+        else if (mobile) {
+            ctx.font = "bold 19px impact";
+        }
         ctx.fillStyle = "darkblue";
         ctx.textAlign = "center";
-        ctx.fillText("SCORE = " + score, canvas.width / 2, 40,);
+        ctx.fillText("SCORE = " + score, canvas.width / 2, sBHeight - (sBHeight/5),);
     }
 
     if (!backgroundMusicOn && playerControl) {
