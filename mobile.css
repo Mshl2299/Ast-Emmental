@@ -26,12 +26,12 @@ ol {
 
 /* classes & id elements */
 #canvas {
-    width: 600px;
-    height: 420px;
+    width: 500px;
+    height: 350px;
 }
 .canvas-container {
-    width: 600px;
-    height: 420px;
+    width: 500px;
+    height: 350px;
 }
 
 .slider {
