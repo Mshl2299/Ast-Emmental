@@ -46,6 +46,18 @@
             <h4><u>GAME OVER</u></h4>
             <h5>FINAL SCORE: <span id="finalScoreDisplay"></span></h5>
         </div>
+        <!--Mobile controls-->
+        <div class="mobileControls">
+            <div class="mobileLeft">
+                <button class="mobileButton mBUp">▲</button>
+                <button class="mobileButton mBLeft">◀</button>
+            </div>
+            <div class="mobileRight">
+                <button class="mobileButton mBRight">▶</button>
+                <button class="mobileButton mBDown">▼</button>
+            </div>
+        </div>
+
 
         <!--Buttons on upper left side-->
         <div class="buttonsFlex1" oncontextmenu="return false">
@@ -55,13 +67,18 @@
         <!--How To Play-->
         <div class="howToScreen fs32 hidden">
             <h2>HOW TO PLAY</h2>
-            <div class="flex Keys">
+            <div class="flex keyControls">
                 <div class="flex"><img src="WASDkeys.jpg" class="mediumIcon"></div>
                 <button class="orText">OR</button>
                 <div class="flex"><img src="ArrowKeys.jpg" class="mediumIcon"></div>
             </div>
+            <div class="flex buttonControls hidden">
+                <p style="width: 250px; height: 38px;">Use the buttons to move the ship.</p>
+                <img style="width:55px; height:55px; position: absolute; left: 90%; top: 15%; transform: translate(-50%, -50%);"
+                    src="turnSideways.png">
+            </div>
             <ul style="overflow: visible; margin-left: 30px;">
-                <li>Welcome to <a>AST-Emmental Mining Company™!</a></br>Your task is to mine asteroids and get richwith
+                <li>Welcome to <a>AST-Emmental Mining Company™!</a></br>Your task is to mine asteroids and get rich with
                     a <a>highscore!</a></li>
                 <li>Collect Grey Asteroids // Avoid Red ones</li>
                 <li>Collect the <a style="color: rgb(80, 67, 2);"><u
@@ -77,9 +94,7 @@
         </div>
         <!--Music Selection-->
         <div class="musicScreen fs32 hidden">
-            <h2>MUSIC</h2>
-            <button class="prevPageButton">◀</button>
-            <button class="nextPageButton">▶</button>
+            <h2><button class="prevPageButton">◀</button> MUSIC <button class="nextPageButton">▶</button></h2>
             <div class="musicPage1">
                 <div class="flex">
                     <div onclick="changeBkgMusic('Audio/rainingBitsGundatsch.ogg')" class="musicTile">
@@ -156,19 +171,18 @@
                 </div>
             </div>
             <div class="musicPage3 hidden">
-                <h6><u>Menu/Loading Music</u></h6>
+                <h5><u>Menu/Loading Music</u></h5>
                 <p><u onclick="changeMenuMusic('Audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
                 <p><u onclick="changeMenuMusic('Audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u>
                 </p>
                 <p><u onclick="changeMenuMusic('Audio/menuLSLBMorris.wav')">Loading Screen Loop</u> - <u>Brandon
                         Morris</u>
                 </p>
-                <h6><u>Other Cool things!</u></h6>
-                <p>Check out <b>PixelSphere</b> by cynicmusic, a free "2d-sidescroller with an <b>interactive</b>
+                <h5><u>Check these out!</u></h5>
+                <p><b>PixelSphere</b> by <b>cynicmusic</b>, a free "2d-sidescroller with an <b>interactive</b>
                     musical
                     soundtrack"! <a target="_blank" href="https://pixelsphere.org/">https://pixelsphere.org/</a></p>
-                </br>
-                <p>Check out <b>Aviary Attorney</b> by SketchyLogic, a paid "~swanderful~ experience", where you play as
+                <p><b>Aviary Attorney</b> by <b>SketchyLogic</b>, a paid "~swanderful~ experience", where you play as
                     "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a
                         target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a></p>
             </div>
