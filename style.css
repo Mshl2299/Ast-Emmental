@@ -43,7 +43,8 @@ li {
     font-size: 22px;
     text-align: left;
     font-weight: bold;
-    letter-spacing: -2.1px;
+    word-spacing: -2.2px;
+    letter-spacing: -1.8px;
     line-height: 28px;
     overflow: visible;
 }
@@ -84,6 +85,7 @@ ol {
 }
 
 .slider {
+    appearance: none;
     width: 80px;
     height: 20px;
     margin-left: -13px;
