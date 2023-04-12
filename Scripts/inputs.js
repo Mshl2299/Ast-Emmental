@@ -1,3 +1,4 @@
+//keyboard
 window.addEventListener("keydown", function (e) { //creates an array to detect keys
     keys[e.key] = true;
     //console.log(e.key);
@@ -5,58 +6,83 @@ window.addEventListener("keydown", function (e) { //creates an array to detect k
 window.addEventListener("keyup", function (e) { //deletes any keys in the array to save memory
     delete keys[e.key];
 });
+//mobile
+mBUp.addEventListener("touchStart", function() {
+    keys["w"] = true;
+});
+mBUp.addEventListener("touchEnd", function() {
+    delete keys["w"];
+});
+mBLeft.addEventListener("touchStart", function() {
+    keys["a"] = true;
+});
+mBLeft.addEventListener("touchEnd", function() {
+    delete keys["a"];
+});
+mBDown.addEventListener("touchStart", function() {
+    keys["s"] = true;
+});
+mBDown.addEventListener("touchEnd", function() {
+    delete keys["s"];
+});
+mBRight.addEventListener("touchStart", function() {
+    keys["d"] = true;
+});
+mBRight.addEventListener("touchEnd", function() {
+    delete keys["d"];
+});
 
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
     detectAllCollisions();
-    if (keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) { //sBHeight is scoreboard height
+    //up
+    if ((keys["w"] || keys["ArrowUp"]) && ship.y > sBHeight) { //sBHeight is scoreboard height
         ship.y -= ship.speed;
         ship.direction = 1;
         ship.frameX = 0;
         ship.frameY = 0;
     }
-    if (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0) {
+    //left
+    if ((keys["a"] || keys["ArrowLeft"]) && ship.x > 0) {
         ship.x -= ship.speed;
         ship.direction = 4;
         ship.frameX = 3;
         ship.frameY = 0;
     }
-    if (keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) {
+    //down
+    if ((keys["s"] || keys["ArrowDown"]) && ship.y < canvas.height - ship.height) {
         ship.y += ship.speed;
         ship.direction = 3;
         ship.frameX = 2;
         ship.frameY = 0;
     }
-    if (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width) {
+    //right
+    if ((keys["d"] || keys["ArrowRight"]) && ship.x < canvas.width - ship.width) {
         ship.x += ship.speed;
         ship.direction = 2;
         ship.frameX = 1;
         ship.frameY = 0;
     }
-    //diagonals
-    if ((keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) && (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0)) {
-        ship.y -= ship.speed / 16;
-        ship.x -= ship.speed / 16;
+    //diagonals; needed to change ship sprites
+    //Top left
+    if (((keys["w"] || keys["ArrowUp"]) && ship.y > sBHeight) && ((keys["a"] || keys["ArrowLeft"]) && ship.x > 0)) {
         ship.direction = 8;
         ship.frameX = 3;
         ship.frameY = 1;
     }
-    if ((keys["w"] && ship.y > sBHeight || keys["ArrowUp"] && ship.y > sBHeight) && (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width)) {
-        ship.y -= ship.speed / 16;
-        ship.x += ship.speed / 16;
+    //Top right
+    if (((keys["w"] || keys["ArrowUp"]) && ship.y > sBHeight) && ((keys["d"] || keys["ArrowRight"]) && ship.x < canvas.width - ship.width)) {
         ship.direction = 5;
         ship.frameX = 0;
         ship.frameY = 1;
     }
-    if ((keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) && (keys["a"] && ship.x > 0 || keys["ArrowLeft"] && ship.x > 0)) {
-        ship.y += ship.speed / 16;
-        ship.x -= ship.speed / 16;
+    //Bottom left
+    if (((keys["s"] || keys["ArrowDown"]) && ship.y < canvas.height - ship.height) && ((keys["a"] || keys["ArrowLeft"]) && ship.x > 0)) {
         ship.direction = 7;
         ship.frameX = 2;
         ship.frameY = 1;
     }
-    if ((keys["s"] && ship.y < canvas.height - ship.height || keys["ArrowDown"] && ship.y < canvas.height - ship.height) && (keys["d"] && ship.x < canvas.width - ship.width || keys["ArrowRight"] && ship.x < canvas.width - ship.width)) {
-        ship.y += ship.speed / 16;
-        ship.x += ship.speed / 16;
+    //Bottom right
+    if (((keys["s"] || keys["ArrowDown"]) && ship.y < canvas.height - ship.height) && ((keys["d"] || keys["ArrowRight"]) && ship.x < canvas.width - ship.width)) {
         ship.direction = 6;
         ship.frameX = 1;
         ship.frameY = 1;
@@ -71,8 +97,8 @@ function openHowTo() {
     else if (!howToButton.classList.contains('greyed')) {
         playerControl = false;
         howToScreen.classList.toggle('hidden'); //toggles how to screen
-        ship.x = canvas.width/2 - ship.width/2;
-        ship.y = canvas.height/2 - ship.height/2;
+        ship.x = canvas.width / 2 - ship.width / 2;
+        ship.y = canvas.height / 2 - ship.height / 2;
         playSoundFX("Audio/click.wav");
         playMenuMusic();
     }
@@ -84,8 +110,8 @@ function openMusicMenu() {
     else if (!musicButton.classList.contains('greyed')) {
         playerControl = false;
         musicScreen.classList.toggle('hidden');
-        ship.x = canvas.width/2 - ship.width/2;
-        ship.y = canvas.height/2 - ship.height/2;
+        ship.x = canvas.width / 2 - ship.width / 2;
+        ship.y = canvas.height / 2 - ship.height / 2;
         playSoundFX("Audio/click.wav");
         playMenuMusic();
     }
@@ -101,11 +127,29 @@ function changeDevice() {
             deviceButton.src = "mobile.png";
             //canvas & css
             canvas.width = 500;
-            canvas.height = 350; 
+            canvas.height = 350;
+            sBHeight = 30;
+            padding = 20;
+            tolerance = 30;
+            keysControl.classList.add('hidden');
+            buttonControls.classList.remove('hidden');
             mobileCSS.setAttribute("href", "mobile.css");
             //sprites
-            ship.x = canvas.width/2 - 33,
-            ship.y = canvas.height/2 - 33,
+            currentSpeed = 1.5;
+            ship.x = canvas.width / 2 - 33,
+            ship.y = canvas.height / 2 - 33,
+            ship.width = 32;
+            ship.height = 32;
+            ast.speed = 0.5;
+            ast.width = 24;
+            ast.height = 24;
+            astRangeY = (canvas.height - padding) - (sBHeight + padding) - ast.height; //max-min -height of asteroid so it doesn't clip off
+            astRangeX = (canvas.width - padding) - padding - ast.width;
+            redAst = new Asteroid("redAst", "enemy", "Sprites/redAsteroid.png", ast.width, ast.height, 0, 0, false, false, 1, -1, 1);
+            redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width * 2, ast.height * 2, 0, 0, false, false, 0.6, -1, -1);
+            redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width * 3, ast.height * 3, 0, 0, false, false, 0.3, 1, 1);
+            redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
+            cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
             mobile = true;
             playSoundFX("Audio/click.wav");
         }
@@ -114,15 +158,35 @@ function changeDevice() {
             //canvas
             canvas.width = 1000;
             canvas.height = 700;
+            sBHeight = 50;
+            padding = 30;
+            tolerance = 60;
+            keysControl.classList.remove('hidden');
+            buttonControls.classList.add('hidden');
             mobileCSS.setAttribute("href", "");
             //sprites
-            ship.x = canvas.width/2 - 33,
-            ship.y = canvas.height/2 - 33,
+            ship.x = canvas.width / 2 - 33,
+            ship.y = canvas.height / 2 - 33,
+            ship.width = 64;
+            ship.height = 64;
+            ast.width = 48;
+            ast.height = 48;
+            astRangeY = (canvas.height - padding) - (sBHeight + padding) - ast.height; //max-min -height of asteroid so it doesn't clip off
+            astRangeX = (canvas.width - padding) - padding - ast.width;
+            redAst = new Asteroid("redAst", "enemy", "Sprites/redAsteroid.png", ast.width, ast.height, 0, 0, false, false, 1, -1, 1);
+            redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width * 2, ast.height * 2, 0, 0, false, false, 0.6, -1, -1);
+            redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width * 3, ast.height * 3, 0, 0, false, false, 0.3, 1, 1);
+            redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
+            cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
             mobile = false;
             playSoundFX("Audio/click.wav");
         }
     }
 }
+if (window.innerWidth <= 1600) {
+    changeDevice();
+}
+
 function openSkinsMenu() {
     if (skinsButton.classList.contains('greyed')) {
         showEndGameText();
@@ -131,16 +195,16 @@ function openSkinsMenu() {
         playerControl = false;
         if (skinsMenuScreen.classList.contains('hidden')) {
             ship.x = 100; //move ship to side to see skins
-            ship.y = canvas.height/2 - ship.height/2;
+            ship.y = canvas.height / 2 - ship.height / 2;
             ship.frameX = 0;
             ship.frameY = 0;
         }
         if (!skinsMenuScreen.classList.contains('hidden')) {
-            ship.x = canvas.width/2 - ship.width/2;
-            ship.y = canvas.height/2 - ship.height/2;
+            ship.x = canvas.width / 2 - ship.width / 2;
+            ship.y = canvas.height / 2 - ship.height / 2;
             ship.frameX = 0;
             ship.frameY = 0;
-        }        
+        }
         skinsMenuScreen.classList.toggle('hidden');
         playSoundFX("Audio/click.wav");
         playMenuMusic();
@@ -186,9 +250,9 @@ function closeAll() {
     howToScreen.classList.add('hidden');
     musicScreen.classList.add('hidden');
     audioMenu.classList.add('hidden');
-    skinsMenuScreen.classList.add('hidden'); 
-    ship.x = canvas.width/2 - ship.width/2;
-    ship.y = canvas.height/2 - ship.height/2;
+    skinsMenuScreen.classList.add('hidden');
+    ship.x = canvas.width / 2 - ship.width / 2;
+    ship.y = canvas.height / 2 - ship.height / 2;
     randomizeMenuMusic();
     playMenuMusic();
 }
@@ -231,6 +295,7 @@ function eGTFlash() {
 }
 
 startButton.addEventListener('click', startGame);
+startButton.addEventListener('touchstart', startGame);
 closeButton.addEventListener('click', closeAll);
 
 howToButton.addEventListener('click', openHowTo);
