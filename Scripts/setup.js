@@ -9,10 +9,9 @@ canvas.height = 700;
 let sBHeight = 50; //scoreBoard Height
 let padding = 30; //distance from borders for Grey & Red Asteroid generation
 let tolerance = 60; //for cheese movement and range detection
-let keys = []; 
 //Scores
 let score = 0;
-let scoreAmt = 50; //easily adjust grey asteroid points
+let scoreAmt = 1; //easily adjust grey asteroid points
 let scoreArray = [];
 //levels & unlock detections
 let level = 0;
@@ -36,10 +35,18 @@ let prevPageButton = document.querySelector('.prevPageButton');
 let nextPageButton = document.querySelector('.nextPageButton');
 
 //LEFT BUTTONS & SCREENS
-//Device
+//Device Button & Controls
 let deviceButton = document.querySelector('.deviceButton');
 let mobileCSS = document.querySelector('.mobileCSS');
 let mobile = false;
+let keysControl = document.querySelector('.keyControls');
+let keys = []; 
+let buttonControls = document.querySelector('.buttonControls');
+let mobileControls = document.querySelector('.mobileControls');
+let mBUp = document.querySelector('.mBUp');
+let mBRight = document.querySelector('.mBRight');
+let mBLeft = document.querySelector('.mBLeft');
+let mBDown = document.querySelector('.mBDown');
 //skin menu
 let skinsButton = document.querySelector('.skinsButton');
 let skinsMenuScreen = document.querySelector('.skinsMenuScreen');
