@@ -8,16 +8,36 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
 });
 //mobile
 mBUp.addEventListener("click", function() {
-    if (ship.y > 50) {ship.y -= (ship.speed * 5);}
+    if (ship.y > 50) {
+        ship.y -= (ship.speed * 5);
+        ship.direction = 1;
+        ship.frameX = 0;
+        ship.frameY = 0;
+    }
 });
 mBLeft.addEventListener("click", function() {
-    if (ship.x > 0) {ship.x -= 10;}
+    if (ship.x > 0) {
+        ship.x -= (ship.speed * 5);
+        ship.direction = 4;
+        ship.frameX = 3;
+        ship.frameY = 0;
+    }
 });
 mBDown.addEventListener("click", function() {
-    if (ship.y < canvas.height) {ship.y += 10;}
+    if (ship.y < canvas.height - ship.height) {
+        ship.y += (ship.speed * 5);
+        ship.direction = 3;
+        ship.frameX = 2;
+        ship.frameY = 0;
+    }
 });
 mBRight.addEventListener("click", function() {
-    if (ship.x < canvas.width) {ship.x += 10;}
+    if (ship.x < canvas.width - ship.width) {
+        ship.x += (ship.speed * 5);
+        ship.direction = 2;
+        ship.frameX = 1;
+        ship.frameY = 0;
+    }
 });
 
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
