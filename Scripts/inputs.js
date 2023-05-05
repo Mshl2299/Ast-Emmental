@@ -8,23 +8,17 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
 });
 //mobile
 mBUp.addEventListener("click", function() {
-    ship.y -= 10;
+    if (ship.y > 50) {ship.y -= (ship.speed * 5);}
 });
-/*mBLeft.addEventListener("click", function() {
-    keys["a"] = true;
+mBLeft.addEventListener("click", function() {
+    if (ship.x > 0) {ship.x -= 10;}
 });
 mBDown.addEventListener("click", function() {
-    keys["s"] = true;
-});
-mBDown.addEventListener("touchEnd", function() {
-    delete keys["s"];
+    if (ship.y < canvas.height) {ship.y += 10;}
 });
 mBRight.addEventListener("click", function() {
-    keys["d"] = true;
+    if (ship.x < canvas.width) {ship.x += 10;}
 });
-mBRight.addEventListener("touchEnd", function() {
-    delete keys["d"];
-});*/
 
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
     detectAllCollisions();
