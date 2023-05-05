@@ -7,46 +7,25 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
     delete keys[e.key];
 });
 //mobile
-function clickFunc(e){
-  if(e.touches){
-    e.preventDefault(); //Try to comment it out: double triggers on short tap
-    mBUP.removeEventListener("touchend", clickFunc);
-    mBUP.addEventListener("click", clickFunc);
-    console.log('tapped!');
-    keys["w"] = true;
-  }else{
-	  console.log('clicked!');
-      delete keys["w"];
-  }
-  //code
-}
-function touchFunc(){
-  mBUP.removeEventListener("click", clickFunc);
-  mBUP.addEventListener("touchend", clickFunc);
-}
-window.onload=function(){
-  mBUP.addEventListener("click", clickFunc);
-  mBUP.addEventListener("touchstart", touchFunc);
-}
-/*mBUp.addEventListener("touchStart", function() {
-    keys["w"] = true;
+mBUp.addEventListener("click", function() {
+    ship.x += ship.speed * 50;
 });
 mBUp.addEventListener("touchEnd", function() {
     delete keys["w"];
-});*/
-mBLeft.addEventListener("touchStart", function() {
+});
+mBLeft.addEventListener("click", function() {
     keys["a"] = true;
 });
 mBLeft.addEventListener("touchEnd", function() {
     delete keys["a"];
 });
-mBDown.addEventListener("touchStart", function() {
+mBDown.addEventListener("click", function() {
     keys["s"] = true;
 });
 mBDown.addEventListener("touchEnd", function() {
     delete keys["s"];
 });
-mBRight.addEventListener("touchStart", function() {
+mBRight.addEventListener("click", function() {
     keys["d"] = true;
 });
 mBRight.addEventListener("touchEnd", function() {
