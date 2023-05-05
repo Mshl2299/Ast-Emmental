@@ -19,7 +19,7 @@ Head over to this link:
 # [AST-Emmental](https://mshl2299.github.io/Ast-Emmental/) 
 Check out the "**How To**" menu, and mute audio in the **audio menu** (music notes)!\
 If something isn't working, feel free to send a message in the Discussion tab.\
-***Note: Mobile is not supported (yet). Firefox works the best, followed by Chrome.***
+***Note: Mobile is buggy. Firefox works the best, followed by Chrome. Other browsers not tested***
 
 ### Thanks for checking my game out! :star:
 
@@ -28,5 +28,5 @@ If something isn't working, feel free to send a message in the Discussion tab.\
 ## Connect with Me: :speech_balloon:
 [<img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" width="100" height="100">](https://instagram.com/mshl_1209_)\
 Discord: Mshl#3896\
-YouTube: https://youtu.be/_Gh1E7BDzAw\
+YouTube: https://youtu.be/_Gh1E7BDzAw \
 (If you are requesting to follow/friend me, please send me a message request saying that you came from "Ast-Emmental" or from my GitHub)
