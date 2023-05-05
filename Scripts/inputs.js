@@ -8,9 +8,9 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
 });
 //mobile
 mBUp.addEventListener("click", function() {
-    ship.y -= ship.speed * 50;
+    ship.y -= 10;
 });
-mBLeft.addEventListener("click", function() {
+/*mBLeft.addEventListener("click", function() {
     keys["a"] = true;
 });
 mBDown.addEventListener("click", function() {
@@ -24,7 +24,7 @@ mBRight.addEventListener("click", function() {
 });
 mBRight.addEventListener("touchEnd", function() {
     delete keys["d"];
-});
+});*/
 
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
     detectAllCollisions();
