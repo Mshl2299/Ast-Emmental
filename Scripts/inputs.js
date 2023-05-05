@@ -8,16 +8,10 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
 });
 //mobile
 mBUp.addEventListener("click", function() {
-    ship.x += ship.speed * 50;
-});
-mBUp.addEventListener("touchEnd", function() {
-    delete keys["w"];
+    ship.y -= ship.speed * 50;
 });
 mBLeft.addEventListener("click", function() {
     keys["a"] = true;
-});
-mBLeft.addEventListener("touchEnd", function() {
-    delete keys["a"];
 });
 mBDown.addEventListener("click", function() {
     keys["s"] = true;
