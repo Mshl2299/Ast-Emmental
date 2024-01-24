@@ -1,101 +1,80 @@
 //Audio
-let currentMusic; //buffer var for music
-let backgroundMusicOn = false;
-let menuMusicOn = false;
-let menuMusicPaused = false;
 
-//New sounds; no sources since they need to be set every time apparently
-let soundFX = new Audio();
-let dingSound = new Audio();
-let popSound = new Audio();
-
-function playSoundFX(source) {
-    soundFX.src = source; //source being changed too often; interrupting audio loading
-    soundFX.play();
-}
-function playDingSound() {
-    dingSound.src = "Audio/ding.wav";
-    dingSound.play();
-}
-function playPopSound() {
-    popSound.src = "Audio/pop.ogg"; //need to reset the audio source everytime
-    popSound.play();
-}
-
-//background music
 let bkgMusic = new Audio();
-bkgMusic.addEventListener('playing', function () {
-    backgroundMusicOn = true;
-})
-bkgMusic.addEventListener('ended', function () {
-    if (bkgMusic.src == "http://127.0.0.1:5500/Audio/NESBossIntroSketchyLogic.wav") {
-        currentMusic = "Audio/NESBossMainSketchyLogic.wav";
-        bkgMusic.src = currentMusic;
-    }
-    bkgMusic.play();
-})
-
-let introPlayed = false;
-function playBkgMusic() {
-    if (!currentMusic) {
-        currentMusic = "Audio/rainingBitsGundatsch.ogg";
-    }
-    bkgMusic.src = currentMusic;
-}
-
-function changeBkgMusic(source) {
-    currentMusic = source;
-    playSoundFX("Audio/click.wav");
-}
-
-//menu music
 let menuMusic = new Audio();
 let menuMusicNumber = 0;
-menuMusic.addEventListener('playing', function () {
-    menuMusicOn = true;
-})
-menuMusic.addEventListener('ended', function () {
-    menuMusicOn = false;
-})
-menuMusic.addEventListener('pause', function () {
-    menuMusicPaused = true;
-})
 
-function randomizeMenuMusic() {
-    menuMusic.pause();
-    menuMusicNumber = Math.floor((Math.random() * 3) + 1);
-    switch (menuMusicNumber) {
-        case 1:
-            menuMusic.src = "Audio/menuDeepSeaUmplix.mp3";
-            break;
-        case 2:
-            menuMusic.src = "Audio/menuMagicSpaceCodeManu.mp3";    
-            break;
-        case 3:
-            menuMusic.src = "Audio/menuLSLBMorris.wav";
-            break;
-    }
-    if (userInteracted) {
-        menuMusic.play();
-    }
+//Sound Effects & Elements
+let soundFX = new Audio(); // misc
+let dingSound = new Audio(); // level ups
+dingSound.src = "Audio/ding.wav";
+let popSound = new Audio(); // collects
+popSound.src = "Audio/pop.ogg";
+
+function playSoundFX(source) {
+    soundFX.src = source;
+    soundFX.play();
 }
-
+//--------------------------------LOAD-IN----------------------------------
+//SFX volume
+if (window.localStorage.getItem('sFXRange')) {
+    sFXRange.value = JSON.parse(window.localStorage.getItem('sFXRange'));
+} else {
+    sFXRange.value = "100";
+    window.localStorage.setItem('sFXRange', JSON.stringify(sFXRange.value));
+}
+//MUSIC volume
+if (window.localStorage.getItem('musicRange')) {
+    musicRange.value = JSON.parse(window.localStorage.getItem('musicRange'));
+} else {
+    musicRange.value = "50";
+    window.localStorage.setItem('musicRange', JSON.stringify(musicRange.value));
+}
+//BKG MUSIC
+if (!window.localStorage.getItem('bkgMusic')) {
+    bkgMusic.src = "Audio/rainingBitsGundatsch.ogg";
+    window.localStorage.setItem('bkgMusic', JSON.stringify(bkgMusic.src));
+} else {
+    bkgMusic.src = JSON.parse(window.localStorage.getItem('bkgMusic'));
+}
+//MENU MUSIC
+if (!window.localStorage.getItem('menuMusic')) {
+    randomizeMenuMusic();
+    window.localStorage.setItem('menuMusic', JSON.stringify(menuMusic.src));
+} else {
+    menuMusic.src = JSON.parse(window.localStorage.getItem('menuMusic'));
+}
+//--------------------------------MUSIC-------------------------
+function changeBkgMusic(source) {
+    bkgMusic.src = source;
+    playSoundFX("Audio/click.wav");
+}
 function changeMenuMusic(source) {
-    menuMusic.pause();
+    menuMusic.pause(); // because menu music is played during switches
     menuMusic.src = source;
     menuMusic.play();
     playSoundFX("Audio/click.wav");
 }
 
-function playMenuMusic() {
-    if (!menuMusic.src) {
-        randomizeMenuMusic();
-    }
-    if (userInteracted && (!menuMusicOn || menuMusicPaused)) {
-        menuMusic.play();
+function randomizeMenuMusic() {
+    menuMusicNumber = Math.floor((Math.random() * 4));
+    switch (menuMusicNumber) {
+        case 0:
+            menuMusic.src = "Audio/menuDeepSeaUmplix.mp3";
+            break;
+        case 1:
+            menuMusic.src = "Audio/menuMagicSpaceCodeManu.mp3";    
+            break;
+        case 2:
+            menuMusic.src = "Audio/menuLSLBMorris.wav";
+            break;
+        case 3:
+            menuMusic.src = "Audio/stageSelectJJunkala.wav";
+            break;
     }
 }
 
+//navigation
 function prevMusicPage() {
     //if on page 1 go to page 3
     if (!musicPage1.classList.contains("hidden")) {
@@ -155,7 +134,3 @@ function updateVolume() {
     window.localStorage.setItem('musicRange', JSON.stringify(musicRange.value));
 }
 
-//menu music start thing to make chrome happy
-document.body.addEventListener('click', function () {
-    userInteracted = true;
-})

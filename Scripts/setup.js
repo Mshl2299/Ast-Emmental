@@ -1,7 +1,16 @@
+/*
+Starting constants
+Selectors & References to HTML w/ Screens & Buttons
+Backgrounds
+Retrieval
+Sprites
+Start game & Game over
+*/
+
 //canvas
-let canvasContainer = document.querySelector('.canvas-container');
-let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext("2d");
+const canvasContainer = document.querySelector('.canvas-container');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext("2d");
 canvas.width = 1000;
 canvas.height = 700;
 
@@ -20,8 +29,10 @@ let tripleDigit2 = false;
 let tripleDigit3 = false;
 let legendaryScore = false;
 let unlocks = [];
+let defaultUnlocks = ['Sprites/alphaSS1.png','Sprites/betaSS1.png','Sprites/ufoSS1.png']
 
-//RIGHT BUTTONS & SCREENS
+//-------------------------------BUTTONS & SCREENS-------------------------------
+//RIGHT SIDE
 //how-to
 let howToButton = document.querySelector('.howToButton');
 let howToScreen = document.querySelector('.howToScreen');
@@ -34,13 +45,13 @@ let musicPage3 = document.querySelector('.musicPage3');
 let prevPageButton = document.querySelector('.prevPageButton');
 let nextPageButton = document.querySelector('.nextPageButton');
 
-//LEFT BUTTONS & SCREENS
+//LEFT SIDE
 //Device Button & Controls
 let deviceButton = document.querySelector('.deviceButton');
 let mobileCSS = document.querySelector('.mobileCSS');
 let mobile = false;
 let keysControl = document.querySelector('.keyControls');
-let keys = []; 
+let keys = [];
 let buttonControls = document.querySelector('.buttonControls');
 let mobileControls = document.querySelector('.mobileControls');
 let mBUp = document.querySelector('.mBUp');
@@ -72,8 +83,8 @@ let gameOverScreen = document.querySelector('.gameOverScreen');
 let paragraphs = document.getElementsByTagName('p');
 //'end the current game first!' Flashing text
 let endGameText = document.querySelector('.endGameText');
-let eGTCount = 0; 
-let eGTInterval; 
+let eGTCount = 0;
+let eGTInterval;
 //Highscores menu
 let rightButton = document.querySelector('.rightButton');
 rightButton.style.left = "98%";
@@ -86,23 +97,24 @@ let playerControl = false; //for player control & menu control
 let gameOverT = false; //needs changes
 let firstDeath = false; //for Explosion to begin cycling; needs changes
 
+//-------------------------------BACKGROUNDS-------------------------------
+let backgroundImg = document.querySelector('.background-img');
+let blueSpace = "Backgrounds/blueSpace.jpg";
+let purpleSpace = "Backgrounds/purpleSpace.jpg";
+let JamesWebb = "Backgrounds/JamesWebb.jpg";
+let orbit = "Backgrounds/Orbit.jpg";
+let hatSpace = "Backgrounds/hatSpace.png";
+let galaxyAnim = "Backgrounds/galaxyAnim.gif";
+let purpleAnim = "Backgrounds/purpleAnim.gif";
+let blueNebula = "Backgrounds/blueNebulaAnim.gif";
+
 //-------------------------------LOAD-IN-----------------------------------
-//AUDIO RETRIEVAL
-//SFX volume
-if (window.localStorage.getItem('sFXRange')) {
-    sFXRange.value = JSON.parse(window.localStorage.getItem('sFXRange'));
-}
-else {
-    sFXRange.value = "100";
-    window.localStorage.setItem('sFXRange', JSON.stringify(sFXRange.value));
-}
-//MUSIC volume
-if (window.localStorage.getItem('musicRange')) {
-    musicRange.value = JSON.parse(window.localStorage.getItem('musicRange'));
-}
-else {
-    musicRange.value = "50";
-    window.localStorage.setItem('musicRange', JSON.stringify(musicRange.value));
+//BKG RETRIEVAL
+if (window.localStorage.getItem('bkgImg')) {
+    backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
+} else {
+    backgroundImg.src = hatSpace;
+    window.localStorage.setItem('bkgImg', JSON.stringify(backgroundImg.src));
 }
 //SCORE RETRIEVAL
 if (window.localStorage.getItem('scoreArray')) {
@@ -116,8 +128,10 @@ if (window.localStorage.getItem('scoreArray')) {
     console.log("Highscores retrieved.");
     console.log(window.localStorage.getItem('scoreArray'));
 }
+
+//MENU MUSIC
 //--------------------------------SPRITES-------------------------------
-//ship
+// SHIP
 let currentSpeed = 3; //speed variable that will change
 let ship = {
     sprite: new Image(),
@@ -125,8 +139,8 @@ let ship = {
     frameY: 0,
     width: 67,
     height: 66,
-    x: canvas.width/2 - 33,
-    y: canvas.height/2 - 33,
+    x: canvas.width / 2 - 33,
+    y: canvas.height / 2 - 33,
     speed: currentSpeed,
     direction: 1,
     immunity: false,
@@ -135,7 +149,8 @@ let ship = {
 }
 let explode1 = new Image();
 explode1.src = "BlueExplosion/blue" + JSON.stringify(ship.explosionFrame) + ".png";
-//SHIP SPRITE RETRIEVAL
+
+// SHIP SPRITE RETRIEVAL (has to be below)
 let currentSkin = JSON.parse(window.localStorage.getItem('skinName'))
 if (!currentSkin) {
     currentSkin = "Sprites/alphaSS1.png";
@@ -147,7 +162,7 @@ if (JSON.parse(window.localStorage.getItem('unlocks'))) {
 }
 ship.sprite.src = currentSkin;
 
-//ASTEROIDS
+// ASTEROIDS
 let ast = {
     name: "greyAst",
     sprite: new Image(),
@@ -170,7 +185,7 @@ class Asteroid {
         this.image.src = source;
         this.width = width;
         this.height = height;
-        this.x = Math.random * (astRangeX) + padding;
+        this.x = Math.random() * (astRangeX) + padding;
         this.y = Math.random() * (astRangeY) + sBHeight + padding;
         this.exist = exist;
         this.moving = moving;
@@ -185,61 +200,28 @@ class Asteroid {
         this.y += ast.speed * this.yF * this.dirY;
         detectBorderCollision(this);
     }
-    drawAst(){
+    drawAst() {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
+// Red Enemies
 let redAst = new Asteroid("redAst", "enemy", "Sprites/redAsteroid.png", ast.width, ast.height, 0, 0, false, false, 1, -1, 1);
-let redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width*2, ast.height*2, 0, 0, false, false, 0.6, -1, -1);
-let redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width*3, ast.height*3, 0, 0, false, false, 0.3, 1, 1);
-let redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width*1.5, ast.height*1.5, 0, 0, false, false, 1.5, 1, -1); 
-//Cheese & Slowdown
-let cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width/2, ast.height/2, 0, 0, false);
+let redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width * 2, ast.height * 2, 0, 0, false, false, 0.6, -1, -1);
+let redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width * 3, ast.height * 3, 0, 0, false, false, 0.3, 1, 1);
+let redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
+// Yellow Slowdown High Reward
+let cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
+// slowDown effect
 let cheeseCDFrame = 1;
 let cheeseCD = new Image();
 cheeseCD.src = "Sprites/cheeseCooldown" + JSON.stringify(cheeseCDFrame) + ".png";
-//slowDown effect
 let slowDown = false;
 let sDCount = 1;
 let sDInterval;
-
-//-------------------------------BACKGROUNDS-------------------------------
-let backgroundAnimating = false;
-let backgroundInterval;
-class background {
-    constructor(animated, source, name, ending, frame, totalFrames) {
-        this.animated = animated;
-        this.image = new Image();
-        this.image.src = source;
-        this.name = name;
-        this.ending = ending;
-        this.frame = frame;
-        this.totalFrames = totalFrames;
-    }
-    drawBkg() {
-        ctx.drawImage(this.image, 0, 0, canvas.width, canvas.height);
-    }
-    cycleBackgroundFrame() { //if background.animated = true;
-        if (this.frame < this.totalFrames) {
-            this.image.src = "Backgrounds/" + this.name + JSON.stringify(this.frame) + this.ending;
-            this.frame ++;
-        }
-        else if (this.frame >= this.totalFrames) {
-            this.frame = 1;
-        }
-    }
-}
-//non-animated
-let blueSpace = new background(false, "Backgrounds/blueSpace.jpg");
-let purpleSpace = new background(false, "Backgrounds/purpleSpace.jpg");
-let JamesWebb = new background(false, "Backgrounds/JamesWebb.jpg");
-let orbit = new background(false, "Backgrounds/Orbit.jpg");
-let hatSpace = new background(false, "Backgrounds/hatSpace.png");
-//animated 
-let galaxyAnim = new background(true, "Backgrounds/galaxyAnim/galaxyAnim1.gif", "galaxyAnim/galaxyAnim", ".gif", 1, 150);
-let purpleAnim = new background(true, "Backgrounds/purpleAnim/purpleAnim1.gif", "purpleAnim/purpleAnim", ".gif", 1, 30);
-let blueNebula = new background(true, "Backgrounds/blueNebulaAnim/blueNebula1.gif", "blueNebulaAnim/blueNebula", ".gif", 1, 148);
-let chosenBkg = blueSpace;
+// Blue Powerup !!!
+let plasma = new Asteroid("plasma", "friend", "Sprites/cheese.png", ast.width / 3, ast.height / 3, 0, 0, false, false, 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
+// shield effect
+let shieldImg = new Image();
 
 //start & end functions
 function startGame() { //reset values
@@ -250,8 +232,8 @@ function startGame() { //reset values
 
     //Reset ship
     ship.sprite.src = currentSkin;
-    ship.x = canvas.width/2 - ship.width/2;
-    ship.y = canvas.height/2 - ship.height/2;
+    ship.x = canvas.width / 2 - ship.width / 2;
+    ship.y = canvas.height / 2 - ship.height / 2;
     currentSpeed = 3;
     ship.speed = currentSpeed;
     ship.immunity = false;
@@ -280,9 +262,8 @@ function startGame() { //reset values
     deviceButton.classList.add('greyed');
     skinsButton.classList.add('greyed');
     //start the music!
-    playSoundFX("Audio/click.wav");
-    menuMusicPaused = true;
-    playBkgMusic();
+    menuMusic.pause();
+    bkgMusic.play();
     //generate Asteroid
     generateAsteroid(ast);
 }
@@ -291,8 +272,8 @@ function gameOver() {
     playerControl = false;
     gameOverT = true;
     ship.exploded = true;
-    backgroundMusicOn = false;
-    menuMusicOn = false;
+    bkgMusic.pause();
+    menuMusic.play();
     playSoundFX("Audio/explosion.wav");
     clearInterval(sDInterval);
     handleScore(score);
@@ -303,5 +284,9 @@ function gameOver() {
     howToButton.classList.remove('greyed');
     musicButton.classList.remove('greyed');
     deviceButton.classList.remove('greyed');
-    skinsButton.classList.remove('greyed'); 
+    skinsButton.classList.remove('greyed');
 }
+
+document.addEventListener('click', function () {
+    userInteracted = true;
+})

@@ -7,37 +7,29 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
     delete keys[e.key];
 });
 //mobile
-mBUp.addEventListener("click", function() {
-    if (ship.y > 50) {
-        ship.y -= (ship.speed * 5);
-        ship.direction = 1;
-        ship.frameX = 0;
-        ship.frameY = 0;
-    }
+mBUp.addEventListener("touchStart", function() {
+    keys["w"] = true;
 });
-mBLeft.addEventListener("click", function() {
-    if (ship.x > 0) {
-        ship.x -= (ship.speed * 5);
-        ship.direction = 4;
-        ship.frameX = 3;
-        ship.frameY = 0;
-    }
+mBUp.addEventListener("touchEnd", function() {
+    delete keys["w"];
 });
-mBDown.addEventListener("click", function() {
-    if (ship.y < canvas.height - ship.height) {
-        ship.y += (ship.speed * 5);
-        ship.direction = 3;
-        ship.frameX = 2;
-        ship.frameY = 0;
-    }
+mBLeft.addEventListener("touchStart", function() {
+    keys["a"] = true;
 });
-mBRight.addEventListener("click", function() {
-    if (ship.x < canvas.width - ship.width) {
-        ship.x += (ship.speed * 5);
-        ship.direction = 2;
-        ship.frameX = 1;
-        ship.frameY = 0;
-    }
+mBLeft.addEventListener("touchEnd", function() {
+    delete keys["a"];
+});
+mBDown.addEventListener("touchStart", function() {
+    keys["s"] = true;
+});
+mBDown.addEventListener("touchEnd", function() {
+    delete keys["s"];
+});
+mBRight.addEventListener("touchStart", function() {
+    keys["d"] = true;
+});
+mBRight.addEventListener("touchEnd", function() {
+    delete keys["d"];
 });
 
 function moveShip() { //keyboard controls WASD & arrow keys; also detects collision with frame border
@@ -108,7 +100,6 @@ function openHowTo() {
         ship.x = canvas.width / 2 - ship.width / 2;
         ship.y = canvas.height / 2 - ship.height / 2;
         playSoundFX("Audio/click.wav");
-        playMenuMusic();
     }
 }
 function openMusicMenu() {
@@ -121,7 +112,6 @@ function openMusicMenu() {
         ship.x = canvas.width / 2 - ship.width / 2;
         ship.y = canvas.height / 2 - ship.height / 2;
         playSoundFX("Audio/click.wav");
-        playMenuMusic();
     }
 }
 
@@ -141,6 +131,7 @@ function changeDevice() {
             tolerance = 30;
             keysControl.classList.add('hidden');
             buttonControls.classList.remove('hidden');
+            mobileControls.classList.remove('hidden');
             mobileCSS.setAttribute("href", "mobile.css");
             //sprites
             currentSpeed = 1.5;
@@ -159,7 +150,9 @@ function changeDevice() {
             redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
             cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
             mobile = true;
-            playSoundFX("Audio/click.wav");
+            if (userInteracted) {
+                playSoundFX("Audio/click.wav");
+            }
         }
         else if (mobile) { //if switching to desktop
             deviceButton.src = "desktop.png";
@@ -171,6 +164,7 @@ function changeDevice() {
             tolerance = 60;
             keysControl.classList.remove('hidden');
             buttonControls.classList.add('hidden');
+            //mobileControls.classList.add('hidden');
             mobileCSS.setAttribute("href", "");
             //sprites
             ship.x = canvas.width / 2 - 33,
@@ -191,7 +185,7 @@ function changeDevice() {
         }
     }
 }
-if (window.innerWidth <= 1600) {
+if (window.innerWidth <= 980) {
     changeDevice();
 }
 
@@ -215,7 +209,6 @@ function openSkinsMenu() {
         }
         skinsMenuScreen.classList.toggle('hidden');
         playSoundFX("Audio/click.wav");
-        playMenuMusic();
     }
     updateUnlocks();
 }
@@ -259,10 +252,9 @@ function closeAll() {
     musicScreen.classList.add('hidden');
     audioMenu.classList.add('hidden');
     skinsMenuScreen.classList.add('hidden');
-    ship.x = canvas.width / 2 - ship.width / 2;
-    ship.y = canvas.height / 2 - ship.height / 2;
+    menuMusic.pause();
     randomizeMenuMusic();
-    playMenuMusic();
+    menuMusic.play();
 }
 
 //-------------------------HIGHSCORES----------------------------------

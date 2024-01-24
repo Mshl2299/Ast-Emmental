@@ -29,7 +29,7 @@ function detectAllCollisions() {
         score += scoreAmt;
         detectLevelUp();
         changeLevelUp();
-        playPopSound();
+        popSound.play();
     }
     if ((redAst.exist && detectCollision(ship, redAst))) {
         gameOver();
@@ -50,7 +50,7 @@ function detectAllCollisions() {
         score += 5; 
         detectLevelUp();
         changeLevelUp();
-        playPopSound();
+        popSound.play();
         
         cheese.x = Math.random() * (astRangeX) + padding; //regenerate cheese coordinates
         cheese.y = Math.random() * (astRangeY) + sBHeight + padding;
@@ -63,17 +63,17 @@ function startSD() {
     cheese.exist = false;
     sDCount = 1;
     ship.speed = currentSpeed * (sDCount / 10);
-    sDInterval = setInterval(sDCountr, 1000);
+    sDInterval = setInterval(sDCounter, 1000);
 }
 
-function sDCountr() {
+function sDCounter() {
     if (sDCount > 4) {
         ship.speed = currentSpeed;
         cheeseCDFrame = 4;
         slowDown = false;
         cheese.exist = true;
         clearInterval(sDInterval);
-        playDingSound();
+        dingSound.play();
     }
     else if (sDCount <= 6) {
         cheese.exist = false;

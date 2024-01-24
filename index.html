@@ -18,6 +18,7 @@
 <body style="background-color: #33758a;">
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
+        <img src="Backgrounds/hatSpace.png" alt="Background" class="background-img">
         <div class="startScreen">
             <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
             <p>A game developed in html by Marcus Lim</p>
@@ -34,7 +35,7 @@
                 <li class="scoreVal fs32 score4">000</li>
             </ol>
         </div>
-        <button class="leftButton" onclick="openLink()">▶</button>
+        <button class="leftButton">▶</button>
         <!--end game first screen-->
         <div class="endGameText fs32 hidden">
             <p>End the current game first!</p>
@@ -47,7 +48,7 @@
             <h5>FINAL SCORE: <span id="finalScoreDisplay"></span></h5>
         </div>
         <!--Mobile controls-->
-        <div class="mobileControls">
+        <div class="mobileControls hidden">
             <div class="mobileLeft">
                 <button class="mobileButton mBUp">▲</button>
                 <button class="mobileButton mBLeft">◀</button>
@@ -190,7 +191,7 @@
 
         <!--Buttons on right side-->
         <div class="buttonsFlex2" oncontextmenu="return false">
-            <img src="desktop.png" class="smallIcon deviceButton">
+            <button class="deviceButton"><img src="desktop.png" class="smallIcon"></button>
             <button class="skinsButton">SKINS</button>
             <button class="audioButton"><img src="Audio/musicUnmuted.jpg" class="smallIcon"></button>
             <button class="closeButton fs32">X</button>
@@ -213,7 +214,7 @@
                         onclick="changeShipSkin('Sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(blueSpace)">
+                <div class="flex"><img src="Backgrounds/hatSpace.png" class="Bkg" onclick="changeBkgSkin(hatSpace)">
                 </div>
                 <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="Bkg"
                         onclick="changeBkgSkin(purpleSpace)">
