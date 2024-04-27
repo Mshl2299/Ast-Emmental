@@ -1,8 +1,26 @@
 //draw functions
-function drawShip(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+function drawCircle(color, obj) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(obj.x+obj.radius, obj.y+obj.radius, obj.radius, 0, Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
+    ctx.stroke();
 }
+
+// update: moved to player constructor
+// function drawShip(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+//     ctx.fillStyle = "white";
+//     ctx.beginPath();
+//     ctx.arc(ship.centerX, ship.centerY, ship.radius, 0, Math.PI*2);
+//     ctx.fill();
+//     ctx.closePath();
+//     ctx.stroke();
+//     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+
+// }
 function drawAst(img, dX, dY, dW, dH) {
+    //drawCircle("gray",ast);
     ctx.drawImage(img, dX, dY, dW, dH);
 }
 
@@ -14,12 +32,12 @@ function changeShipSkin(skinName) {
         currentSkin = skinName;
     }
     window.localStorage.setItem('skinName', JSON.stringify(currentSkin)); //JSON needs it to be a string, so this works by stringifying to ensure it's a string
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 function changeBkgSkin(bkgSkinName) {
     backgroundImg.src = bkgSkinName;
     window.localStorage.setItem('bkgImg', JSON.stringify(backgroundImg.src));
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 function updateUnlocks() {
     //check scores
@@ -53,7 +71,7 @@ function updateUnlocks() {
     }
     if (unlocks.includes("Sprites/asteroidSS1.png")) {
         asteroidSkin.classList.remove("greyed");
-        asteroidSkin.src = "Sprites/asteroidSS1.png";
+        asteroidSkin.src = "Sprites/asteroid.png";
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
@@ -121,13 +139,13 @@ function animate() {
 
         //which skin to display; exploded vs Skin selection
         if (gameOverT && skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
-            explode1.src = "BlueExplosion/blue" + JSON.stringify(ship.explosionFrame) + ".png";
+            ship.image.src = "BlueExplosion/blue" + JSON.stringify(ship.explosionFrame) + ".png";
             cycleExplosionFrame();
-            drawShip(explode1, 0, 0, 256, 256, ship.x - 50, ship.y - 50, ship.width + 100, ship.height + 100);
+            ship.draw(ship.image.src, 0, 0, 256, 256, ship.x - 50, ship.y - 50, ship.width + 100, ship.height + 100);
         }
         else {
-            ship.sprite.src = currentSkin;
-            drawShip(ship.sprite, 67 * ship.frameX, 66 * ship.frameY, 67, 66, ship.x, ship.y, ship.width, ship.height);
+            ship.image.src = currentSkin;
+            ship.draw(ship.image.src, 67 * ship.frameX, 66 * ship.frameY, 67, 66, ship.x, ship.y, ship.width, ship.height);
         }
 
         if (playerControl) {

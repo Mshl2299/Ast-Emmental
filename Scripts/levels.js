@@ -49,35 +49,59 @@ function changeLevelUp() {
         ship.speed = currentSpeed;
         if (!redAst.exist) {
             generateAsteroid(redAst);
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 2 && !redAst2.exist) {
         currentSpeed = 5;
         ship.speed = currentSpeed;
         ast.speed = 1.5;
+        if (!redAst.exist) {
+            generateAsteroid(redAst);
+            lvlUpSound.play();
+        }
         if (!redAst2.exist) {
             generateAsteroid(redAst2);
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 3 && !redAst3.exist) {
         currentSpeed = 6;
         ship.speed = currentSpeed;
         ast.speed = 2;
+        if (!redAst.exist) {
+            generateAsteroid(redAst);
+            lvlUpSound.play();
+        }
+        if (!redAst2.exist) {
+            generateAsteroid(redAst2);
+            lvlUpSound.play();
+        }
         if (!redAst3.exist) {
             generateAsteroid(redAst3);
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 4 && !cheese.exist) {
         currentSpeed = 7;
         ship.speed = currentSpeed;
         ast.speed = 3;
+        if (!redAst.exist) {
+            generateAsteroid(redAst);
+            lvlUpSound.play();
+        }
+        if (!redAst2.exist) {
+            generateAsteroid(redAst2);
+            lvlUpSound.play();
+        }
+        if (!redAst3.exist) {
+            generateAsteroid(redAst3);
+            lvlUpSound.play();
+        }
         if (!cheese.exist && !slowDown) {
             generateAsteroid(cheese);
             cheeseCDFrame = 4;
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
 
     }
@@ -89,7 +113,7 @@ function changeLevelUp() {
         ast.speed = 4;
         if (!redAst4.exist) {
             generateAsteroid(redAst4);
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 6 && !tripleDigit1) {
@@ -101,7 +125,7 @@ function changeLevelUp() {
         if (!tripleDigit1) {
             unlocks = ["snake"];
             tripleDigit1 = true;
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 7 && !tripleDigit2) {
@@ -113,7 +137,7 @@ function changeLevelUp() {
         if (!tripleDigit2) {
             unlocks = ["snake", "inverted"];
             tripleDigit2 = true;
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 8 && !tripleDigit3) {
@@ -125,7 +149,7 @@ function changeLevelUp() {
         if (!tripleDigit3) {
             unlocks = ["snake", "inverted", "asteroid"];
             tripleDigit3 = true;
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 9 && !legendaryScore) {
@@ -136,7 +160,7 @@ function changeLevelUp() {
         ast.speed = 8;
         if (!legendaryScore) {
             legendaryScore = true;
-            playSoundFX("Audio/success.mp3");
+            lvlUpSound.play();
         }
     }
     if (level == 10) {
@@ -145,7 +169,7 @@ function changeLevelUp() {
             ship.speed = currentSpeed;
         }
         ast.speed = 9;
-        playSoundFX("Audio/success.mp3");
+        lvlUpSound.play();
         console.log("game breaking score");
     }
 }

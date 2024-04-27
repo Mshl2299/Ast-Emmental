@@ -20,7 +20,7 @@ let padding = 30; //distance from borders for Grey & Red Asteroid generation
 let tolerance = 60; //for cheese movement and range detection
 //Scores
 let score = 0;
-let scoreAmt = 1; //easily adjust grey asteroid points
+let scoreAmt = 15; //easily adjust grey asteroid points
 let scoreArray = [];
 //levels & unlock detections
 let level = 0;
@@ -29,7 +29,7 @@ let tripleDigit2 = false;
 let tripleDigit3 = false;
 let legendaryScore = false;
 let unlocks = [];
-let defaultUnlocks = ['Sprites/alphaSS1.png','Sprites/betaSS1.png','Sprites/ufoSS1.png']
+let defaultUnlocks = ['Sprites/alphaSS1.png', 'Sprites/betaSS1.png', 'Sprites/ufoSS1.png']
 
 //-------------------------------BUTTONS & SCREENS-------------------------------
 //RIGHT SIDE
@@ -113,7 +113,7 @@ let blueNebula = "Backgrounds/blueNebulaAnim.gif";
 if (window.localStorage.getItem('bkgImg')) {
     backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
 } else {
-    backgroundImg.src = hatSpace;
+    backgroundImg.src = blueSpace;
     window.localStorage.setItem('bkgImg', JSON.stringify(backgroundImg.src));
 }
 //SCORE RETRIEVAL
@@ -133,20 +133,55 @@ if (window.localStorage.getItem('scoreArray')) {
 //--------------------------------SPRITES-------------------------------
 // SHIP
 let currentSpeed = 3; //speed variable that will change
-let ship = {
-    sprite: new Image(),
-    frameX: 0,
-    frameY: 0,
-    width: 67,
-    height: 66,
-    x: canvas.width / 2 - 33,
-    y: canvas.height / 2 - 33,
-    speed: currentSpeed,
-    direction: 1,
-    immunity: false,
-    exploded: false,
-    explosionFrame: 1,
+class Player {
+    constructor(source, width, height, x, y, frameX, frameY, speed, dir, imm, exp, expFrame) { //speedF = speed factor
+        this.image = new Image();
+        this.image.src = source;
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        this.frameX = frameX;
+        this.frameY = frameY;
+        this.radius = width / 2;
+        this.speed = speed;
+        this.direction = dir;
+        this.immunity = imm;
+        this.exploded = exp;
+        this.explosionFrame = expFrame;
+    }
+    move() {
+        this.x += ast.speed * this.xF * this.dirX;
+        this.y += ast.speed * this.yF * this.dirY;
+        detectBorderCollision(this); //collision with edge of screen
+    }
+    draw(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+        this.image.src=img;
+        //drawCircle("white", this);
+        ctx.drawImage(this.image, sX, sY, sW, sH, dX, dY, dW, dH);
+    }
+    resetPos() {
+        this.x = canvas.width/2-33;
+        this.y = canvas.width/2-33;
+    }
 }
+let ship = new Player("Sprites/shipAlpha.png", 67, 66, canvas.width/2-33, canvas.height/2-33, 0, 0, currentSpeed, 1, false, false, 1);
+// update: moved to constructor
+// let ship = {
+//     sprite: new Image(),
+//     frameX: 0,
+//     frameY: 0,
+//     width: 67,
+//     height: 66,
+//     radius: 32,
+//     x: canvas.width / 2 - 33,
+//     y: canvas.height / 2 - 33,
+//     speed: currentSpeed,
+//     direction: 1,
+//     immunity: false,
+//     exploded: false,
+//     explosionFrame: 1,
+// }
 let explode1 = new Image();
 explode1.src = "BlueExplosion/blue" + JSON.stringify(ship.explosionFrame) + ".png";
 
@@ -160,7 +195,7 @@ if (JSON.parse(window.localStorage.getItem('unlocks'))) {
     unlocks = JSON.parse(window.localStorage.getItem('unlocks'));
     console.log("Unlocked Sprites retrieved.")
 }
-ship.sprite.src = currentSkin;
+ship.image.src = currentSkin;
 
 // ASTEROIDS
 let ast = {
@@ -168,6 +203,7 @@ let ast = {
     sprite: new Image(),
     width: 48,
     height: 48,
+    radius: 24,
     x: 0,
     y: 0,
     exist: false,
@@ -178,15 +214,19 @@ ast.sprite.src = "Sprites/Asteroid.png";
 let astRangeY = (canvas.height - padding) - (sBHeight + padding) - ast.height; //max-min -height of asteroid so it doesn't clip off
 let astRangeX = (canvas.width - padding) - padding - ast.width;
 class Asteroid {
-    constructor(name, type, source, width, height, x, y, exist, moving, speedF, dirX, dirY) { //speedF = speed factor
+    constructor(name, type, source, width, height, exist, moving, speedF, dirX, dirY) { //speedF = speed factor
         this.name = name;
         this.type = type;
         this.image = new Image();
         this.image.src = source;
         this.width = width;
         this.height = height;
-        this.x = Math.random() * (astRangeX) + padding;
-        this.y = Math.random() * (astRangeY) + sBHeight + padding;
+        // may cause glitches so they are set to null
+        // this.x = Math.random() * (astRangeX) + padding;
+        // this.y = Math.random() * (astRangeY) + sBHeight + padding;
+        this.x = null;
+        this.y = null;
+        this.radius = width / 2;
         this.exist = exist;
         this.moving = moving;
         this.xF = Math.random() * speedF; //x multiplication factor; random to create new vectors
@@ -198,17 +238,18 @@ class Asteroid {
     move() {
         this.x += ast.speed * this.xF * this.dirX;
         this.y += ast.speed * this.yF * this.dirY;
-        detectBorderCollision(this);
+        detectBorderCollision(this); //collision with edge of screen
     }
     drawAst() {
+        //drawCircle("red", this);
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
 // Red Enemies
-let redAst = new Asteroid("redAst", "enemy", "Sprites/redAsteroid.png", ast.width, ast.height, 0, 0, false, false, 1, -1, 1);
-let redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width * 2, ast.height * 2, 0, 0, false, false, 0.6, -1, -1);
-let redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width * 3, ast.height * 3, 0, 0, false, false, 0.3, 1, 1);
-let redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
+let redAst = new Asteroid("redAst", "enemy", "Sprites/redAsteroid.png", ast.width, ast.height, false, false, 1, -1, 1);
+let redAst2 = new Asteroid("redAst2", "enemy", "Sprites/redAsteroid.png", ast.width * 2, ast.height * 2, false, false, 0.6, -1, -1);
+let redAst3 = new Asteroid("redAst3", "enemy", "Sprites/redAsteroid.png", ast.width * 3, ast.height * 3, false, false, 0.3, 1, 1);
+let redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, false, false, 1.5, 1, -1);
 // Yellow Slowdown High Reward
 let cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
 // slowDown effect
@@ -231,7 +272,7 @@ function startGame() { //reset values
     gameOverT = false;
 
     //Reset ship
-    ship.sprite.src = currentSkin;
+    ship.image.src = currentSkin;
     ship.x = canvas.width / 2 - ship.width / 2;
     ship.y = canvas.height / 2 - ship.height / 2;
     currentSpeed = 3;
@@ -274,7 +315,7 @@ function gameOver() {
     ship.exploded = true;
     bkgMusic.pause();
     menuMusic.play();
-    playSoundFX("Audio/explosion.wav");
+    explSound.play();
     clearInterval(sDInterval);
     handleScore(score);
     //display UI

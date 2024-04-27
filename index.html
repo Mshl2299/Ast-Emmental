@@ -18,7 +18,7 @@
 <body style="background-color: #33758a;">
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
-        <img src="Backgrounds/hatSpace.png" alt="Background" class="background-img">
+        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="background-img">
         <div class="startScreen">
             <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
             <p>A game developed in html by Marcus Lim</p>
@@ -83,11 +83,11 @@
                     a <a>highscore!</a></li>
                 <li>Collect Grey Asteroids // Avoid Red ones</li>
                 <li>Collect the <a style="color: rgb(80, 67, 2);"><u
-                            onclick="playSoundFX('Audio/success.mp3')">valuable</u></a> (but heavy) Yellow Asteroids
+                            onclick="lvlUpSound.play()">valuable</u></a> (but heavy) Yellow Asteroids
                     too!</li>
                 <li>Customize <a>MUSIC</a>, <a>SKINS</a> & <a>AUDIO</a> at the top</li>
                 <li>Press the "X" button to <a style="color:darkred;"><u
-                            onclick="playSoundFX('Audio/explosion.wav')">RESET</u></a></li>
+                            onclick="explSound.play()">RESET</u></a></li>
                 <li>Unlock new SKINS with scores! Check scores on the right ></li>
                 <li>GitHub page <a href="https://github.com/Mshl2299/Ast-Emmental" target="_blank">Here</a> // Thanks
                     for playing!</li>
@@ -214,7 +214,7 @@
                         onclick="changeShipSkin('Sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/hatSpace.png" class="Bkg" onclick="changeBkgSkin(hatSpace)">
+                <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(blueSpace)">
                 </div>
                 <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="Bkg"
                         onclick="changeBkgSkin(purpleSpace)">

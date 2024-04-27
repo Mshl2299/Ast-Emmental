@@ -1,49 +1,50 @@
 //collision detection; first "if" is for x-values/domain, second "if" is for y-values/range
-function detectCollision(player, obstacle) {
+var distanceToPlayer;
+
+// function detectCollision(player, obstacle) {
+//     if (playerControl && !ship.immunity) {
+//         // if (player.x > obstacle.x + obstacle.width ||
+//         //     player.x + player.width < obstacle.x ||
+//         //     player.y > obstacle.y + obstacle.height ||
+//         //     player.y + player.height < obstacle.y) {
+//         //     return false;
+//         // }
+//         // return true; //use "detectCollision" in an if statement
+//     }
+// }
+
+function detectCircleCollision(player, obstacle){
     if (playerControl && !ship.immunity) {
-        if (player.x > obstacle.x + obstacle.width ||
-            player.x + player.width < obstacle.x ||
-            player.y > obstacle.y + obstacle.height ||
-            player.y + player.height < obstacle.y) {
-            return false;
+        distanceToPlayer = Math.sqrt(((player.x+player.radius)-(obstacle.x+obstacle.radius))**2+((player.y+player.radius)-(obstacle.y+obstacle.radius))**2);
+        //pythagoras: (player centerX - obstacle centerX)^2 + (player centerY - obstacle centerY)^2
+        if (distanceToPlayer <= player.radius + obstacle.radius) {
+            return true;
         }
-        return true; //use "detectCollision" in an if statement
+        return false;
     }
 }
-
-function detectRangeCollision(player, obstacle) {
-    if (playerControl && !ship.immunity) {
-        if (player.x > obstacle.x + obstacle.width + tolerance ||
-            player.x + player.width + tolerance < obstacle.x ||
-            player.y > obstacle.y + obstacle.height + tolerance ||
-            player.y + player.height + tolerance < obstacle.y) {
-            return false;
-        }
-        return true; 
-    }
-}
-
+//update: added circle collision, updated detectAllCollisions to match
 function detectAllCollisions() {
-    if (detectCollision(ship, ast)) {
+    if (detectCircleCollision(ship, ast)) {
         generateAsteroid(ast);
         score += scoreAmt;
         detectLevelUp();
         changeLevelUp();
         popSound.play();
     }
-    if ((redAst.exist && detectCollision(ship, redAst))) {
+    if ((redAst.exist && detectCircleCollision(ship, redAst))) {
         gameOver();
     }
-    if ((redAst2.exist && detectCollision(ship, redAst2))) {
+    if ((redAst2.exist && detectCircleCollision(ship, redAst2))) {
         gameOver();
     }
-    if ((redAst3.exist && detectCollision(ship, redAst3))) {
+    if ((redAst3.exist && detectCircleCollision(ship, redAst3))) {
         gameOver();
     }
-    if ((redAst4.exist && detectCollision(ship, redAst4))) {
+    if ((redAst4.exist && detectCircleCollision(ship, redAst4))) {
         gameOver();
     }
-    if (cheese.exist && detectCollision(ship, cheese)) {
+    if (cheese.exist && detectCircleCollision(ship, cheese)) {
         slowDown = true;
         cheeseCDFrame = 1;
         givePlayerImmunity(300);
@@ -86,6 +87,7 @@ function sDCounter() {
     }
 }
 
+// code for cheese to run away
 function detectRange(player, obstacle) {
     if (playerControl) {
         if (player.x > obstacle.x + obstacle.width + tolerance || //same collision code, but adding extra distance to create a range

@@ -5,16 +5,26 @@ let menuMusic = new Audio();
 let menuMusicNumber = 0;
 
 //Sound Effects & Elements
-let soundFX = new Audio(); // misc
-let dingSound = new Audio(); // level ups
+let clickSound = new Audio(); // click in menus
+clickSound.src = "Audio/click.wav";
+let lvlUpSound = new Audio(); // level up
+lvlUpSound.src = "Audio/success.mp3";
+let dingSound = new Audio(); // cheese regen
 dingSound.src = "Audio/ding.wav";
 let popSound = new Audio(); // collects
 popSound.src = "Audio/pop.ogg";
+let explSound = new Audio(); // explosion
+explSound.src = "Audio/explosion.wav";
 
-function playSoundFX(source) {
-    soundFX.src = source;
-    soundFX.play();
-}
+//update: errors occuring when the same audio element is used to simultaneously make 2 sounds
+//solution: make more audio elements for each unique sound
+// function playSoundFX(source) {
+//     soundFX.src = source;
+//     soundFX.play().catch((e)=>{
+//         console.log(e);
+//      });
+// }
+
 //--------------------------------LOAD-IN----------------------------------
 //SFX volume
 if (window.localStorage.getItem('sFXRange')) {
@@ -47,13 +57,13 @@ if (!window.localStorage.getItem('menuMusic')) {
 //--------------------------------MUSIC-------------------------
 function changeBkgMusic(source) {
     bkgMusic.src = source;
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 function changeMenuMusic(source) {
     menuMusic.pause(); // because menu music is played during switches
     menuMusic.src = source;
     menuMusic.play();
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 
 function randomizeMenuMusic() {
@@ -91,7 +101,7 @@ function prevMusicPage() {
         musicPage3.classList.add("hidden");
         musicPage2.classList.remove("hidden");
     }
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 function nextMusicPage() {
     //if on page 1 go to page 2
@@ -109,11 +119,11 @@ function nextMusicPage() {
         musicPage3.classList.add("hidden");
         musicPage1.classList.remove("hidden");
     }
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
 }
 
-function updateVolume() {
-    soundFX.volume = sFXRange.value / 100;
+function updateVolume() { //!!!
+    //soundFX.volume = sFXRange.value / 100;
     popSound.volume = sFXRange.value / 100;
     dingSound.volume = sFXRange.value / 100;
     bkgMusic.volume = musicRange.value / 180;

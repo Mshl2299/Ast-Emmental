@@ -99,7 +99,7 @@ function openHowTo() {
         howToScreen.classList.toggle('hidden'); //toggles how to screen
         ship.x = canvas.width / 2 - ship.width / 2;
         ship.y = canvas.height / 2 - ship.height / 2;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
 }
 function openMusicMenu() {
@@ -111,7 +111,7 @@ function openMusicMenu() {
         musicScreen.classList.toggle('hidden');
         ship.x = canvas.width / 2 - ship.width / 2;
         ship.y = canvas.height / 2 - ship.height / 2;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
 }
 
@@ -151,7 +151,7 @@ function changeDevice() {
             cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
             mobile = true;
             if (userInteracted) {
-                playSoundFX("Audio/click.wav");
+                clickSound.play();
             }
         }
         else if (mobile) { //if switching to desktop
@@ -181,13 +181,14 @@ function changeDevice() {
             redAst4 = new Asteroid("redAst4", "enemy", "Sprites/redAsteroid.png", ast.width * 1.5, ast.height * 1.5, 0, 0, false, false, 1.5, 1, -1);
             cheese = new Asteroid("cheese", "friend", "Sprites/cheese.png", ast.width / 2, ast.height / 2, 0, 0, false);
             mobile = false;
-            playSoundFX("Audio/click.wav");
+            clickSound.play();
         }
     }
 }
-if (window.innerWidth <= 980) {
-    changeDevice();
-}
+// update: temp change to stop annoyance
+// if (window.innerWidth <= 980) {
+//     changeDevice();
+// }
 
 function openSkinsMenu() {
     if (skinsButton.classList.contains('greyed')) {
@@ -208,13 +209,13 @@ function openSkinsMenu() {
             ship.frameY = 0;
         }
         skinsMenuScreen.classList.toggle('hidden');
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
     updateUnlocks();
 }
 function openAudioMenu() {
     audioMenu.classList.toggle('hidden');
-    playSoundFX("Audio/click.wav");
+    clickSound.play();
     //testing spot
 }
 function toggleSFX() {
@@ -223,7 +224,7 @@ function toggleSFX() {
     }
     else if (sFXRange.value == 0) {
         sFXRange.value = 100;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
 }
 function toggleMusic() {
@@ -232,15 +233,16 @@ function toggleMusic() {
     }
     else if (musicRange.value == 0) {
         musicRange.value = 100;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
 }
 function clearData() {
     window.localStorage.clear();
     scoreArray = [];
     unlocks = [];
+    changeShipSkin('Sprites/alphaSS1.png')
     handleScore(0);
-    playSoundFX('Audio/explosion.wav');
+    explSound.play();
     console.log("Data Successfully Cleared.");
     console.log(window.localStorage);
 }
@@ -263,13 +265,13 @@ function toggleScores() {
         rightButton.style.left = "98%";
         scoreDisplay.style.left = "100%";
         scoreDisplayOpen = false;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
     else if (!scoreDisplayOpen) {
         rightButton.style.left = "78.8%";
         scoreDisplay.style.left = "80%";
         scoreDisplayOpen = true;
-        playSoundFX("Audio/click.wav");
+        clickSound.play();
     }
 }
 //-------------------------OTHER-------------------------------

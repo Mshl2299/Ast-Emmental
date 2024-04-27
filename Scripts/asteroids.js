@@ -2,11 +2,6 @@
 function generateAsteroid(asteroid) {
     asteroid.x = Math.random() * (astRangeX) + padding;
     asteroid.y = Math.random() * (astRangeY) + sBHeight + padding;
-    while (detectRangeCollision(ship, asteroid)) {
-        asteroid.x = Math.random() * (astRangeX) + padding;
-        asteroid.y = Math.random() * (astRangeY) + sBHeight + padding;
-        console.log(JSON.stringify(asteroid.name) + " regenerated");
-    }
     givePlayerImmunity(500);
     asteroid.exist = true;
     asteroid.moving = false;

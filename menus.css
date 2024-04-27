@@ -82,6 +82,9 @@ button:hover {
     margin-right: auto;
     background: transparent;
 }
+.musicTile:hover{
+    background: #d28f29;
+}
 
 /*Right Buttons & Menus*/
 .buttonsFlex2 {
