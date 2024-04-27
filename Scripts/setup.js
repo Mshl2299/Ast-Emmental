@@ -20,7 +20,7 @@ let padding = 30; //distance from borders for Grey & Red Asteroid generation
 let tolerance = 60; //for cheese movement and range detection
 //Scores
 let score = 0;
-let scoreAmt = 15; //easily adjust grey asteroid points
+let scoreAmt = 5; //easily adjust grey asteroid points
 let scoreArray = [];
 //levels & unlock detections
 let level = 0;
