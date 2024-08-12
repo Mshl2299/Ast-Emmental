@@ -11,20 +11,20 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="menus.css">
-    <link rel="stylesheet" href="" class="mobileCSS">
+    <!-- <link rel="stylesheet" href="" class="mobileCSS"> -->
     <link rel="icon" type="image/png" href="Sprites/shipAlpha.png">
 </head>
 
 <body style="background-color: #33758a;">
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
-        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="background-img">
+        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="backgroundImg">
         <div class="startScreen">
             <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
-            <p>A game developed in html by Marcus Lim</p>
+            <p>A vanilla JavaScript game by Marcus Lim</p>
         </div>
         <!--Middle Left/Right Buttons-->
-        <button class="rightButton">◀</button>
+        <button class="rightHexButton">◀</button>
         <div class="scoreDisplay">
             <h1><u>HIGHSCORES</u></h1>
             <ol>
@@ -35,9 +35,9 @@
                 <li class="scoreVal fs32 score4">000</li>
             </ol>
         </div>
-        <button class="leftButton">▶</button>
+        <button class="leftHexButton">▶</button>
         <!--end game first screen-->
-        <div class="endGameText fs32 hidden">
+        <div class="endGameFirstText fs32 hidden">
             <p>End the current game first!</p>
         </div>
         <!--start game-->
@@ -47,18 +47,6 @@
             <h4><u>GAME OVER</u></h4>
             <h5>FINAL SCORE: <span id="finalScoreDisplay"></span></h5>
         </div>
-        <!--Mobile controls-->
-        <div class="mobileControls hidden">
-            <div class="mobileLeft">
-                <button class="mobileButton mBUp">▲</button>
-                <button class="mobileButton mBLeft">◀</button>
-            </div>
-            <div class="mobileRight">
-                <button class="mobileButton mBRight">▶</button>
-                <button class="mobileButton mBDown">▼</button>
-            </div>
-        </div>
-
 
         <!--Buttons on upper left side-->
         <div class="buttonsFlex1" oncontextmenu="return false">
@@ -69,9 +57,9 @@
         <div class="howToScreen fs32 hidden">
             <h2>HOW TO PLAY</h2>
             <div class="flex keyControls">
-                <div class="flex"><img src="WASDkeys.jpg" class="mediumIcon"></div>
+                <div class="flex"><img draggable="false" src="WASDkeys.jpg" class="mediumIcon"></div>
                 <button class="orText">OR</button>
-                <div class="flex"><img src="ArrowKeys.jpg" class="mediumIcon"></div>
+                <div class="flex"><img draggable="false" src="ArrowKeys.jpg" class="mediumIcon"></div>
             </div>
             <div class="flex buttonControls hidden">
                 <p style="width: 250px; height: 38px;">Use the buttons to move the ship.</p>
@@ -82,19 +70,17 @@
                 <li>Welcome to <a>AST-Emmental Mining Company™!</a></br>Your task is to mine asteroids and get rich with
                     a <a>highscore!</a></li>
                 <li>Collect Grey Asteroids // Avoid Red ones</li>
-                <li>Collect the <a style="color: rgb(80, 67, 2);"><u
-                            onclick="lvlUpSound.play()">valuable</u></a> (but heavy) Yellow Asteroids
-                    too!</li>
+                <li>Collect the <a style="color: rgb(80, 67, 2);"><u onclick="lvlUpSound.play()">valuable</u></a> (but
+                    heavy) Yellow Asteroids too!</li>
                 <li>Customize <a>MUSIC</a>, <a>SKINS</a> & <a>AUDIO</a> at the top</li>
-                <li>Press the "X" button to <a style="color:darkred;"><u
-                            onclick="explSound.play()">RESET</u></a></li>
+                <li>Press the "X" button to <a style="color:darkred;"><u onclick="explSound.play()">RESET</u></a></li>
                 <li>Unlock new SKINS with scores! Check scores on the right ></li>
                 <li>GitHub page <a href="https://github.com/Mshl2299/Ast-Emmental" target="_blank">Here</a> // Thanks
                     for playing!</li>
             </ul>
         </div>
         <!--Music Selection-->
-        <div class="musicScreen fs32 hidden">
+        <!-- <div class="musicScreen fs32 hidden">
             <h2><button class="prevPageButton">◀</button> MUSIC <button class="nextPageButton">▶</button></h2>
             <div class="musicPage1">
                 <div class="flex">
@@ -187,11 +173,11 @@
                     "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a
                         target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a></p>
             </div>
-        </div>
+        </div> -->
 
         <!--Buttons on right side-->
         <div class="buttonsFlex2" oncontextmenu="return false">
-            <button class="deviceButton"><img src="desktop.png" class="smallIcon"></button>
+            <button class="deviceButton greyed"><img src="desktop.png" class="smallIcon"></button>
             <button class="skinsButton">SKINS</button>
             <button class="audioButton"><img src="Audio/musicUnmuted.jpg" class="smallIcon"></button>
             <button class="closeButton fs32">X</button>
@@ -200,18 +186,18 @@
         <div class="skinsMenuScreen fs32 hidden">
             <h2>SKINS</h2>
             <div class="flex">
-                <div class="flex"><img src="Sprites/shipAlpha.png" class="skin"
-                        onclick="changeShipSkin('Sprites/alphaSS1.png')"></div>
-                <div class="flex"><img src="Sprites/shipBeta.png" class="skin"
-                        onclick="changeShipSkin('Sprites/betaSS1.png')"></div>
-                <div class="flex"><img src="Sprites/shipUFO.png" class="skin"
-                        onclick="changeShipSkin('Sprites/ufoSS1.png')"></div>
-                <div class="flex"><img src="Sprites/shipSnakeLocked.png" class="skin snakeSkin greyed"
-                        onclick="changeShipSkin('Sprites/snakeSS1.png')"></div>
-                <div class="flex"><img src="Sprites/shipAlphaInvertedLocked.png" class="skin greyed invertedSkin"
-                        onclick="changeShipSkin('Sprites/alphaInvertedSS1.png')"></div>
-                <div class="flex"><img src="Sprites/AsteroidLocked.png" class="skin greyed asteroidSkin"
-                        onclick="changeShipSkin('Sprites/asteroidSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipAlpha.png" class="skin"
+                        onclick="ship.changeSkin('Sprites/alphaSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipBeta.png" class="skin"
+                        onclick="ship.changeSkin('Sprites/betaSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipUFO.png" class="skin"
+                        onclick="ship.changeSkin('Sprites/ufoSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipSnakeLocked.png" class="skin snakeSkin greyed"
+                        onclick="ship.changeSkin('Sprites/snakeSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipAlphaInvertedLocked.png" class="skin greyed invertedSkin"
+                        onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/AsteroidLocked.png" class="skin greyed asteroidSkin"
+                        onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
                 <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(blueSpace)">
@@ -257,10 +243,8 @@
     </div>
     <script src="Scripts/setup.js"></script>
     <script src="Scripts/audio.js"></script>
-    <script src="Scripts/inputs.js"></script>
     <script src="Scripts/levels.js"></script>
-    <script src="Scripts/detections.js"></script>
-    <script src="Scripts/asteroids.js"></script>
+    <script src="Scripts/ui.js"></script>
     <script src="Scripts/functions.js"></script>
 </body>
 

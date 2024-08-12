@@ -99,7 +99,7 @@ br {
 }
 
 /* right trapezoid button & scores*/
-.rightButton {
+.hSButton {
     height: 220px;   
 }
 .scoreDisplay {
@@ -114,11 +114,11 @@ br {
     line-height: 20px;
 }
 
-.leftButton {
+.leftHexButton {
     height: 220px;
 }
 
-.endGameText {
+.endGameFirstText {
     width: 120px;
     height: 32px;
     position: absolute;

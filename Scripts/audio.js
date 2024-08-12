@@ -67,6 +67,7 @@ function changeMenuMusic(source) {
 }
 
 function randomizeMenuMusic() {
+    menuMusic.pause();
     menuMusicNumber = Math.floor((Math.random() * 4));
     switch (menuMusicNumber) {
         case 0:
@@ -82,44 +83,7 @@ function randomizeMenuMusic() {
             menuMusic.src = "Audio/stageSelectJJunkala.wav";
             break;
     }
-}
-
-//navigation
-function prevMusicPage() {
-    //if on page 1 go to page 3
-    if (!musicPage1.classList.contains("hidden")) {
-        musicPage1.classList.add("hidden");
-        musicPage3.classList.remove("hidden");
-    }
-    //if on page 2 go to page 1
-    else if (!musicPage2.classList.contains("hidden")) {
-        musicPage2.classList.add("hidden");
-        musicPage1.classList.remove("hidden");
-    }
-    //if on page 3 go to page 2
-    else if (!musicPage3.classList.contains("hidden")) {
-        musicPage3.classList.add("hidden");
-        musicPage2.classList.remove("hidden");
-    }
-    clickSound.play();
-}
-function nextMusicPage() {
-    //if on page 1 go to page 2
-    if (!musicPage1.classList.contains("hidden")) {
-        musicPage1.classList.add("hidden");
-        musicPage2.classList.remove("hidden");
-    }
-    //if on page 2 go to page 3
-    else if (!musicPage2.classList.contains("hidden")) {
-        musicPage2.classList.add("hidden");
-        musicPage3.classList.remove("hidden");
-    }
-    //if on page 3 go to page 1
-    else if (!musicPage3.classList.contains("hidden")) {
-        musicPage3.classList.add("hidden");
-        musicPage1.classList.remove("hidden");
-    }
-    clickSound.play();
+    menuMusic.play();
 }
 
 function updateVolume() { //!!!
