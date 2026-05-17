@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="menus.css">
     <!-- <link rel="stylesheet" href="" class="mobileCSS"> -->
     <link rel="icon" type="image/png" href="Sprites/shipAlpha.png">
+
 </head>
 
 <body style="background-color: #33758a;">
@@ -26,14 +27,23 @@
         <!--Middle Left/Right Buttons-->
         <button class="rightHexButton">◀</button>
         <div class="scoreDisplay">
-            <h1><u>HIGHSCORES</u></h1>
-            <ol>
-                <li class="scoreVal fs32 score0">000</li>
-                <li class="scoreVal fs32 score1">000</li>
-                <li class="scoreVal fs32 score2">000</li>
-                <li class="scoreVal fs32 score3">000</li>
-                <li class="scoreVal fs32 score4">000</li>
+            <h6 class="highscoreTitle"><u>ALL-TIME HIGHSCORES</u></h6>
+            <ol class="leaderboardScores">
+                <li class="scoreVal leaderboard0">000</li>
+                <li class="scoreVal leaderboard1">000</li>
+                <li class="scoreVal leaderboard2">000</li>
+                <li class="scoreVal leaderboard3">000</li>
+                <li class="scoreVal leaderboard4">000</li>
             </ol>
+            <h6 class="highscoreTitle"><u>HIGHSCORES</u></h6>
+            <ol>
+                <li class="scoreVal score0">000</li>
+                <li class="scoreVal score1">000</li>
+                <li class="scoreVal score2">000</li>
+                <li class="scoreVal score3">000</li>
+                <li class="scoreVal score4">000</li>
+            </ol>
+
         </div>
         <button class="leftHexButton">▶</button>
         <!--end game first screen-->
@@ -46,6 +56,10 @@
         <div class="gameOverScreen fs32 hidden">
             <h4><u>GAME OVER</u></h4>
             <h5>FINAL SCORE: <span id="finalScoreDisplay"></span></h5>
+            <form id="scoreForm">
+                <input type="text" id="username" placeholder="NAME" size = "4" maxlength="4" required>
+                <button type="submit" id="leaderboardSubmit">Submit Score</button>
+            </form>
         </div>
 
         <!--Buttons on upper left side-->
@@ -79,101 +93,7 @@
                     for playing!</li>
             </ul>
         </div>
-        <!--Music Selection-->
-        <!-- <div class="musicScreen fs32 hidden">
-            <h2><button class="prevPageButton">◀</button> MUSIC <button class="nextPageButton">▶</button></h2>
-            <div class="musicPage1">
-                <div class="flex">
-                    <div onclick="changeBkgMusic('Audio/rainingBitsGundatsch.ogg')" class="musicTile">
-                        <h6 class="musicIcon">&#128126</h6>
-                        <h6><u>Raining Bits (default)</u></h6>
-                        <p><a target="_blank" href="https://soundcloud.com/gundatsch"><b><u>Gundatsch</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/NESBossIntroSketchyLogic.wav')" class="musicTile">
-                        <h6 class="musicIcon">&#128299</h6>
-                        <h6><u>NES Shooter - Boss</u></h6>
-                        <p><a target="_blank" href="https://soundcloud.com/sketchylogic"><b><u>SketchyLogic</u></b></a>
-                        </p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/linesOfCodeTLentz.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#128121</h6>
-                        <h6><u>Lines of Code</u></h6>
-                        <p><a target="_blank" href="https://open.spotify.com/artist/3AjWA7sRmeZSKqr7PoKL6k"><b><u>Trevor
-                                        Lentz</u></b></a></p>
-                    </div>
-                </div>
-                <div class="flex">
-                    <div onclick="changeBkgMusic('Audio/cyberSonataJoth.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#127932</h6>
-                        <h6><u>Cyber Sonata</u></h6>
-                        <p><a target="_blank" href="https://opengameart.org/users/joth"><b><u>Joth</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/hyperUltraRacingcynicmusic.wav')" class="musicTile">
-                        <h6 class="musicIcon">&#127950</h6>
-                        <h6><u>Hyper Ultra-Racing</u></h6>
-                        <p><a target="_blank" href="https://cynicmusic.com"><b><u>cynicmusic</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/lunarArrowmmry.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#127776</h6>
-                        <h6><u>Lunar Arrow</u></h6>
-                        <p><a target="_blank" href="https://soundcloud.com/mmry/"><b><u>mmry</u></b></a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="musicPage2 hidden">
-                <div class="flex">
-                    <div onclick="changeBkgMusic('Audio/bossaNovaJoth.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#9749</h6>
-                        <h6><u>Bossa Nova</u></h6>
-                        <p><a target="_blank" href="https://opengameart.org/users/joth"><b><u>Joth</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/ET86cynicmusic.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#127754</h6>
-                        <h6><u>Enchanted Tiki 86</u></h6>
-                        <p><a target="_blank" href="https://cynicmusic.com"><b><u>cynicmusic</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/chiptunesJJunkala.wav')" class="musicTile">
-                        <h6 class="musicIcon">&#11088</h6>
-                        <h6><u>Chiptune Adventures</u></h6>
-                        <p><a target="_blank" href="https://juhanijunkala.com/"><b><u>Juhani Junkala</u></b></a></p>
-                    </div>
-                </div>
-                <div class="flex">
-                    <div onclick="changeBkgMusic('Audio/thrustSequenceMPablo.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#128760</h6>
-                        <h6><u>Thrust Sequence</u></h6>
-                        <p><a target="_blank" href="https://www.matthewpablo.com"><b><u>matthewpablo</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/orbitalColossusMPablo.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#127761</h6>
-                        <h6><u>Orbital Colossus</u></h6>
-                        <p><a target="_blank" href="https://www.matthewpablo.com"><b><u>matthewpablo</u></b></a></p>
-                    </div>
-                    <div onclick="changeBkgMusic('Audio/theReconMissionZNoriega.mp3')" class="musicTile">
-                        <h6 class="musicIcon">&#127928</h6>
-                        <h6><u>The Recon Mission</u></h6>
-                        <p><a target="_blank" href="https://twitter.com/ZanderNoriega"><b><u>Zander Noriega</u></b></a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="musicPage3 hidden">
-                <h5><u>Menu/Loading Music</u></h5>
-                <p><u onclick="changeMenuMusic('Audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
-                <p><u onclick="changeMenuMusic('Audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u>
-                </p>
-                <p><u onclick="changeMenuMusic('Audio/menuLSLBMorris.wav')">Loading Screen Loop</u> - <u>Brandon
-                        Morris</u>
-                </p>
-                <h5><u>Check these out!</u></h5>
-                <p><b>PixelSphere</b> by <b>cynicmusic</b>, a free "2d-sidescroller with an <b>interactive</b>
-                    musical
-                    soundtrack"! <a target="_blank" href="https://pixelsphere.org/">https://pixelsphere.org/</a></p>
-                <p><b>Aviary Attorney</b> by <b>SketchyLogic</b>, a paid "~swanderful~ experience", where you play as
-                    "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a
-                        target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a></p>
-            </div>
-        </div> -->
+
 
         <!--Buttons on right side-->
         <div class="buttonsFlex2" oncontextmenu="return false">
@@ -194,10 +114,11 @@
                         onclick="ship.changeSkin('Sprites/ufoSS1.png')"></div>
                 <div class="flex"><img draggable="false" src="Sprites/shipSnakeLocked.png" class="skin snakeSkin greyed"
                         onclick="ship.changeSkin('Sprites/snakeSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipAlphaInvertedLocked.png" class="skin greyed invertedSkin"
-                        onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/AsteroidLocked.png" class="skin greyed asteroidSkin"
-                        onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipAlphaInvertedLocked.png"
+                        class="skin greyed invertedSkin" onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')">
+                </div>
+                <div class="flex"><img draggable="false" src="Sprites/AsteroidLocked.png"
+                        class="skin greyed asteroidSkin" onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
                 <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(blueSpace)">
