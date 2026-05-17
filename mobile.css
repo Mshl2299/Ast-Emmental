@@ -81,19 +81,19 @@ br {
     border-radius: 12px;
 }
 
-.smallIcon {
+.small-icon {
     height: 38px;
     width: 38px;
     margin: 1px;
 }
 
 /*Other Buttons & Menus*/
-.startButton {
+.start-button {
     border: 3px solid black;
     height: 50px;
     width: 100px;
 }
-.startScreen {
+.start-screen {
     height: 100px;
     width: 250px;
     border: 3px solid black;
@@ -105,23 +105,23 @@ br {
 .hSButton {
     height: 220px;   
 }
-.scoreDisplay {
+.score-display {
     height: 220px;
     width: 120px;
     border: none;
 }
-.scoreVal {
+.score-val {
     width: 120px;
     font-size: 22px;
     word-spacing: -10px;
     line-height: 20px;
 }
 
-.leftHexButton {
+.left-hex-button {
     height: 220px;
 }
 
-.endGameFirstText {
+.end-game-first-text {
     width: 120px;
     height: 32px;
     position: absolute;
@@ -130,7 +130,7 @@ br {
     transform: translate(-50%, -50%);
 }
 
-.gameOverScreen {
+.game-over-screen {
     height: 120px;
     width: 240px;
     font-size: 42px;
@@ -144,42 +144,42 @@ button {
 }
 
 /*Left Buttons & Menus*/
-.buttonsFlex1 {
+.buttons-flex1 {
     display: flex;
     width: 200px;
     left: 1.8%;
 }
 /* how to */
-.howToButton {
+.how-to-button {
     width: 110px;
     height: 40px;
     padding: 5px;
 }
-.howToScreen {
+.how-to-screen {
     height: 240px;
     width: 390px;
     padding-top: 3px;
 }
 
 /* music selection */
-.musicButton {
+.music-button {
     width: 100px;
     height: 40px;
     padding: 5px;
 }
-.musicScreen {
+.music-screen {
     height: 250px;
     width: 380px;
     padding: 5px;
     padding-left: 25px;
     padding-right: 25px;
 }
-.musicTile {
+.music-tile {
     width: 90px;
     height: 80px;
     margin: 3px;
 }
-.musicIcon {
+.music-icon {
     height: 40px;
     width: 60px;
     font-size: 30px;
@@ -188,23 +188,23 @@ button {
 }
 
 /*Right Buttons & Menus*/
-.buttonsFlex2 {
+.buttons-flex2 {
     display: flex;
     width: 200px;
     position: absolute;
     left: 59%;
 }
 /*desktop-mobile switching*/
-.deviceButton {
+.device-button {
     width: 60px;
     height: 40px;
 }
 /* skin menu */
-.skinsButton {
+.skins-button {
     width: 100px;
     height: 40px;
 }
-.skinsMenuScreen {
+.skins-menu-screen {
     height: 230px;
     width: 330px;
     padding-top: 3px;
@@ -215,17 +215,17 @@ button {
     border: 2px solid black;
     padding: 1px;
 }
-.Bkg {
+.bkg {
     width: 80px;
     height: 52px;
 }
 
 /* audio menu */
-.audioButton {
+.audio-button {
     width: 60px;
     height: 40px;
 }
-.audioMenu {
+.audio-menu {
     height: 120px;
     width: 90px;
     position: absolute;
@@ -237,19 +237,19 @@ button {
     padding-top: 2px;
 }
 /*End game/Explode player/Close all menus*/
-.closeButton {
+.close-button {
     width: 50px;
     height: 40px;
     font-size: 20px;
 }
 
 /*Mobile Controls*/
-.mobileButton {
+.mobile-button {
     width: 40px;
     height: 32px;
     opacity: 0.5;
 }
-.mobileLeft {
+.mobile-left {
     width: 120px;
     height: 80px;
     position: absolute;
@@ -261,7 +261,7 @@ button {
     margin-left: 64px;
 }
 
-.mobileRight {
+.mobile-right {
     width: 120px;
     height: 80px;
     position: absolute;

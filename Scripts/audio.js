@@ -5,16 +5,22 @@ let menuMusic = new Audio();
 let menuMusicNumber = 0;
 
 //Sound Effects & Elements
+// TODO: convert to an object that stores all sounds
 let clickSound = new Audio(); // click in menus
 clickSound.src = "Audio/click.wav";
 let lvlUpSound = new Audio(); // level up
 lvlUpSound.src = "Audio/success.mp3";
 let dingSound = new Audio(); // cheese regen
 dingSound.src = "Audio/ding.wav";
-let popSound = new Audio(); // collects
-popSound.src = "Audio/pop.ogg";
 let explSound = new Audio(); // explosion
 explSound.src = "Audio/explosion.wav";
+
+let popSoundVolume = 1;
+function playPop() {
+    const s = new Audio("Audio/pop.ogg");
+    s.volume = popSoundVolume;
+    s.play();
+  }
 
 //update: errors occuring when the same audio element is used to simultaneously make 2 sounds
 //solution: make more audio elements for each unique sound
@@ -27,18 +33,18 @@ explSound.src = "Audio/explosion.wav";
 
 //--------------------------------LOAD-IN----------------------------------
 //SFX volume
-if (window.localStorage.getItem('sFXRange')) {
-    sFXRange.value = JSON.parse(window.localStorage.getItem('sFXRange'));
+if (window.localStorage.getItem('sfxRange')) {
+    uiElements.sfxRange.value = JSON.parse(window.localStorage.getItem('sfxRange'));
 } else {
-    sFXRange.value = "100";
-    window.localStorage.setItem('sFXRange', JSON.stringify(sFXRange.value));
+    uiElements.sfxRange.value = "100";
+    window.localStorage.setItem('sfxRange', JSON.stringify(uiElements.sfxRange.value));
 }
 //MUSIC volume
 if (window.localStorage.getItem('musicRange')) {
-    musicRange.value = JSON.parse(window.localStorage.getItem('musicRange'));
+    uiElements.musicRange.value = JSON.parse(window.localStorage.getItem('musicRange'));
 } else {
-    musicRange.value = "50";
-    window.localStorage.setItem('musicRange', JSON.stringify(musicRange.value));
+    uiElements.musicRange.value = "50";
+    window.localStorage.setItem('musicRange', JSON.stringify(uiElements.musicRange.value));
 }
 //BKG MUSIC
 if (!window.localStorage.getItem('bkgMusic')) {
@@ -87,24 +93,24 @@ function randomizeMenuMusic() {
 }
 
 function updateVolume() { //!!!
-    //soundFX.volume = sFXRange.value / 100;
-    popSound.volume = sFXRange.value / 100;
-    dingSound.volume = sFXRange.value / 100;
-    bkgMusic.volume = musicRange.value / 180;
-    menuMusic.volume = musicRange.value / 200;
-    if (sFXRange.value > 0) {
-        sFXButton.src = "Audio/audioUnmuted.png";
+    //soundFX.volume = sfxRange.value / 100;
+    popSoundVolume = uiElements.sfxRange.value / 100;
+    dingSound.volume = uiElements.sfxRange.value / 100;
+    bkgMusic.volume = uiElements.musicRange.value / 180;
+    menuMusic.volume = uiElements.musicRange.value / 200;
+    if (uiElements.sfxRange.value > 0) {
+        uiElements.sfxButton.src = "Audio/audioUnmuted.png";
     }
-    else if (sFXRange.value == 0) {
-        sFXButton.src = "Audio/audioMuted.png";
+    else if (uiElements.sfxRange.value == 0) {
+        uiElements.sfxButton.src = "Audio/audioMuted.png";
     }
-    if (musicRange.value > 0) {
-        musicToggleButton.src = "Audio/musicUnmuted.jpg";
+    if (uiElements.musicRange.value > 0) {
+        uiElements.musicToggleButton.src = "Audio/musicUnmuted.jpg";
     }
-    else if (musicRange.value == 0) {
-        musicToggleButton.src = "Audio/musicMuted.png";
+    else if (uiElements.musicRange.value == 0) {
+        uiElements.musicToggleButton.src = "Audio/musicMuted.png";
     }
-    window.localStorage.setItem('sFXRange', JSON.stringify(sFXRange.value));
-    window.localStorage.setItem('musicRange', JSON.stringify(musicRange.value));
+    window.localStorage.setItem('sfxRange', JSON.stringify(uiElements.sfxRange.value));
+    window.localStorage.setItem('musicRange', JSON.stringify(uiElements.musicRange.value));
 }
 

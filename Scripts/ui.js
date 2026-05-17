@@ -1,25 +1,25 @@
 //ui elements
 
 function openAudioMenu() {
-    audioMenu.classList.toggle('hidden');
+    uiElementsHidable.audioMenu.classList.toggle('hidden');
     clickSound.play();
     //debug
 }
 function toggleSFX() {
-    if (sFXRange.value > 0) {
-        sFXRange.value = 0;
+    if (uiElements.sfxRange.value > 0) {
+        uiElements.sfxRange.value = 0;
     }
-    else if (sFXRange.value == 0) {
-        sFXRange.value = 100;
+    else if (uiElements.sfxRange.value == 0) {
+        uiElements.sfxRange.value = 100;
         clickSound.play();
     }
 }
 function toggleMusic() {
-    if (musicRange.value > 0) {
-        musicRange.value = 0;
+    if (uiElements.musicRange.value > 0) {
+        uiElements.musicRange.value = 0;
     }
-    else if (musicRange.value == 0) {
-        musicRange.value = 100;
+    else if (uiElements.musicRange.value == 0) {
+        uiElements.musicRange.value = 100;
         clickSound.play();
     }
 }
@@ -32,7 +32,7 @@ function clearData() {
     }
     unlocks = [];
     ship.changeSkin('Sprites/alphaSS1.png');
-    backgroundImg.src = blueSpace;
+    uiElements.backgroundImg.src = blueSpace;
 
     explSound.play();
     updateUnlocks();
@@ -43,9 +43,9 @@ function clearData() {
 function closeAll() {
     gameOver();
     //closes all UI
-    uIScreensByClass.forEach(element => {
-        element.classList.add('hidden');
-    });
+    for (let key in uiElementsHidable) {
+        uiElementsHidable[key].classList.add('hidden');
+    }
 
     randomizeMenuMusic();
 }
@@ -53,14 +53,14 @@ function closeAll() {
 //-------------------------HIGHSCORES----------------------------------
 function toggleScores() {
     if (scoreDisplayOpen) {
-        rightHexButton.style.left = "98%";
-        scoreDisplay.style.left = "100%";
+        uiElements.rightHexButton.style.left = "98%";
+        uiElements.scoreDisplay.style.left = "100%";
         scoreDisplayOpen = false;
         clickSound.play();
     }
     else if (!scoreDisplayOpen) {
-        rightHexButton.style.left = "78.8%";
-        scoreDisplay.style.left = "80%";
+        uiElements.rightHexButton.style.left = "75.5%";
+        uiElements.scoreDisplay.style.left = "77%";
         scoreDisplayOpen = true;
         clickSound.play();
     }
@@ -75,24 +75,24 @@ function showEndGameFirstText() {
 function eGTFlash() {
     if (eGTCount > 3) {
         clearInterval(eGTInterval);
-        endGameFirstText.classList.add('hidden');
+        uiElementsHidable.endGameFirstText.classList.add('hidden');
     }
     else if (eGTCount % 2 == 0) {
-        endGameFirstText.classList.remove('hidden');
+        uiElementsHidable.endGameFirstText.classList.remove('hidden');
         eGTCount += 1;
     }
     else if (eGTCount % 2 != 0) {
-        endGameFirstText.classList.add('hidden');
+        uiElementsHidable.endGameFirstText.classList.add('hidden');
         eGTCount += 1;
     }
 }
 
 // All event Listeners
-startButton.addEventListener('click', startGame);
+uiElements.startButton.addEventListener('click', startGame);
 //startButton.addEventListener('touchstart', startGame);
-closeButton.addEventListener('click', closeAll);
+uiElements.closeButton.addEventListener('click', closeAll);
 
-howToButton.addEventListener('click', () => openMenu(howToButton, howToScreen));
+uiElements.howToButton.addEventListener('click', () => openMenu(uiElements.howToButton, uiElementsHidable.howToScreen));
 
 // ------------------------
 function openMenu(button, screen) {
@@ -100,7 +100,7 @@ function openMenu(button, screen) {
         showEndGameFirstText();
     }
     else if (!button.classList.contains('greyed')) {
-        if (screen.classList.contains('skinsMenuScreen') && screen.classList.contains('hidden')) {
+        if (screen.classList.contains('skins-menu-screen') && screen.classList.contains('hidden')) {
             ship.x = 100; //move ship to side to see skins
             ship.y = canvas.height / 2 - ship.height / 2;
             ship.frameX = 0;
@@ -113,40 +113,40 @@ function openMenu(button, screen) {
         clickSound.play();
     }
 }
-//navigation
+//navigation TODO: improve music menu, refactor
 function prevMusicPage() {
     //if on page 1 go to page 3
-    if (!musicPage1.classList.contains("hidden")) {
-        musicPage1.classList.add("hidden");
-        musicPage3.classList.remove("hidden");
+    if (!musicItems.musicPage1.classList.contains("hidden")) {
+        musicItems.musicPage1.classList.add("hidden");
+        musicItems.musicPage3.classList.remove("hidden");
     }
     //if on page 2 go to page 1
-    else if (!musicPage2.classList.contains("hidden")) {
-        musicPage2.classList.add("hidden");
-        musicPage1.classList.remove("hidden");
+    else if (!musicItems.musicPage2.classList.contains("hidden")) {
+        musicItems.musicPage2.classList.add("hidden");
+        musicItems.musicPage1.classList.remove("hidden");
     }
     //if on page 3 go to page 2
-    else if (!musicPage3.classList.contains("hidden")) {
-        musicPage3.classList.add("hidden");
-        musicPage2.classList.remove("hidden");
+    else if (!musicItems.musicPage3.classList.contains("hidden")) {
+        musicItems.musicPage3.classList.add("hidden");
+        musicItems.musicPage2.classList.remove("hidden");
     }
     clickSound.play();
 }
 function nextMusicPage() {
     //if on page 1 go to page 2
-    if (!musicPage1.classList.contains("hidden")) {
-        musicPage1.classList.add("hidden");
-        musicPage2.classList.remove("hidden");
+    if (!musicItems.musicPage1.classList.contains("hidden")) {
+        musicItems.musicPage1.classList.add("hidden");
+        musicItems.musicPage2.classList.remove("hidden");
     }
     //if on page 2 go to page 3
-    else if (!musicPage2.classList.contains("hidden")) {
-        musicPage2.classList.add("hidden");
-        musicPage3.classList.remove("hidden");
+    else if (!musicItems.musicPage2.classList.contains("hidden")) {
+        musicItems.musicPage2.classList.add("hidden");
+        musicItems.musicPage3.classList.remove("hidden");
     }
     //if on page 3 go to page 1
-    else if (!musicPage3.classList.contains("hidden")) {
-        musicPage3.classList.add("hidden");
-        musicPage1.classList.remove("hidden");
+    else if (!musicItems.musicPage3.classList.contains("hidden")) {
+        musicItems.musicPage3.classList.add("hidden");
+        musicItems.musicPage1.classList.remove("hidden");
     }
     clickSound.play();
 }
@@ -250,8 +250,8 @@ const musicData = {
 };
 function createMusicTile(song) {
     return `
-        <div onclick="changeBkgMusic('${song.src}')" class="musicTile">
-            <h6 class="musicIcon">${song.icon}</h6>
+        <div onclick="changeBkgMusic('${song.src}')" class="music-tile">
+            <h6 class="music-icon">${song.icon}</h6>
             <h6><u>${song.title}</u></h6>
             <p><a target="_blank" href="${song.url}"><b><u>${song.artist}</u></b></a></p>
         </div>
@@ -276,27 +276,27 @@ function createMusicPage(pageNumber) {
     }
 }
 
-function createMusicScreen() {
-    const musicScreen = document.createElement('div');
-    musicScreen.classList.add('musicScreen', 'fs32', 'hidden');
+const musicScreen = document.createElement('div');;
+function initMusicScreen() {
+    musicScreen.classList.add('music-screen', 'fs32', 'hidden');
 
     const heading = `
         <h2>
-            <button class="prevPageButton">◀</button> 
+            <button class="prev-page-button">◀</button> 
             MUSIC 
-            <button class="nextPageButton">▶</button>
+            <button class="next-page-button">▶</button>
         </h2>
     `;
 
     musicScreen.innerHTML = `
         ${heading}
-        <div class="musicPage1">
+        <div class="music-page1">
             ${createMusicPage(1)}
         </div>
-        <div class="musicPage2 hidden">
+        <div class="music-page2 hidden">
             ${createMusicPage(2)}
         </div>
-        <div class="musicPage3 hidden">
+        <div class="music-page3 hidden">
             <h5><u>Menu/Loading Music</u></h5>
             <p><u onclick="changeMenuMusic('Audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
             <p><u onclick="changeMenuMusic('Audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u></p>
@@ -310,22 +310,34 @@ function createMusicScreen() {
     document.body.appendChild(musicScreen);
 }
 
-createMusicScreen();
-let musicItems = ['.musicScreen', '.prevPageButton', '.nextPageButton', '.musicPage1', '.musicPage2', '.musicPage3',]
-musicItems.forEach(element => {
-    window[element.substring(1)] = document.querySelector(element);
-})
+initMusicScreen();
+// TODO: get this working dynamically?
+const musicSelectors = [
+    '.prev-page-button',
+    '.next-page-button',
+    '.music-page1',
+    '.music-page2',
+    '.music-page3',
+];
+const musicItems = {};
 
-musicButton.addEventListener('click', () => openMenu(musicButton, musicScreen));
-prevPageButton.addEventListener('click', prevMusicPage);
-nextPageButton.addEventListener('click', nextMusicPage);
+musicSelectors.forEach(selector => {
+    const className = selector.substring(1);
+    const variableName = kebabToCamel(className);
+
+    musicItems[variableName] = document.querySelector(selector);
+});
+
+uiElements.musicButton.addEventListener('click', () => openMenu(uiElements.musicButton, musicScreen));
+musicItems.prevPageButton.addEventListener('click', prevMusicPage);
+musicItems.nextPageButton.addEventListener('click', nextMusicPage);
 
 //deviceButton.addEventListener('click', changeDevice);
-skinsButton.addEventListener('click', () => openMenu(skinsButton, skinsMenuScreen));
-audioButton.addEventListener('click', openAudioMenu);
+uiElements.skinsButton.addEventListener('click', () => openMenu(uiElements.skinsButton, uiElementsHidable.skinsMenuScreen));
+uiElements.audioButton.addEventListener('click', openAudioMenu);
 
-rightHexButton.addEventListener('click', toggleScores);
-scoreDisplay.addEventListener('click', toggleScores);
+uiElements.rightHexButton.addEventListener('click', toggleScores);
+uiElements.scoreDisplay.addEventListener('click', toggleScores);
 
 //keyboard
 window.addEventListener("keydown", function (e) { //creates an array to detect keys

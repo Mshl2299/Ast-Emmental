@@ -41,7 +41,7 @@ function detectAllCollisions() {
         if (asteroid.exist && asteroid.moving && detectCircleCollision(ship, asteroid, -ship.breathingRoom)) {
             gameOver();
         } else if (asteroid.exist && asteroid.moving && detectCircleCollision(greyAst, asteroid, 0)) {
-            popSound.play();
+            playPop();
             greyAst.generate();
         }
     })
@@ -49,14 +49,14 @@ function detectAllCollisions() {
     if (greyAst.exist && detectCircleCollision(ship, greyAst, 0)) {
         score += scoreAmt;
         changeLevelUp();
-        popSound.play();
+        playPop();
 
         greyAst.generate(); //move to a new location
     }
     if (cheese.exist && detectCircleCollision(ship, cheese, 0)) {
         score += scoreAmt * 5;
         changeLevelUp();
-        popSound.play();
+        playPop();
         cheese.exist = false;
 
         sDCount = 1;
@@ -69,8 +69,8 @@ function detectAllCollisions() {
 
 
 function changeBkgSkin(bkgSkinName) {
-    backgroundImg.src = bkgSkinName;
-    window.localStorage.setItem('bkgImg', JSON.stringify(backgroundImg.src));
+    uiElements.backgroundImg.src = bkgSkinName;
+    window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
     clickSound.play();
 }
 //slowDown effect
@@ -131,14 +131,14 @@ function animate() { //game update
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas to save memory
 
         //display explosion (called on gameOver()) or selected skin
-        if (ship.exploded && skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
+        if (ship.exploded && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
             ship.image.src = "BlueExplosion/blue" + ship.explosionFrame.toString() + ".png";
             if(ship.image.height == 256) {
                 ship.draw(ship.image.src, 0, 0, 256, 256, ship.x - 50, ship.y - 50, ship.width + 100, ship.height + 100);
             }
             ship.cycleExplosionFrame();
         }
-        else if (!skinsMenuScreen.classList.contains('hidden')) {
+        else if (!uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) {
             ship.speed = 0;
             ship.move();
             ship.image.src = currentSkin;

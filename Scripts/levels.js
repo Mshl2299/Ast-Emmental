@@ -113,31 +113,31 @@ function updateUnlocks() {
     }
     //update skins to be Unlocked or Greyed
     if (unlocks.includes("Sprites/snakeSS1.png")) {
-        snakeSkin.classList.remove("greyed");
-        snakeSkin.src = "Sprites/shipSnake.png"; //html image
+        uiElements.snakeSkin.classList.remove("greyed");
+        uiElements.snakeSkin.src = "Sprites/shipSnake.png"; //html image
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
-        snakeSkin.classList.add("greyed");
-        snakeSkin.src = "Sprites/shipSnakeLocked.png";
+        uiElements.snakeSkin.classList.add("greyed");
+        uiElements.snakeSkin.src = "Sprites/shipSnakeLocked.png";
     }
     if (unlocks.includes("Sprites/alphaInvertedSS1.png")) {
-        invertedSkin.classList.remove("greyed");
-        invertedSkin.src = "Sprites/shipAlphaInverted.png";
+        uiElements.invertedSkin.classList.remove("greyed");
+        uiElements.invertedSkin.src = "Sprites/shipAlphaInverted.png";
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
-        invertedSkin.classList.add("greyed");
-        invertedSkin.src = "Sprites/shipAlphaInvertedLocked.png";
+        uiElements.invertedSkin.classList.add("greyed");
+        uiElements.invertedSkin.src = "Sprites/shipAlphaInvertedLocked.png";
     }
     if (unlocks.includes("Sprites/asteroidSS1.png")) {
-        asteroidSkin.classList.remove("greyed");
-        asteroidSkin.src = "Sprites/asteroid.png";
+        uiElements.asteroidSkin.classList.remove("greyed");
+        uiElements.asteroidSkin.src = "Sprites/asteroid.png";
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
-        asteroidSkin.classList.add("greyed");
-        asteroidSkin.src = "Sprites/AsteroidLocked.png";
+        uiElements.asteroidSkin.classList.add("greyed");
+        uiElements.asteroidSkin.src = "Sprites/AsteroidLocked.png";
     }
 }
 

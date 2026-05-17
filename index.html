@@ -19,63 +19,86 @@
 <body style="background-color: #33758a;">
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
-        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="backgroundImg">
-        <div class="startScreen">
+        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="background-img">
+        <div class="start-screen">
             <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
             <p>A vanilla JavaScript game by Marcus Lim</p>
         </div>
         <!--Middle Left/Right Buttons-->
-        <button class="rightHexButton">◀</button>
-        <div class="scoreDisplay">
-            <h6 class="highscoreTitle"><u>ALL-TIME HIGHSCORES</u></h6>
-            <ol class="leaderboardScores">
-                <li class="scoreVal leaderboard0">000</li>
-                <li class="scoreVal leaderboard1">000</li>
-                <li class="scoreVal leaderboard2">000</li>
-                <li class="scoreVal leaderboard3">000</li>
-                <li class="scoreVal leaderboard4">000</li>
+        <button class="right-hex-button">◀</button>
+        <div class="score-display">
+            <h6 class="highscore-title"><u>ALL-TIME HIGHSCORES</u></h6>
+            <ol class="leaderboard-scores">
+                <li class="score-val leaderboard0">000</li>
+                <li class="score-val leaderboard1">000</li>
+                <li class="score-val leaderboard2">000</li>
+                <li class="score-val leaderboard3">000</li>
+                <li class="score-val leaderboard4">000</li>
             </ol>
-            <h6 class="highscoreTitle"><u>HIGHSCORES</u></h6>
+            <!-- <h6 class="highscoreTitle"><u>LOCAL HIGHSCORES</u></h6>
             <ol>
                 <li class="scoreVal score0">000</li>
                 <li class="scoreVal score1">000</li>
                 <li class="scoreVal score2">000</li>
                 <li class="scoreVal score3">000</li>
                 <li class="scoreVal score4">000</li>
-            </ol>
+            </ol> -->
+            <h6 class="highscoreTitle"><u>LOCAL HIGHSCORES</u></h6>
+            <div class="local-scores">
+                <div class="player-card score0">
+                    <div class="player-name"></div>
+                    <div class="player-score"></div>
+                </div>
+                <div class="player-card score1">
+                    <div class="player-name"></div>
+                    <div class="player-score"></div>
+                </div>
+                <div class="player-card score2">
+                    <div class="player-name"></div>
+                    <div class="player-score"></div>
+                </div>
+                <div class="player-card score3">
+                    <div class="player-name"></div>
+                    <div class="player-score"></div>
+                </div>
+                <div class="player-card score4">
+                    <div class="player-name"></div>
+                    <div class="player-score"></div>
+                </div>
+            </div>
 
         </div>
-        <button class="leftHexButton">▶</button>
+        <button class="left-hex-button">▶</button>
         <!--end game first screen-->
-        <div class="endGameFirstText fs32 hidden">
+        <div class="end-game-first-text fs32 hidden">
             <p>End the current game first!</p>
         </div>
         <!--start game-->
-        <button class="startButton" oncontextmenu="return false">START</button>
+        <button class="start-button" oncontextmenu="return false">START</button>
         <!--game over screen-->
-        <div class="gameOverScreen fs32 hidden">
+        <div class="game-over-screen fs32 hidden">
             <h4><u>GAME OVER</u></h4>
-            <h5>FINAL SCORE: <span id="finalScoreDisplay"></span></h5>
-            <form id="scoreForm">
-                <input type="text" id="username" placeholder="NAME" size = "4" maxlength="4" required>
-                <button type="submit" id="leaderboardSubmit">Submit Score</button>
+            <h5>FINAL SCORE: <span id="final-score-display"></span></h5>
+            <form id="score-form">
+                <input type="text" id="username" placeholder="NAME" size="4" maxlength="4" required>
+                <button type="submit" id="leaderboard-submit">Submit Score</button>
             </form>
         </div>
 
         <!--Buttons on upper left side-->
-        <div class="buttonsFlex1" oncontextmenu="return false">
-            <button class="howToButton">HOW TO</button>
-            <button class="musicButton">MUSIC</button>
+        <div class="buttons-flex1" oncontextmenu="return false">
+            <button class="how-to-button">HOW TO</button>
+            <button class="music-button">MUSIC</button>
         </div>
         <!--How To Play-->
-        <div class="howToScreen fs32 hidden">
+        <div class="how-to-screen fs32 hidden">
             <h2>HOW TO PLAY</h2>
-            <div class="flex keyControls">
-                <div class="flex"><img draggable="false" src="WASDkeys.jpg" class="mediumIcon"></div>
-                <button class="orText">OR</button>
-                <div class="flex"><img draggable="false" src="ArrowKeys.jpg" class="mediumIcon"></div>
+            <div class="flex key-controls">
+                <div class="flex"><img draggable="false" src="WASDkeys.jpg" class="medium-icon"></div>
+                <button class="or-text">OR</button>
+                <div class="flex"><img draggable="false" src="ArrowKeys.jpg" class="medium-icon"></div>
             </div>
-            <div class="flex buttonControls hidden">
+            <div class="flex button-controls hidden">
                 <p style="width: 250px; height: 38px;">Use the buttons to move the ship.</p>
                 <img style="width:55px; height:55px; position: absolute; left: 90%; top: 15%; transform: translate(-50%, -50%);"
                     src="turnSideways.png">
@@ -96,14 +119,14 @@
 
 
         <!--Buttons on right side-->
-        <div class="buttonsFlex2" oncontextmenu="return false">
-            <button class="deviceButton greyed"><img src="desktop.png" class="smallIcon"></button>
-            <button class="skinsButton">SKINS</button>
-            <button class="audioButton"><img src="Audio/musicUnmuted.jpg" class="smallIcon"></button>
-            <button class="closeButton fs32">X</button>
+        <div class="buttons-flex2" oncontextmenu="return false">
+            <button class="device-button greyed"><img src="desktop.png" class="small-icon"></button>
+            <button class="skins-button">SKINS</button>
+            <button class="audio-button"><img src="Audio/musicUnmuted.jpg" class="small-icon"></button>
+            <button class="close-button fs32">X</button>
         </div>
         <!--Skins Menu-->
-        <div class="skinsMenuScreen fs32 hidden">
+        <div class="skins-menu-screen fs32 hidden">
             <h2>SKINS</h2>
             <div class="flex">
                 <div class="flex"><img draggable="false" src="Sprites/shipAlpha.png" class="skin"
@@ -112,53 +135,53 @@
                         onclick="ship.changeSkin('Sprites/betaSS1.png')"></div>
                 <div class="flex"><img draggable="false" src="Sprites/shipUFO.png" class="skin"
                         onclick="ship.changeSkin('Sprites/ufoSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipSnakeLocked.png" class="skin snakeSkin greyed"
-                        onclick="ship.changeSkin('Sprites/snakeSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="Sprites/shipSnakeLocked.png"
+                        class="skin snake-skin greyed" onclick="ship.changeSkin('Sprites/snakeSS1.png')"></div>
                 <div class="flex"><img draggable="false" src="Sprites/shipAlphaInvertedLocked.png"
-                        class="skin greyed invertedSkin" onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')">
+                        class="skin greyed inverted-skin" onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')">
                 </div>
                 <div class="flex"><img draggable="false" src="Sprites/AsteroidLocked.png"
-                        class="skin greyed asteroidSkin" onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
+                        class="skin greyed asteroid-skin" onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="Bkg" onclick="changeBkgSkin(blueSpace)">
+                <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="bkg" onclick="changeBkgSkin(blueSpace)">
                 </div>
-                <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="Bkg"
+                <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="bkg"
                         onclick="changeBkgSkin(purpleSpace)">
                 </div>
-                <div class="flex"><img src="Backgrounds/JamesWebb.jpg" class="Bkg" onclick="changeBkgSkin(JamesWebb)">
+                <div class="flex"><img src="Backgrounds/JamesWebb.jpg" class="bkg" onclick="changeBkgSkin(JamesWebb)">
                 </div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/galaxyAnim.gif" class="Bkg" onclick="changeBkgSkin(galaxyAnim)">
+                <div class="flex"><img src="Backgrounds/galaxyAnim.gif" class="bkg" onclick="changeBkgSkin(galaxyAnim)">
                 </div>
-                <div class="flex"><img src="Backgrounds/purpleAnim.gif" class="Bkg" onclick="changeBkgSkin(purpleAnim)">
+                <div class="flex"><img src="Backgrounds/purpleAnim.gif" class="bkg" onclick="changeBkgSkin(purpleAnim)">
                 </div>
-                <div class="flex"><img src="Backgrounds/blueNebulaAnim.gif" class="Bkg"
+                <div class="flex"><img src="Backgrounds/blueNebulaAnim.gif" class="bkg"
                         onclick="changeBkgSkin(blueNebula)">
                 </div>
             </div>
         </div>
         <!--Audio Menu-->
-        <div class="audioMenu fs32 hidden">
+        <div class="audio-menu fs32 hidden">
             <div class="flex">
-                <div class="flex"><img src="Audio/audioUnmuted.png" class="smallIcon border sFXButton"
+                <div class="flex"><img src="Audio/audioUnmuted.png" class="small-icon border sfx-button"
                         onclick="toggleSFX()"></div>
-                <div class="flex"><img src="Audio/musicUnmuted.jpg" class="smallIcon border musicToggleButton"
+                <div class="flex"><img src="Audio/musicUnmuted.jpg" class="small-icon border music-toggle-button"
                         onclick="toggleMusic()">
                 </div>
             </div>
             </br>
             <div class="flex">
                 <div class="flex container">
-                    <input type="range" min="0" max="100" value="100" class="slider" id="sFXRange">
+                    <input type="range" min="0" max="100" value="100" class="slider" id="sfx-range">
                 </div>
                 <div class="flex container">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="musicRange">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="music-range">
                 </div>
             </div>
             </br>
-            <h6 class="resetDataButton" onclick="clearData()">RESET DATA</h6>
+            <h6 class="reset-data-button" onclick="clearData()">RESET DATA</h6>
         </div>
         <!--End of Canvas Container div-->
     </div>

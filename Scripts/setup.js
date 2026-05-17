@@ -1,4 +1,3 @@
-
 /*
 Starting constants
 Selectors & References to HTML w/ Screens & Buttons
@@ -33,25 +32,58 @@ let unlocks = [];
 let defaultUnlocks = ['Sprites/alphaSS1.png', 'Sprites/betaSS1.png', 'Sprites/ufoSS1.png'];
 
 //-------------------------------BUTTONS & SCREENS-------------------------------
-//ALL UI ELEMENTS (listed by Class or by ID)
-let uIButtonsByClassList = ['.howToButton', '.musicButton',
-    '.deviceButton', '.keyControls', '.skinsButton', '.snakeSkin', '.invertedSkin', '.asteroidSkin', '.audioButton', '.musicToggleButton', '.sFXButton', '.closeButton',
-    '.startButton', '.leftHexButton', '.rightHexButton', '.scoreDisplay', '.backgroundImg', '.leaderboardButton'];
-let uIScreensByClassList = ['.howToScreen', '.skinsMenuScreen', '.audioMenu', '.startScreen', '.gameOverScreen', '.endGameFirstText'];
-// '.musicScreen',
-let uIScreensByClass = [];
-uIButtonsByClassList.forEach(element => {
-    window[element.substring(1)] = document.querySelector(element);
-}); //links all UI elements to JS file by class
-uIScreensByClassList.forEach(element => {
-    window[element.substring(1)] = document.querySelector(element);
-    uIScreensByClass.push(window[element.substring(1)]);
-});
+// ALL UI ELEMENTS (listed by Class or by ID)
+// Screens will be hidden on certain game events
+const uiSelectors = [
+    '.background-img',
+    '.how-to-button',
+    '.music-button',
+    '.device-button',
+    '.key-controls',
+    '.skins-button',
+    '.snake-skin',
+    '.inverted-skin',
+    '.asteroid-skin',
+    '.audio-button',
+    '.music-toggle-button',
+    '.sfx-button',
+    '.close-button',
+    '.start-button',
+    '.left-hex-button',
+    '.right-hex-button',
+    '.score-display',
+    '.leaderboard-button',
+    '#sfx-range',
+    '#music-range'
+];
+const uiSelectorsHidable = [
+    '.how-to-screen',
+    '.skins-menu-screen',
+    '.audio-menu',
+    '.start-screen',
+    '.game-over-screen',
+    '.end-game-first-text',
+]
 
-let uIElementsByID = ['sFXRange', 'musicRange'];
-uIElementsByID.forEach(element => {
-    window[element] = document.getElementById(element);
-});
+const uiElements = {};
+const uiElementsHidable = {};
+
+function kebabToCamel(str) { // TODO: utility .js script
+    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+uiSelectors.forEach(selector => {
+    const className = selector.substring(1);
+    const variableName = kebabToCamel(className);
+
+    uiElements[variableName] = document.querySelector(selector);
+}); 
+uiSelectorsHidable.forEach(selector => {
+    const className = selector.substring(1);
+    const variableName = kebabToCamel(className);
+
+    uiElementsHidable[variableName] = document.querySelector(selector);
+}) // TODO: update ui.js to hide correct
 
 let keys = [];
 //style elements
@@ -59,27 +91,36 @@ let keys = [];
 let eGTCount = 0;
 let eGTInterval;
 //Highscores menu
-rightHexButton.style.left = "98%";
-scoreDisplay.style.left = "100%";
+uiElements.rightHexButton.style.left = "98%";
+uiElements.scoreDisplay.style.left = "20%"; // turn back to 100
 let scoreDisplayOpen = false; //to move the score button & display together
 //Booleans
 let userInteracted = false; //chrome update for bkg music
 let playerControl = false; //for player control & menu control
 
 //-------------------------------BACKGROUNDS-------------------------------
-let bkgArray = ["blueSpace.jpg", "purpleSpace.jpg", "JamesWebb.jpg", "Orbit.jpg", "hatSpace.png",
-    "galaxyAnim.gif", "purpleAnim.gif", "blueNebulaAnim.gif"];
+let bkgArray = [
+    "blueSpace.jpg",
+    "purpleSpace.jpg",
+    "JamesWebb.jpg",
+    "Orbit.jpg",
+    "hatSpace.png",
+    "galaxyAnim.gif",
+    "purpleAnim.gif",
+    "blueNebulaAnim.gif"
+];
 bkgArray.forEach(element => {
     window[element.slice(0, -4)] = "Backgrounds/" + element;
 });
 
+// Persistence
 //-------------------------------RETRIEVAL-----------------------------------
 //BKG RETRIEVAL
 if (window.localStorage.getItem('bkgImg')) {
-    backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
+    uiElements.backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
 } else {
-    backgroundImg.src = blueSpace;
-    window.localStorage.setItem('bkgImg', JSON.stringify(backgroundImg.src));
+    uiElements.backgroundImg.src = blueSpace;
+    window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
 }
 //SCORE RETRIEVAL
 //window.localStorage.setItem('scoreArray','[1,2,3,4,5]'); //debug
@@ -87,7 +128,7 @@ if (window.localStorage.getItem('scoreArray')) {
     scoreArray = JSON.parse(window.localStorage.getItem('scoreArray'));
     for (i = 0; i < 5; ++i) {
         if (!scoreArray[i] || scoreArray[i] == 0) {
-            scoreArray[i] = "000";
+            scoreArray[i] = "000"; // TODO: don't hardcode this
         }
         document.querySelector('.score' + i).innerHTML = scoreArray[i];
     }
@@ -96,7 +137,7 @@ if (window.localStorage.getItem('scoreArray')) {
 //score sorting
 function handleScore(newScore) {
     scoreArray.push(newScore); //add new score in
-    document.getElementById("finalScoreDisplay").innerHTML = score; //displays "Final Score:"
+    document.getElementById("final-score-display").innerHTML = score; //displays "Final Score:"
     scoreArray.sort(function (a, b) { return b - a }); //sort array
     for (i = 0; i <= 4; i++) {
         if (!scoreArray[i]) {
@@ -330,13 +371,13 @@ function startGame() { //reset values
     legendaryScore = false;
 
     //hide ui
-    startButton.classList.add('hidden');
-    startScreen.classList.add('hidden');
-    gameOverScreen.classList.add('hidden');
+    uiElements.startButton.classList.add('hidden');
+    uiElementsHidable.startScreen.classList.add('hidden');
+    uiElementsHidable.gameOverScreen.classList.add('hidden');
     //grey out buttons
-    howToButton.classList.add('greyed');
-    musicButton.classList.add('greyed');
-    skinsButton.classList.add('greyed');
+    uiElements.howToButton.classList.add('greyed');
+    uiElements.musicButton.classList.add('greyed');
+    uiElements.skinsButton.classList.add('greyed');
     //deviceButton.classList.add('greyed');
     //start the music
     menuMusic.pause();
@@ -357,11 +398,11 @@ function gameOver() {
     sDCount = 1;
     handleScore(score);
     //display UI
-    startButton.classList.remove('hidden');
-    gameOverScreen.classList.remove('hidden');
+    uiElements.startButton.classList.remove('hidden');
+    uiElementsHidable.gameOverScreen.classList.remove('hidden');
     //allow button presses
-    howToButton.classList.remove('greyed');
-    musicButton.classList.remove('greyed');
-    skinsButton.classList.remove('greyed');
+    uiElements.howToButton.classList.remove('greyed');
+    uiElements.musicButton.classList.remove('greyed');
+    uiElements.skinsButton.classList.remove('greyed');
     //deviceButton.classList.remove('greyed');
 }
