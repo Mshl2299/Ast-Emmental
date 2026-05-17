@@ -17,7 +17,7 @@ p {
     font-size: 18px;
 }
 
-h2 {
+h2 { /*menu titles*/
     font-family: impact;
     font-weight: thin;
     font-size: 50px;
@@ -25,12 +25,13 @@ h2 {
     text-decoration: underline;
 }
 
-h5 {
+h5 { /*final score*/
     font-weight: thin;
     font-size: 40px;
+    border: 1px solid red;
 }
 
-h6 {
+h6 { /*music*/
     padding: 2px;
     margin: 3px;
 }
@@ -40,17 +41,17 @@ a {
 }
 
 li {
-    font-size: 22px;
+    font-size: 24px;
     text-align: left;
     font-weight: bold;
-    word-spacing: -2.2px;
-    letter-spacing: -1.8px;
-    line-height: 28px;
+    word-spacing: -2.8px;
+    letter-spacing: -2px;
+    line-height: 26px;
     overflow: visible;
 }
 
 ol {
-    margin: 38px;
+    padding-left: 30px;
 }
 
 /* classes & id elements */
@@ -184,6 +185,19 @@ ol {
     background: none;
     border-right: 20px solid #d28f29;
 }
+.highscoreTitle {
+    font-size: 30px;
+    font-weight: bolder;
+    color: darkblue;
+    letter-spacing: -2px;
+    line-height: 28px;
+    margin: 0 0 5px 0;
+    padding: 5px 0 5px 0;
+    border-radius: 0px;
+}
+.leaderboardScores {
+    padding: 1px;
+}
 .scoreDisplay {
     height: 400px;
     width: 200px;
@@ -191,7 +205,6 @@ ol {
     top: 50.5%;
     left: 100%;
     transform: translate(0, -50%);
-    padding-top: 50px;
     border: 5px solid darkblue;
     background: #cf8619;
     transition: 0.3s;
@@ -200,7 +213,8 @@ ol {
 .scoreVal {
     list-style-position: inside;
     width: 190px;
-    word-spacing: -16px;
+    word-spacing: -8px;
+    font-size: 26px;
 }
 
 .leftHexButton {
@@ -242,7 +256,7 @@ ol {
 }
 
 .gameOverScreen {
-    height: 200px;
+    height: 220px;
     width: 400px;
     position: absolute;
     top: 45%;
@@ -256,9 +270,20 @@ ol {
     padding-top: 22px;
     background: #cf8619;
 }
-.gameOverScreen:hover {
-    opacity: 0.2;
-    transition: 0.6s;
+
+#scoreForm {
+    height: 45px;
+    width: 280px;
+    margin: auto;
+    background-color: #bcbcbc;
+}
+#username, #leaderboardSubmit {
+    font-size: 18px;
+    border-radius: 12px;
+    vertical-align: top;
+    background-color: #cf8619;
+    padding: 5px;
+    margin: 5px;
 }
 
 .backgroundImg {

@@ -1,3 +1,4 @@
+
 /*
 Starting constants
 Selectors & References to HTML w/ Screens & Buttons
@@ -35,7 +36,7 @@ let defaultUnlocks = ['Sprites/alphaSS1.png', 'Sprites/betaSS1.png', 'Sprites/uf
 //ALL UI ELEMENTS (listed by Class or by ID)
 let uIButtonsByClassList = ['.howToButton', '.musicButton',
     '.deviceButton', '.keyControls', '.skinsButton', '.snakeSkin', '.invertedSkin', '.asteroidSkin', '.audioButton', '.musicToggleButton', '.sFXButton', '.closeButton',
-    '.startButton', '.leftHexButton', '.rightHexButton', '.scoreDisplay', '.backgroundImg'];
+    '.startButton', '.leftHexButton', '.rightHexButton', '.scoreDisplay', '.backgroundImg', '.leaderboardButton'];
 let uIScreensByClassList = ['.howToScreen', '.skinsMenuScreen', '.audioMenu', '.startScreen', '.gameOverScreen', '.endGameFirstText'];
 // '.musicScreen',
 let uIScreensByClass = [];
@@ -91,6 +92,24 @@ if (window.localStorage.getItem('scoreArray')) {
         document.querySelector('.score' + i).innerHTML = scoreArray[i];
     }
     console.log("Highscores retrieved. " + window.localStorage.getItem('scoreArray'));
+}
+//score sorting
+function handleScore(newScore) {
+    scoreArray.push(newScore); //add new score in
+    document.getElementById("finalScoreDisplay").innerHTML = score; //displays "Final Score:"
+    scoreArray.sort(function (a, b) { return b - a }); //sort array
+    for (i = 0; i <= 4; i++) {
+        if (!scoreArray[i]) {
+            scoreArray[i] = "000";
+        }
+        document.querySelector('.score' + i).innerHTML = scoreArray[i]; //reset each of the scores in the score screen
+    }
+    window.localStorage.setItem('scoreArray', JSON.stringify(scoreArray));
+    while (scoreArray.length > 5) {
+        scoreArray.pop();
+        window.localStorage.setItem('scoreArray', JSON.stringify(scoreArray));
+    }
+    updateUnlocks();
 }
 
 //-------------------------------SPRITES & OBJECTS----------------------------

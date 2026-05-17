@@ -13,10 +13,13 @@ p {
     font-size: 10px;
     border-radius: 0px;
 }
-h1 { /*highscores*/
+h3 { /*highscores*/
+    width: 10px;
+    height: 5px;
+    border: 2px solid red;
     text-align: left;
     margin-left: 6px;
-    font-size: 16px;
+    font-size: 40px;
 }
 h2 { /*menu titles*/
     font-size: 42px;

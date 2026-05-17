@@ -1,5 +1,4 @@
-
-
+//ui elements
 
 function openAudioMenu() {
     audioMenu.classList.toggle('hidden');
