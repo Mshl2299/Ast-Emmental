@@ -1,0 +1,294 @@
+* {
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-khtml-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+/*-webkit-tap-highlight-color:transparent;*/
+touch-action: manipulation;
+}
+
+p {
+    font-size: 10px;
+    border-radius: 0px;
+}
+h3 { /*highscores*/
+    width: 10px;
+    height: 5px;
+    border: 2px solid red;
+    text-align: left;
+    margin-left: 6px;
+    font-size: 40px;
+}
+h2 { /*menu titles*/
+    font-size: 42px;
+}
+
+h5 { /*final score*/
+    font-size: 24px;
+}
+
+h6 { /*music*/
+    font-size: 8px;
+    padding: 2px;
+    margin: 3px;
+}
+
+li {
+    font-size: 16px;
+    line-height: 13px;
+}
+
+ol {
+    margin-top: 3px;
+    margin-left: 12px;
+    border-radius: 0px;
+}
+ul {
+    margin-top: -15px;
+}
+
+br {
+    margin: 0px;
+}
+
+/* classes & id elements */
+#canvas {
+    width: 500px;
+    height: 350px;
+}
+.canvas-container {
+    width: 500px;
+    height: 350px;
+}
+
+.slider {
+    appearance: none;
+    width: 60px;
+    height: 12px;
+    margin: -12px;
+}
+
+.slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 12px;
+}
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 12px;
+}
+
+.small-icon {
+    height: 38px;
+    width: 38px;
+    margin: 1px;
+}
+
+/*Other Buttons & Menus*/
+.start-button {
+    border: 3px solid black;
+    height: 50px;
+    width: 100px;
+}
+.title-splash {
+    height: 100px;
+    width: 250px;
+    border: 3px solid black;
+    border-radius: 12px;
+    padding: 3px;
+}
+
+/* right trapezoid button & scores*/
+.hSButton {
+    height: 220px;   
+}
+.score-display {
+    height: 220px;
+    width: 120px;
+    border: none;
+}
+.score-val {
+    width: 120px;
+    font-size: 22px;
+    word-spacing: -10px;
+    line-height: 20px;
+}
+
+.left-hex-button {
+    height: 220px;
+}
+
+.end-game-first-text {
+    width: 120px;
+    height: 32px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.game-over-screen {
+    height: 120px;
+    width: 240px;
+    font-size: 42px;
+    border: 3px solid black;
+    padding-top: 20px;
+    opacity: 1;
+    transition: 0.6s;
+}
+.game-over-screen:hover {
+    opacity: 0.3;
+    transition: 0.6s;
+}
+/* buttons & respective screens */
+button {
+    font-size: 20px;
+    margin: 2px;
+}
+
+/*Left Buttons & Menus*/
+.buttons-flex1 {
+    display: flex;
+    width: 200px;
+    left: 1.8%;
+}
+/* how to */
+.how-to-button {
+    width: 110px;
+    height: 40px;
+    padding: 5px;
+}
+.how-to-screen {
+    height: 240px;
+    width: 390px;
+    padding-top: 3px;
+}
+
+/* music selection */
+.music-button {
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+}
+.music-screen {
+    height: 250px;
+    width: 380px;
+    padding: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.music-tile {
+    width: 90px;
+    height: 80px;
+    margin: 3px;
+}
+.music-icon {
+    height: 40px;
+    width: 60px;
+    font-size: 30px;
+    line-height: 30px;
+    margin-bottom: -10px;
+}
+
+/*Right Buttons & Menus*/
+.buttons-flex2 {
+    display: flex;
+    width: 200px;
+    position: absolute;
+    left: 59%;
+}
+/*desktop-mobile switching*/
+.device-button {
+    width: 60px;
+    height: 40px;
+}
+/* skin menu */
+.skins-button {
+    width: 100px;
+    height: 40px;
+}
+.skins-menu-screen {
+    height: 230px;
+    width: 330px;
+    padding-top: 3px;
+}
+.skin {
+    width: 38px;
+    height: 38px;
+    border: 2px solid black;
+    padding: 1px;
+}
+.bkg {
+    width: 80px;
+    height: 52px;
+}
+
+/* audio menu */
+.audio-button {
+    width: 60px;
+    height: 40px;
+}
+.audio-menu {
+    height: 120px;
+    width: 90px;
+    position: absolute;
+    top: 32%;
+    left: 83%;
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+    border-radius: 12px;
+    padding-top: 2px;
+}
+/*End game/Explode player/Close all menus*/
+.close-button {
+    width: 50px;
+    height: 40px;
+    font-size: 20px;
+}
+
+/*Mobile Controls*/
+.mobile-button {
+    width: 40px;
+    height: 32px;
+    opacity: 0.5;
+}
+.mobile-left {
+    width: 120px;
+    height: 80px;
+    position: absolute;
+    top: 85%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+}
+.mBUp {
+    margin-left: 64px;
+}
+
+.mobile-right {
+    width: 120px;
+    height: 80px;
+    position: absolute;
+    top: 85%;
+    left: 83%;
+    transform: translate(-50%, -50%);
+}
+.mBRight {
+    margin-left: 64px;
+}
+
+
+
+/* toggled classes - need to be at bottom so they can override other styles */
+.hidden {
+    display: none;
+}
+.greyed {
+    background-color: grey;
+    opacity: 0.9;
+}
+.greyed:hover {
+    background-color: grey;
+}

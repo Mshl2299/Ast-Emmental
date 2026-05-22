@@ -9,19 +9,19 @@
     <meta name="description"
         content="Welcome to Ast-Emmental Mining Co. Collect precious space minerals, avoid dangerous Asteroids, and seek the greatest Score!">
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="menus.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/menus.css">
     <!-- <link rel="stylesheet" href="" class="mobileCSS"> -->
-    <link rel="icon" type="image/png" href="Sprites/shipAlpha.png">
+    <link rel="icon" type="image/png" href="assets/sprites/shipAlpha.png">
 
 </head>
 
 <body style="background-color: #33758a;">
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
-        <img src="Backgrounds/blueSpace.jpg" alt="Background" class="background-img">
+        <img src="assets/backgrounds/blueSpace.jpg" alt="Background" class="background-img">
         <div class="title-splash">
-            <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
+            <img src="assets/images/AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
             <p style="letter-spacing: -1px; font-size: 20px;">Welcome to AST-Emmental Mining Co.</p>
         </div>
         <!--Middle Left/Right Buttons-->
@@ -62,14 +62,14 @@
         <div class="how-to-screen fs32 hidden">
             <h2>HOW TO PLAY</h2>
             <div class="flex key-controls">
-                <div class="flex"><img draggable="false" src="WASDkeys.jpg" class="medium-icon"></div>
+                <div class="flex"><img draggable="false" src="assets/images/WASDkeys.jpg" class="medium-icon"></div>
                 <button class="or-text">OR</button>
-                <div class="flex"><img draggable="false" src="ArrowKeys.jpg" class="medium-icon"></div>
+                <div class="flex"><img draggable="false" src="assets/images/ArrowKeys.jpg" class="medium-icon"></div>
             </div>
             <div class="flex button-controls hidden">
                 <p style="width: 250px; height: 38px;">Use the buttons to move the ship.</p>
                 <img style="width:55px; height:55px; position: absolute; left: 90%; top: 15%; transform: translate(-50%, -50%);"
-                    src="turnSideways.png">
+                    src="assets/images/turnSideways.png">
             </div>
             <ul style="overflow: visible; margin-left: 30px;">
                 <li>Welcome to <a>AST-Emmental Mining Company™!</a></br>Your task is to mine asteroids and get rich with
@@ -88,44 +88,44 @@
 
         <!--Buttons on right side-->
         <div class="buttons-flex2" oncontextmenu="return false">
-            <button class="device-button greyed"><img src="desktop.png" class="small-icon"></button>
+            <button class="device-button greyed"><img src="assets/images/desktop.png" class="small-icon"></button>
             <button class="skins-button">SKINS</button>
-            <button class="audio-button"><img src="Audio/musicUnmuted.jpg" class="small-icon"></button>
+            <button class="audio-button"><img src="assets/audio/musicUnmuted.jpg" class="small-icon"></button>
             <button class="close-button fs32">X</button>
         </div>
         <!--Skins Menu-->
         <div class="skins-menu-screen fs32 hidden">
             <h2>SKINS</h2>
             <div class="flex">
-                <div class="flex"><img draggable="false" src="Sprites/shipAlpha.png" class="skin"
-                        onclick="ship.changeSkin('Sprites/alphaSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipBeta.png" class="skin"
-                        onclick="ship.changeSkin('Sprites/betaSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipUFO.png" class="skin"
-                        onclick="ship.changeSkin('Sprites/ufoSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipSnakeLocked.png"
-                        class="skin snake-skin greyed" onclick="ship.changeSkin('Sprites/snakeSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="Sprites/shipAlphaInvertedLocked.png"
-                        class="skin greyed inverted-skin" onclick="ship.changeSkin('Sprites/alphaInvertedSS1.png')">
+                <div class="flex"><img draggable="false" src="assets/sprites/shipAlpha.png" class="skin"
+                        onclick="ship.changeSkin('assets/sprites/alphaSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="assets/sprites/shipBeta.png" class="skin"
+                        onclick="ship.changeSkin('assets/sprites/betaSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="assets/sprites/shipUFO.png" class="skin"
+                        onclick="ship.changeSkin('assets/sprites/ufoSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="assets/sprites/shipSnakeLocked.png"
+                        class="skin snake-skin greyed" onclick="ship.changeSkin('assets/sprites/snakeSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="assets/sprites/shipAlphaInvertedLocked.png"
+                        class="skin greyed inverted-skin" onclick="ship.changeSkin('assets/sprites/alphaInvertedSS1.png')">
                 </div>
-                <div class="flex"><img draggable="false" src="Sprites/AsteroidLocked.png"
-                        class="skin greyed asteroid-skin" onclick="ship.changeSkin('Sprites/asteroidSS1.png')"></div>
+                <div class="flex"><img draggable="false" src="assets/sprites/AsteroidLocked.png"
+                        class="skin greyed asteroid-skin" onclick="ship.changeSkin('assets/sprites/asteroidSS1.png')"></div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/blueSpace.jpg" class="bkg" onclick="changeBkgSkin(blueSpace)">
+                <div class="flex"><img src="assets/backgrounds/blueSpace.jpg" class="bkg" onclick="changeBkgSkin(blueSpace)">
                 </div>
-                <div class="flex"><img src="Backgrounds/purpleSpace.jpg" class="bkg"
+                <div class="flex"><img src="assets/backgrounds/purpleSpace.jpg" class="bkg"
                         onclick="changeBkgSkin(purpleSpace)">
                 </div>
-                <div class="flex"><img src="Backgrounds/JamesWebb.jpg" class="bkg" onclick="changeBkgSkin(JamesWebb)">
+                <div class="flex"><img src="assets/backgrounds/JamesWebb.jpg" class="bkg" onclick="changeBkgSkin(JamesWebb)">
                 </div>
             </div>
             <div class="flex">
-                <div class="flex"><img src="Backgrounds/galaxyAnim.gif" class="bkg" onclick="changeBkgSkin(galaxyAnim)">
+                <div class="flex"><img src="assets/backgrounds/galaxyAnim.gif" class="bkg" onclick="changeBkgSkin(galaxyAnim)">
                 </div>
-                <div class="flex"><img src="Backgrounds/purpleAnim.gif" class="bkg" onclick="changeBkgSkin(purpleAnim)">
+                <div class="flex"><img src="assets/backgrounds/purpleAnim.gif" class="bkg" onclick="changeBkgSkin(purpleAnim)">
                 </div>
-                <div class="flex"><img src="Backgrounds/blueNebulaAnim.gif" class="bkg"
+                <div class="flex"><img src="assets/backgrounds/blueNebulaAnim.gif" class="bkg"
                         onclick="changeBkgSkin(blueNebulaAnim)">
                 </div>
             </div>
@@ -133,9 +133,9 @@
         <!--Audio Menu-->
         <div class="audio-menu fs32 hidden">
             <div class="flex">
-                <div class="flex"><img src="Audio/audioUnmuted.png" class="small-icon border sfx-button"
+                <div class="flex"><img src="assets/audio/audioUnmuted.png" class="small-icon border sfx-button"
                         onclick="toggleSFX()"></div>
-                <div class="flex"><img src="Audio/musicUnmuted.jpg" class="small-icon border music-toggle-button"
+                <div class="flex"><img src="assets/audio/musicUnmuted.jpg" class="small-icon border music-toggle-button"
                         onclick="toggleMusic()">
                 </div>
             </div>
@@ -153,11 +153,7 @@
         </div>
         <!--End of Canvas Container div-->
     </div>
-    <script src="Scripts/setup.js"></script>
-    <script src="Scripts/audio.js"></script>
-    <script src="Scripts/levels.js"></script>
-    <script src="Scripts/ui.js"></script>
-    <script src="Scripts/functions.js"></script>
+    <script type="module" src="scripts/main.js"></script>
 </body>
 
 </html>

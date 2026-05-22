@@ -1,4 +1,5 @@
-//ui elements
+// Handles UI-related rendering and Menus
+// TODO: Base on assets/data
 
 function openAudioMenu() {
     uiElementsHidable.audioMenu.classList.toggle('hidden');

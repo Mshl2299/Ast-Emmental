@@ -1,11 +1,29 @@
-//Audio
+// Handles audio management (volume, play/stop, sound registry)
+
+// Represents an Audio manager with a map of sounds that can be played
+export default class AudioManager {
+    constructor() {
+        this.sounds = new Map();
+    }
+
+    register(name, src) {
+        const a = new Audio(src);
+        this.sounds.set(name, a);
+    }
+
+    play(name) {
+        const s = this.sounds.get(name);
+        if (s) {
+            s.play();
+        }
+    }
+}
 
 let bkgMusic = new Audio();
 let menuMusic = new Audio();
-let menuMusicNumber = 0;
+let menuMusicNumber = 0; // state
 
 //Sound Effects & Elements
-// TODO: convert to an object that stores all sounds
 let clickSound = new Audio(); // click in menus
 clickSound.src = "Audio/click.wav";
 let lvlUpSound = new Audio(); // level up
