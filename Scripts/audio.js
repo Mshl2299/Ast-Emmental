@@ -22,16 +22,7 @@ function playPop() {
     s.play();
   }
 
-//update: errors occuring when the same audio element is used to simultaneously make 2 sounds
-//solution: make more audio elements for each unique sound
-// function playSoundFX(source) {
-//     soundFX.src = source;
-//     soundFX.play().catch((e)=>{
-//         console.log(e);
-//      });
-// }
-
-//--------------------------------LOAD-IN----------------------------------
+//--------------------------------AUDIO SETTINGS----------------------------------
 //SFX volume
 if (window.localStorage.getItem('sfxRange')) {
     uiElements.sfxRange.value = JSON.parse(window.localStorage.getItem('sfxRange'));
@@ -92,7 +83,7 @@ function randomizeMenuMusic() {
     menuMusic.play();
 }
 
-function updateVolume() { //!!!
+function updateVolume() { // !!! TODO
     //soundFX.volume = sfxRange.value / 100;
     popSoundVolume = uiElements.sfxRange.value / 100;
     dingSound.volume = uiElements.sfxRange.value / 100;

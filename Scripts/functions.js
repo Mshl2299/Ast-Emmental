@@ -1,4 +1,5 @@
-//collision detection; first "if" is for x-values/domain, second "if" is for y-values/range
+// Loaded last. Utility and Animation
+// Collision detection; first "if" is for x-values/domain, second "if" is for y-values/range
 var distanceToPlayer, dX, dY;
 
 function detectCircleCollision(player, obstacle, tolerance) {
@@ -96,7 +97,6 @@ function drawCircle(color, obj) {
     ctx.arc(obj.x + obj.radius, obj.y + obj.radius, obj.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.closePath();
-    ctx.stroke();
 }
 function drawScore() {
     //Scoreboard rectangle (Drawn after everything so that it's always on top)

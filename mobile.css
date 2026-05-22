@@ -93,7 +93,7 @@ br {
     height: 50px;
     width: 100px;
 }
-.start-screen {
+.title-splash {
     height: 100px;
     width: 250px;
     border: 3px solid black;
@@ -136,6 +136,12 @@ br {
     font-size: 42px;
     border: 3px solid black;
     padding-top: 20px;
+    opacity: 1;
+    transition: 0.6s;
+}
+.game-over-screen:hover {
+    opacity: 0.3;
+    transition: 0.6s;
 }
 /* buttons & respective screens */
 button {

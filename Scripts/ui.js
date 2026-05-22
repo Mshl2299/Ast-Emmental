@@ -25,11 +25,10 @@ function toggleMusic() {
 }
 function clearData() {
     window.localStorage.clear();
-    scoreArray = [];
-    for (i = 0; i <= 4; i++) {
-        scoreArray[i] = "000";
-        document.querySelector('.score' + i.toString()).innerHTML = scoreArray[i];
-    }
+    initLocalScores();
+    
+    updateScoresHTML();
+
     unlocks = [];
     ship.changeSkin('Sprites/alphaSS1.png');
     uiElements.backgroundImg.src = blueSpace;
@@ -51,20 +50,88 @@ function closeAll() {
 }
 
 //-------------------------HIGHSCORES----------------------------------
+//SCORE RETRIEVAL TODO
+const GLOBAL_LB = [
+    { name: "PLAYER1", score: 0 },
+    { name: "PLAYER2", score: 0 },
+    { name: "PLAYER3", score: 0 },
+    { name: "PLAYER4", score: 0 },
+    { name: "PLAYER5", score: 0 }
+]
+retrieveLocalScores();
+
+function renderLocalLeaderboard() {
+    const container = document.querySelector(".local-scores");
+    container.innerHTML = "";
+
+    localScores
+        .sort((a, b) => b - a)
+        .forEach((player, index) => {
+            const row = document.createElement("div");
+            row.className = "player-card";
+
+            row.innerHTML = `
+                <div class="player-rank">${index + 1}</div>
+                <div class="player-score score${index}">${player.toString().padStart(3, "0")}</div>
+            `;
+
+            container.appendChild(row);
+        });
+}
+renderLocalLeaderboard();
+
+function renderGlobalLeaderboard() {
+    const container = document.querySelector(".global-scores");
+    container.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.className = "player-card header-row";
+    header.innerHTML = `
+        <div class="player-rank">#</div>
+        <div class="player-score">SCORE</div>
+        <div class="player-name">NAME</div>
+    `;
+    container.appendChild(header);
+
+    GLOBAL_LB
+        .sort((a, b) => b.score - a.score)
+        .forEach((player, index) => {
+            const row = document.createElement("div");
+            row.className = "player-card";
+
+            row.innerHTML = `
+                <div class="player-rank">${index + 1}</div>
+                <div class="player-score">${player.score.toString().padStart(3, "0")}</div>
+                <div class="player-name">${player.name}</div>
+            `;
+
+            container.appendChild(row);
+        });
+}
+renderGlobalLeaderboard();
+
 function toggleScores() {
     if (scoreDisplayOpen) {
-        uiElements.rightHexButton.style.left = "98%";
-        uiElements.scoreDisplay.style.left = "100%";
-        scoreDisplayOpen = false;
-        clickSound.play();
+        hideScoreDisplay();
     }
     else if (!scoreDisplayOpen) {
-        uiElements.rightHexButton.style.left = "75.5%";
-        uiElements.scoreDisplay.style.left = "77%";
-        scoreDisplayOpen = true;
-        clickSound.play();
+        showScoreDisplay();
     }
 }
+function hideScoreDisplay() {
+    uiElements.scoreAnchor.style.left = `${canvas.width - BUTTON_WIDTH - SCORE_WIDTH_ADJUST}px`;
+    scoreDisplayOpen = false;
+    clickSound.play();
+}
+function showScoreDisplay() {
+    const SCORE_X = canvas.width - SCORE_WIDTH + SCORE_WIDTH_ADJUST;
+
+    uiElements.scoreAnchor.style.left = `${SCORE_X}px`;
+
+    scoreDisplayOpen = true;
+    clickSound.play();
+}
+
 //-------------------------OTHER-------------------------------
 function showEndGameFirstText() {
     clearInterval(eGTInterval);
@@ -336,8 +403,7 @@ musicItems.nextPageButton.addEventListener('click', nextMusicPage);
 uiElements.skinsButton.addEventListener('click', () => openMenu(uiElements.skinsButton, uiElementsHidable.skinsMenuScreen));
 uiElements.audioButton.addEventListener('click', openAudioMenu);
 
-uiElements.rightHexButton.addEventListener('click', toggleScores);
-uiElements.scoreDisplay.addEventListener('click', toggleScores);
+uiElements.scoreAnchor.addEventListener('click', toggleScores);
 
 //keyboard
 window.addEventListener("keydown", function (e) { //creates an array to detect keys

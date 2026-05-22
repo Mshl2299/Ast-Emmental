@@ -1,10 +1,12 @@
-/* buttons & respective screens */
+/* Represents all top menu items */
+/* General Buttons */
 button {
     background-color: #cf8619;
     font-size: 32px;
     letter-spacing: -1px;
     font-weight: bold;
     margin: 3px;
+    border-radius: 12px;
 }
 button:hover {
     background-color: #d28f29;
@@ -12,7 +14,7 @@ button:hover {
     cursor: pointer;
 }
 
-/*Left Buttons & Menus*/
+/* ----- Left Buttons & Menus ----- */
 .buttons-flex1 {
     display: flex;
     width: 360px;
@@ -86,7 +88,7 @@ button:hover {
     background: #d28f29;
 }
 
-/*Right Buttons & Menus*/
+/* ----- Right Buttons & Menus ----- */
 .buttons-flex2 {
     display: flex;
     width: 300px;

@@ -14,14 +14,17 @@ const ctx = canvas.getContext("2d");
 canvas.width = 1000;
 canvas.height = 700;
 
+ctx.imageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;
+
 //general values
 let sBHeight = 50; //scoreBoard Height
 let padding = 30; //distance from borders for Grey & Red Asteroid generation
 let tolerance = 80; //for cheese movement and range detection
-//Scores
-let score = 0;
-let scoreAmt = 1; //easily adjust grey asteroid points
-let scoreArray = [];
+let auraFct = 1.8;
+let showDebug = false;
 //levels & unlock detections
 let level = 0;
 let hasUnlockedSnake = false; //level-ups to store in localStorage for skin unlocks & sound effect
@@ -32,6 +35,10 @@ let unlocks = [];
 let defaultUnlocks = ['Sprites/alphaSS1.png', 'Sprites/betaSS1.png', 'Sprites/ufoSS1.png'];
 
 //-------------------------------BUTTONS & SCREENS-------------------------------
+const SCORE_WIDTH = 280;
+const BUTTON_WIDTH = 20;
+const SCORE_WIDTH_ADJUST = 5;
+
 // ALL UI ELEMENTS (listed by Class or by ID)
 // Screens will be hidden on certain game events
 const uiSelectors = [
@@ -52,15 +59,17 @@ const uiSelectors = [
     '.left-hex-button',
     '.right-hex-button',
     '.score-display',
-    '.leaderboard-button',
+    '.score-anchor',
     '#sfx-range',
-    '#music-range'
+    '#music-range',
+    '#final-score-display',
+    '#leaderboard-submit',
 ];
 const uiSelectorsHidable = [
     '.how-to-screen',
     '.skins-menu-screen',
     '.audio-menu',
-    '.start-screen',
+    '.title-splash',
     '.game-over-screen',
     '.end-game-first-text',
 ]
@@ -77,7 +86,7 @@ uiSelectors.forEach(selector => {
     const variableName = kebabToCamel(className);
 
     uiElements[variableName] = document.querySelector(selector);
-}); 
+});
 uiSelectorsHidable.forEach(selector => {
     const className = selector.substring(1);
     const variableName = kebabToCamel(className);
@@ -91,8 +100,6 @@ let keys = [];
 let eGTCount = 0;
 let eGTInterval;
 //Highscores menu
-uiElements.rightHexButton.style.left = "98%";
-uiElements.scoreDisplay.style.left = "20%"; // turn back to 100
 let scoreDisplayOpen = false; //to move the score button & display together
 //Booleans
 let userInteracted = false; //chrome update for bkg music
@@ -122,49 +129,75 @@ if (window.localStorage.getItem('bkgImg')) {
     uiElements.backgroundImg.src = blueSpace;
     window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
 }
-//SCORE RETRIEVAL
-//window.localStorage.setItem('scoreArray','[1,2,3,4,5]'); //debug
-if (window.localStorage.getItem('scoreArray')) {
-    scoreArray = JSON.parse(window.localStorage.getItem('scoreArray'));
-    for (i = 0; i < 5; ++i) {
-        if (!scoreArray[i] || scoreArray[i] == 0) {
-            scoreArray[i] = "000"; // TODO: don't hardcode this
-        }
-        document.querySelector('.score' + i).innerHTML = scoreArray[i];
-    }
-    console.log("Highscores retrieved. " + window.localStorage.getItem('scoreArray'));
+
+//Scores
+let score = 0;
+let scoreAmt = 5;
+let localScores;
+
+function initLocalScores() {
+    localScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 }
-//score sorting
-function handleScore(newScore) {
-    scoreArray.push(newScore); //add new score in
-    document.getElementById("final-score-display").innerHTML = score; //displays "Final Score:"
-    scoreArray.sort(function (a, b) { return b - a }); //sort array
-    for (i = 0; i <= 4; i++) {
-        if (!scoreArray[i]) {
-            scoreArray[i] = "000";
+initLocalScores();
+
+function updateScoresHTML() {
+    for (i = 0; i < 10; i++) {
+        if (!localScores[i]) {
+            localScores[i] = 0;
         }
-        document.querySelector('.score' + i).innerHTML = scoreArray[i]; //reset each of the scores in the score screen
+        if (document.querySelector('.score0')) {
+            document.querySelector('.score' + i).innerHTML = localScores[i].toString().padStart(3, "0");
+        }
     }
-    window.localStorage.setItem('scoreArray', JSON.stringify(scoreArray));
-    while (scoreArray.length > 5) {
-        scoreArray.pop();
-        window.localStorage.setItem('scoreArray', JSON.stringify(scoreArray));
+}
+
+
+// Retreives local leaderboard from localScores, fill with 0's
+function retrieveLocalScores() {
+    if (window.localStorage.getItem('localScores')) {
+        localScores = JSON.parse(window.localStorage.getItem('localScores'));
+
+        updateScoresHTML();
+
+        console.log("Highscores retrieved. " + window.localStorage.getItem('localScores'));
     }
+}
+
+// Adds a new score to localScores and updates localStorage
+function handleScore(newScore) {
+    localScores.push(newScore);
+    uiElements.finalScoreDisplay.innerHTML = newScore;
+
+    localScores.sort((a, b) => b - a)
+    while (localScores.length > 10) {
+        localScores.pop();
+    }
+
+    updateScoresHTML();
+    window.localStorage.setItem('localScores', JSON.stringify(localScores));
+
     updateUnlocks();
 }
 
+document.querySelector("#score-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    uiElementsHidable.gameOverScreen.classList.add('hidden');
+    // TODO: database connection
+});
+
 //-------------------------------SPRITES & OBJECTS----------------------------
 // SHIP
+// TODO: base speed
 let currentSpeed = 3; //speed variable that will change
 let ship = {
     image: new Image(),
-    width: 67,
-    height: 66,
+    width: 64,
+    height: 64,
     x: canvas.width / 2 - 33,
     y: canvas.height / 2 - 33,
     frameX: 0,
     frameY: 0,
-    radius: 67 / 2,
+    radius: 60 / 2,
     speed: currentSpeed,
     direction: "",
     immunity: false,
@@ -173,8 +206,8 @@ let ship = {
     explosionInterval: null,
     explosionFrame: 1,
     draw(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-        this.image.src = img;
-        //drawCircle("white", this); //debug
+        this.image.src = img; // TODO remove
+        if (showDebug) { drawCircle("rgb(255,255,255,0.5)", this); };
         ctx.drawImage(this.image, sX, sY, sW, sH, dX, dY, dW, dH);
     },
     resetPos() { ship.x = canvas.width / 2 - ship.width / 2; ship.y = canvas.height / 2 - ship.height / 2; },
@@ -267,7 +300,7 @@ let astHeight = 48;
 let astRangeY = (canvas.height - padding) - (sBHeight + padding) - astHeight; //max-min -height of asteroid so it doesn't clip off
 let astRangeX = (canvas.width - padding) - padding - astWidth;
 class Asteroid {
-    constructor(source, width, height, exist, speed, dirX, dirY, genTime) {
+    constructor(source, width, height, exist, speed, dirX, dirY, genTime, isEnemy) {
         this.image = new Image();
         this.image.src = source;
         this.width = width;
@@ -287,6 +320,8 @@ class Asteroid {
         this.genTime = genTime;
         this.genCount = 0;
         this.moveInterval;
+
+        this.isEnemy = isEnemy;
     }
     spawn() { //first time generated
         if (!this.exist) {
@@ -322,16 +357,22 @@ class Asteroid {
         detectBorderCollision(this); //collision with edge of screen
     }
     draw() {
-        //drawCircle('red',this); //debug
+        if (this.isEnemy) {
+            let auraRadius = this.radius * auraFct;
+            let auraX = this.x - (auraRadius - this.radius);
+            let auraY = this.y - (auraRadius - this.radius);
+            drawCircle("rgba(255, 0, 0, 0.05)", { x: auraX, y: auraY, radius: auraRadius });
+        }
+        if (showDebug) { drawCircle('red', this); };
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
 let greyAst = new Asteroid("Sprites/Asteroid.png", astWidth, astHeight, false, 0, 0, 0, 30)
-// Red Enemies
-let redAst = new Asteroid("Sprites/redAsteroid.png", astWidth, astHeight, false, 2, -1, 1, 50);
-let redAst2 = new Asteroid("Sprites/redAsteroid.png", astWidth * 2, astHeight * 2, false, 1.5, -1, -1, 50);
-let redAst3 = new Asteroid("Sprites/redAsteroid.png", astWidth * 3, astHeight * 3, false, 1, 1, 1, 100);
-let redAst4 = new Asteroid("Sprites/redAsteroid.png", astWidth * 1.5, astHeight * 1.5, false, 3, 1, -1, 100);
+// Red Enemies TODO: Factory pattern?
+let redAst = new Asteroid("Sprites/redAsteroid.png", astWidth, astHeight, false, 2, -1, 1, 50, true);
+let redAst2 = new Asteroid("Sprites/redAsteroid.png", astWidth * 2, astHeight * 2, false, 1.5, -1, -1, 50, true);
+let redAst3 = new Asteroid("Sprites/redAsteroid.png", astWidth * 3, astHeight * 3, false, 1, 1, 1, 100, true);
+let redAst4 = new Asteroid("Sprites/redAsteroid.png", astWidth * 1.5, astHeight * 1.5, false, 3, 1, -1, 100, true);
 // Yellow Slowdown High Reward
 let cheese = new Asteroid("Sprites/cheese.png", astWidth / 2, astHeight / 2, false, 0, 0, 0, 30);
 // slowDown effect
@@ -356,7 +397,7 @@ function startGame() { //reset values
     //Reset ship
     ship.image.src = currentSkin;
     ship.resetPos();
-    currentSpeed = 3;
+    currentSpeed = 20;
     ship.speed = currentSpeed;
     ship.immunity = false;
     ship.exploded = false;
@@ -372,7 +413,7 @@ function startGame() { //reset values
 
     //hide ui
     uiElements.startButton.classList.add('hidden');
-    uiElementsHidable.startScreen.classList.add('hidden');
+    uiElementsHidable.titleSplash.classList.add('hidden');
     uiElementsHidable.gameOverScreen.classList.add('hidden');
     //grey out buttons
     uiElements.howToButton.classList.add('greyed');

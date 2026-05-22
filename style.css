@@ -7,8 +7,8 @@
     box-sizing: border-box;
     background-color: transparent;
     border: none;
-    border-radius: 12px;
-    overflow: hidden;
+    /* border-radius: 12px; */
+    /* overflow: hidden; */
     outline: none;
     user-select: none;
 }
@@ -28,7 +28,7 @@ h2 { /*menu titles*/
 h5 { /*final score*/
     font-weight: thin;
     font-size: 40px;
-    border: 1px solid red;
+    border: none;
 }
 
 h6 { /*music*/
@@ -54,6 +54,14 @@ ol {
     padding-left: 30px;
 }
 
+hr {
+    width: 98%;
+    border: none;
+    border-top: 5px solid darkblue;
+    margin: 8px 0;
+    opacity: 0.8;
+}
+
 /* classes & id elements */
 #canvas {
     position: absolute;
@@ -73,6 +81,7 @@ ol {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    overflow: hidden;
 }
 
 .flex {
@@ -124,9 +133,9 @@ ol {
     margin: 2px;
 }
 .medium-icon {
-    height: 160px;
-    width: 220px;
-    border-radius: 22px;
+    height: 120px;
+    width: 200px;
+    border-radius: 16px;
     margin: 8px;
 }
 
@@ -145,7 +154,7 @@ ol {
 .title {
     width: 100%;
 }
-.start-screen {
+.title-splash {
     height: 180px;
     width: 420px;
     position: absolute;
@@ -154,69 +163,130 @@ ol {
     transform: translate(-50%, -50%);
     border: 5px solid black;
     border-radius: 25px;
-    padding: 5px;
+    padding-top: 20px;
     background-color: #cf8619;
     opacity: 1;
+    transition: 0.6s;
 }
-.start-screen:hover {
+.title-splash:hover {
     opacity: 0.2;
     transition: 0.6s;
 }
 
-/* right trapezoid button & scores*/
+
+.score-anchor {
+    position: absolute;
+    left: 97.5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    transition: 0.3s;
+    opacity: 0.8;
+}
+/* Right trapezoid button & scores */
 .right-hex-button {
     width: 20px;
-    height: 380px;
-    position: absolute;
-    top: 50%;
-    left: 98%;
-    transform: translate(-50%, -50%);
+    height: 395px;
     font-size: 22px;
     border-top: 25px solid transparent;
     border-bottom: 25px solid transparent;
     border-right: 20px solid #cf8619;
     border-left: 0px solid transparent;
     background: none;
-    transition: 0.3s;
-    opacity: 0.88;
+    margin-right: 0;
+    border-radius: 0;
+    
     overflow: visible;
 }
 .right-hex-button:hover {
     background: none;
     border-right: 20px solid #d28f29;
 }
+
+.score-display {
+    height: 400px;
+    width: 260px;
+
+    border: 5px solid darkblue;
+    background: #cf8619;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0 10px;
+    
+    overflow: hidden;
+}
 .highscore-title {
     font-size: 28px;
     font-weight: bolder;
     color: darkblue;
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
+    word-spacing: -6px;
     line-height: 28px;
     margin: 0 0 5px 0;
     padding: 3px 0 3px 0;
     border-radius: 0px;
 }
-.leaderboard-scores {
-    padding: 1px;
+
+.score-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 0;
 }
-.score-display {
-    height: 400px;
-    width: 240px;
-    position: absolute;
-    top: 50.5%;
-    left: 100%;
-    transform: translate(0, -50%);
-    border: 5px solid darkblue;
-    background: #cf8619;
-    transition: 0.3s;
-    opacity: 0.88;
+.score-list::-webkit-scrollbar {
+    width: 6px;
 }
-.score-val {
-    list-style-position: inside;
-    width: 190px;
-    word-spacing: -8px;
-    font-size: 26px;
+.score-list::-webkit-scrollbar-thumb {
+    background: darkblue;
+    border-radius: 4px;
+}
+.local-scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: row;
+
+    column-gap: 0px;
+    row-gap: 0px;
+
+    overflow-y: auto;
+
+    min-height: 0;
 }
 
+.header-row {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-weight: bold;
+    background:#0093c4
+}
+.player-card {
+    display: grid;
+    grid-template-columns: 40px 70px 1fr;
+
+    font-size: 24px;
+    letter-spacing: -1.5px;
+}
+.player-name {
+    text-align: right;
+    min-width: 0;
+    padding-right: 8px;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.player-score {
+    text-align: left;
+}
+
+/* The left trapezoidal button and its menu */
 .left-hex-button {
     width: 20px;
     height: 380px;
@@ -256,7 +326,7 @@ ol {
 }
 
 .game-over-screen {
-    height: 220px;
+    height: 280px;
     width: 400px;
     position: absolute;
     top: 45%;
@@ -271,19 +341,26 @@ ol {
     background: #cf8619;
 }
 
+/* Score submission form */
 #score-form {
-    height: 45px;
-    width: 280px;
+    display: flex;
+    align-items:flex-start;
+    justify-content: center;
+    width: 300px;
     margin: auto;
-    background-color: #bcbcbc;
+    padding: 5px;
 }
 #username, #leaderboard-submit {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: lighter;
+    color: white;
     border-radius: 12px;
-    vertical-align: top;
-    background-color: #cf8619;
-    padding: 5px;
+    background-color: #242424;
+    padding: 8px 15px;
     margin: 5px;
+}
+#username {
+    width: 180px;
 }
 
 .background-img {

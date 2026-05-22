@@ -101,14 +101,15 @@ function handleAsteroids() { //moving & drawing asteroids as score goes up, ever
 }
 
 function updateUnlocks() {
+    const HISCORE = localScores[0];
     //check scores
-    if (!unlocks.includes("Sprites/snakeSS1.png") && scoreArray[0] >= 100) {
+    if (!unlocks.includes("Sprites/snakeSS1.png") && HISCORE >= 100) {
         unlocks.push("Sprites/snakeSS1.png");
     }
-    if (!unlocks.includes("Sprites/alphaInvertedSS1.png") && scoreArray[0] >= 150) {
+    if (!unlocks.includes("Sprites/alphaInvertedSS1.png") && HISCORE >= 150) {
         unlocks.push("Sprites/alphaInvertedSS1.png");
     }
-    if (!unlocks.includes("Sprites/asteroidSS1.png") && scoreArray[0] >= 250) {
+    if (!unlocks.includes("Sprites/asteroidSS1.png") && HISCORE >= 250) {
         unlocks.push("Sprites/asteroidSS1.png");
     }
     //update skins to be Unlocked or Greyed

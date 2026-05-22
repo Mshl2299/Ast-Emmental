@@ -20,53 +20,20 @@
     <div class="canvas-container">
         <canvas id="canvas" oncontextmenu="return false">Your browser does not support HTML Canvas</canvas>
         <img src="Backgrounds/blueSpace.jpg" alt="Background" class="background-img">
-        <div class="start-screen">
+        <div class="title-splash">
             <img src="AstEmmentalTitle.png" alt="Ast-Emmental" class="title">
-            <p>A vanilla JavaScript game by Marcus Lim</p>
+            <p style="letter-spacing: -1px; font-size: 20px;">Welcome to AST-Emmental Mining Co.</p>
         </div>
         <!--Middle Left/Right Buttons-->
-        <button class="right-hex-button">◀</button>
-        <div class="score-display">
-            <h6 class="highscore-title"><u>ALL-TIME HIGHSCORES</u></h6>
-            <ol class="leaderboard-scores">
-                <li class="score-val leaderboard0">000</li>
-                <li class="score-val leaderboard1">000</li>
-                <li class="score-val leaderboard2">000</li>
-                <li class="score-val leaderboard3">000</li>
-                <li class="score-val leaderboard4">000</li>
-            </ol>
-            <!-- <h6 class="highscoreTitle"><u>LOCAL HIGHSCORES</u></h6>
-            <ol>
-                <li class="scoreVal score0">000</li>
-                <li class="scoreVal score1">000</li>
-                <li class="scoreVal score2">000</li>
-                <li class="scoreVal score3">000</li>
-                <li class="scoreVal score4">000</li>
-            </ol> -->
-            <h6 class="highscoreTitle"><u>LOCAL HIGHSCORES</u></h6>
-            <div class="local-scores">
-                <div class="player-card score0">
-                    <div class="player-name"></div>
-                    <div class="player-score"></div>
-                </div>
-                <div class="player-card score1">
-                    <div class="player-name"></div>
-                    <div class="player-score"></div>
-                </div>
-                <div class="player-card score2">
-                    <div class="player-name"></div>
-                    <div class="player-score"></div>
-                </div>
-                <div class="player-card score3">
-                    <div class="player-name"></div>
-                    <div class="player-score"></div>
-                </div>
-                <div class="player-card score4">
-                    <div class="player-name"></div>
-                    <div class="player-score"></div>
-                </div>
+        <div class="score-anchor">
+            <button class="right-hex-button">◀</button>
+            <div class="score-display">
+                <h6 class="highscore-title"><u>GLOBAL HIGHSCORES</u></h6>
+                <div class="score-list global-scores"></div>
+                <hr>
+                <h6 class="highscore-title"><u>LOCAL HIGHSCORES</u></h6>
+                <div class="score-list local-scores"></div>
             </div>
-
         </div>
         <button class="left-hex-button">▶</button>
         <!--end game first screen-->
@@ -80,8 +47,9 @@
             <h4><u>GAME OVER</u></h4>
             <h5>FINAL SCORE: <span id="final-score-display"></span></h5>
             <form id="score-form">
-                <input type="text" id="username" placeholder="NAME" size="4" maxlength="4" required>
-                <button type="submit" id="leaderboard-submit">Submit Score</button>
+                <input type="text" id="username" placeholder="NAME" maxlength="12" autocomplete="off"
+                    autocorrect="off" autocapitalize="off" spellcheck="false">
+                <button type="submit" id="leaderboard-submit">Submit</button>
             </form>
         </div>
 
@@ -158,7 +126,7 @@
                 <div class="flex"><img src="Backgrounds/purpleAnim.gif" class="bkg" onclick="changeBkgSkin(purpleAnim)">
                 </div>
                 <div class="flex"><img src="Backgrounds/blueNebulaAnim.gif" class="bkg"
-                        onclick="changeBkgSkin(blueNebula)">
+                        onclick="changeBkgSkin(blueNebulaAnim)">
                 </div>
             </div>
         </div>
