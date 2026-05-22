@@ -30,7 +30,7 @@ function clearData() {
     updateScoresHTML();
 
     unlocks = [];
-    ship.changeSkin('Sprites/alphaSS1.png');
+    ship.changeSkin('assets/sprites/alphaSS1.png');
     uiElements.backgroundImg.src = blueSpace;
 
     explSound.play();
@@ -225,42 +225,42 @@ const musicData = {
             title: 'Raining Bits (default)',
             artist: 'Gundatsch',
             url: 'https://soundcloud.com/gundatsch',
-            src: 'Audio/rainingBitsGundatsch.ogg'
+            src: 'assets/audio/rainingBitsGundatsch.ogg'
         },
         // {
         //     icon: '&#128299',
         //     title: 'NES Shooter - Boss',
         //     artist: 'SketchyLogic',
         //     url: 'https://soundcloud.com/sketchylogic',
-        //     src: 'Audio/NESBossIntroSketchyLogic.wav'
+        //     src: 'assets/audio/NESBossIntroSketchyLogic.wav'
         // }, !!!
         {
             icon: '&#63',
             title: 'WIP (no sound)',
             artist: 'N/A',
             url: '',
-            src: 'Audio/pop.ogg'
+            src: 'assets/audio/pop.ogg'
         },
         {
             icon: '&#128121',
             title: 'Lines of Code',
             artist: 'Trevor Lentz',
             url: 'https://open.spotify.com/artist/3AjWA7sRmeZSKqr7PoKL6k',
-            src: 'Audio/linesOfCodeTLentz.mp3'
+            src: 'assets/audio/linesOfCodeTLentz.mp3'
         },
         {
             icon: '&#127932',
             title: 'Cyber Sonata',
             artist: 'Joth',
             url: 'https://opengameart.org/users/joth',
-            src: 'Audio/cyberSonataJoth.mp3'
+            src: 'assets/audio/cyberSonataJoth.mp3'
         },
         {
             icon: '&#127950',
             title: 'Hyper Ultra-Racing',
             artist: 'cynicmusic',
             url: 'https://cynicmusic.com',
-            src: 'Audio/hyperUltraRacingcynicmusic.wav'
+            src: 'assets/audio/hyperUltraRacingcynicmusic.wav'
         },
         {
             icon: '&#127776',
@@ -276,42 +276,42 @@ const musicData = {
             title: 'Bossa Nova',
             artist: 'Joth',
             url: 'https://opengameart.org/users/joth',
-            src: 'Audio/bossaNovaJoth.mp3'
+            src: 'assets/audio/bossaNovaJoth.mp3'
         },
         {
             icon: '&#127754',
             title: 'Enchanted Tiki 86',
             artist: 'cynicmusic',
             url: 'https://cynicmusic.com',
-            src: 'Audio/ET86cynicmusic.mp3'
+            src: 'assets/audio/ET86cynicmusic.mp3'
         },
         {
             icon: '&#11088',
             title: 'Chiptune Adventures',
             artist: 'Juhani Junkala',
             url: 'https://juhanijunkala.com/',
-            src: 'Audio/chiptunesJJunkala.wav'
+            src: 'assets/audio/chiptunesJJunkala.wav'
         },
         {
             icon: '&#128760',
             title: 'Thrust Sequence',
             artist: 'matthewpablo',
             url: 'https://www.matthewpablo.com',
-            src: 'Audio/thrustSequenceMPablo.mp3'
+            src: 'assets/audio/thrustSequenceMPablo.mp3'
         },
         {
             icon: '&#127761',
             title: 'Orbital Colossus',
             artist: 'matthewpablo',
             url: 'https://www.matthewpablo.com',
-            src: 'Audio/orbitalColossusMPablo.mp3'
+            src: 'assets/audio/orbitalColossusMPablo.mp3'
         },
         {
             icon: '&#127928',
             title: 'The Recon Mission',
             artist: 'Zander Noriega',
             url: 'https://twitter.com/ZanderNoriega',
-            src: 'Audio/theReconMissionZNoriega.mp3'
+            src: 'assets/audio/theReconMissionZNoriega.mp3'
         },
     ]
 };
@@ -365,9 +365,9 @@ function initMusicScreen() {
         </div>
         <div class="music-page3 hidden">
             <h5><u>Menu/Loading Music</u></h5>
-            <p><u onclick="changeMenuMusic('Audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
-            <p><u onclick="changeMenuMusic('Audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u></p>
-            <p><u onclick="changeMenuMusic('Audio/menuLSLBMorris.wav')">Loading Screen Loop</u> - <u>Brandon Morris</u></p>
+            <p><u onclick="changeMenuMusic('assets/audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
+            <p><u onclick="changeMenuMusic('assets/audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u></p>
+            <p><u onclick="changeMenuMusic('assets/audio/menuLSLBMorris.wav')">Loading Screen Loop</u> - <u>Brandon Morris</u></p>
             <h5><u>Check these out!</u></h5>
             <p><b>PixelSphere</b> by <b>cynicmusic</b>, a free "2d-sidescroller with an <b>interactive</b> musical soundtrack"! <a target="_blank" href="https://pixelsphere.org/">https://pixelsphere.org/</a></p>
             <p><b>Aviary Attorney</b> by <b>SketchyLogic</b>, a paid "~swanderful~ experience", where you play as "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a></p>

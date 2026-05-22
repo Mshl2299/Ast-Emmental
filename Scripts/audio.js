@@ -7,17 +7,17 @@ let menuMusicNumber = 0;
 //Sound Effects & Elements
 // TODO: convert to an object that stores all sounds
 let clickSound = new Audio(); // click in menus
-clickSound.src = "Audio/click.wav";
+clickSound.src = "assets/audio/click.wav";
 let lvlUpSound = new Audio(); // level up
-lvlUpSound.src = "Audio/success.mp3";
+lvlUpSound.src = "assets/audio/success.mp3";
 let dingSound = new Audio(); // cheese regen
-dingSound.src = "Audio/ding.wav";
+dingSound.src = "assets/audio/ding.wav";
 let explSound = new Audio(); // explosion
-explSound.src = "Audio/explosion.wav";
+explSound.src = "assets/audio/explosion.wav";
 
 let popSoundVolume = 1;
 function playPop() {
-    const s = new Audio("Audio/pop.ogg");
+    const s = new Audio("assets/audio/pop.ogg");
     s.volume = popSoundVolume;
     s.play();
   }
@@ -39,7 +39,7 @@ if (window.localStorage.getItem('musicRange')) {
 }
 //BKG MUSIC
 if (!window.localStorage.getItem('bkgMusic')) {
-    bkgMusic.src = "Audio/rainingBitsGundatsch.ogg";
+    bkgMusic.src = "assets/audio/rainingBitsGundatsch.ogg";
     window.localStorage.setItem('bkgMusic', JSON.stringify(bkgMusic.src));
 } else {
     bkgMusic.src = JSON.parse(window.localStorage.getItem('bkgMusic'));
@@ -68,16 +68,16 @@ function randomizeMenuMusic() {
     menuMusicNumber = Math.floor((Math.random() * 4));
     switch (menuMusicNumber) {
         case 0:
-            menuMusic.src = "Audio/menuDeepSeaUmplix.mp3";
+            menuMusic.src = "assets/audio/menuDeepSeaUmplix.mp3";
             break;
         case 1:
-            menuMusic.src = "Audio/menuMagicSpaceCodeManu.mp3";    
+            menuMusic.src = "assets/audio/menuMagicSpaceCodeManu.mp3";    
             break;
         case 2:
-            menuMusic.src = "Audio/menuLSLBMorris.wav";
+            menuMusic.src = "assets/audio/menuLSLBMorris.wav";
             break;
         case 3:
-            menuMusic.src = "Audio/stageSelectJJunkala.wav";
+            menuMusic.src = "assets/audio/stageSelectJJunkala.wav";
             break;
     }
     menuMusic.play();
@@ -90,16 +90,16 @@ function updateVolume() { // !!! TODO
     bkgMusic.volume = uiElements.musicRange.value / 180;
     menuMusic.volume = uiElements.musicRange.value / 200;
     if (uiElements.sfxRange.value > 0) {
-        uiElements.sfxButton.src = "Audio/audioUnmuted.png";
+        uiElements.sfxButton.src = "assets/images/audioUnmuted.png";
     }
     else if (uiElements.sfxRange.value == 0) {
-        uiElements.sfxButton.src = "Audio/audioMuted.png";
+        uiElements.sfxButton.src = "assets/images/audioMuted.png";
     }
     if (uiElements.musicRange.value > 0) {
-        uiElements.musicToggleButton.src = "Audio/musicUnmuted.jpg";
+        uiElements.musicToggleButton.src = "assets/images/musicUnmuted.jpg";
     }
     else if (uiElements.musicRange.value == 0) {
-        uiElements.musicToggleButton.src = "Audio/musicMuted.png";
+        uiElements.musicToggleButton.src = "assets/images/musicMuted.png";
     }
     window.localStorage.setItem('sfxRange', JSON.stringify(uiElements.sfxRange.value));
     window.localStorage.setItem('musicRange', JSON.stringify(uiElements.musicRange.value));

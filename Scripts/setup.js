@@ -32,7 +32,7 @@ let hasUnlockedInverted = false;
 let hasUnlockedAsteroid = false;
 let legendaryScore = false;
 let unlocks = [];
-let defaultUnlocks = ['Sprites/alphaSS1.png', 'Sprites/betaSS1.png', 'Sprites/ufoSS1.png'];
+let defaultUnlocks = ['assets/sprites/alphaSS1.png', 'assets/sprites/betaSS1.png', 'assets/sprites/ufoSS1.png'];
 
 //-------------------------------BUTTONS & SCREENS-------------------------------
 const SCORE_WIDTH = 280;
@@ -117,7 +117,7 @@ let bkgArray = [
     "blueNebulaAnim.gif"
 ];
 bkgArray.forEach(element => {
-    window[element.slice(0, -4)] = "Backgrounds/" + element;
+    window[element.slice(0, -4)] = "assets/backgrounds/" + element;
 });
 
 // Persistence
@@ -285,7 +285,7 @@ let ship = {
 // SHIP SPRITE RETRIEVAL (has to be below)
 let currentSkin = JSON.parse(window.localStorage.getItem('skinName'))
 if (!currentSkin) {
-    currentSkin = "Sprites/alphaSS1.png";
+    currentSkin = "assets/sprites/alphaSS1.png";
     window.localStorage.setItem('skinName', JSON.stringify(currentSkin));
 }
 if (JSON.parse(window.localStorage.getItem('unlocks'))) {
@@ -367,23 +367,23 @@ class Asteroid {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
-let greyAst = new Asteroid("Sprites/Asteroid.png", astWidth, astHeight, false, 0, 0, 0, 30)
+let greyAst = new Asteroid("assets/sprites/Asteroid.png", astWidth, astHeight, false, 0, 0, 0, 30)
 // Red Enemies TODO: Factory pattern?
-let redAst = new Asteroid("Sprites/redAsteroid.png", astWidth, astHeight, false, 2, -1, 1, 50, true);
-let redAst2 = new Asteroid("Sprites/redAsteroid.png", astWidth * 2, astHeight * 2, false, 1.5, -1, -1, 50, true);
-let redAst3 = new Asteroid("Sprites/redAsteroid.png", astWidth * 3, astHeight * 3, false, 1, 1, 1, 100, true);
-let redAst4 = new Asteroid("Sprites/redAsteroid.png", astWidth * 1.5, astHeight * 1.5, false, 3, 1, -1, 100, true);
+let redAst = new Asteroid("assets/sprites/redAsteroid.png", astWidth, astHeight, false, 2, -1, 1, 50, true);
+let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 2, astHeight * 2, false, 1.5, -1, -1, 50, true);
+let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 3, astHeight * 3, false, 1, 1, 1, 100, true);
+let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 1.5, astHeight * 1.5, false, 3, 1, -1, 100, true);
 // Yellow Slowdown High Reward
-let cheese = new Asteroid("Sprites/cheese.png", astWidth / 2, astHeight / 2, false, 0, 0, 0, 30);
+let cheese = new Asteroid("assets/sprites/cheese.png", astWidth / 2, astHeight / 2, false, 0, 0, 0, 30);
 // slowDown effect
 let cheeseCD = new Image();
 let cheeseCDx = 900;
 let cheeseCDy = 80;
 let sDCount = 1;
 let sDInterval;
-cheeseCD.src = "Sprites/cheeseCooldown" + JSON.stringify(sDCount) + ".png";
-// Blue Powerup !!!
-//let plasma = new Asteroid("Sprites/cheese.png", astWidth / 3, astHeight / 3, false);
+cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(sDCount) + ".png";
+// Blue Powerup !!! TODO
+//let plasma = new Asteroid("assets/sprites/cheese.png", astWidth / 3, astHeight / 3, false);
 // shield effect
 
 let drawAstArray = [greyAst, redAst, redAst2, redAst3, redAst4, cheese];

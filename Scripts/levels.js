@@ -95,7 +95,7 @@ function handleAsteroids() { //moving & drawing asteroids as score goes up, ever
             moveToAway(ship, cheese, 0.2); //unique move function
         }
     }
-    cheeseCD.src = "Sprites/cheeseCooldown" + JSON.stringify(sDCount) + ".png"; //!!!
+    cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(sDCount) + ".png"; //!!!
     ctx.drawImage(cheeseCD, cheeseCDx, cheeseCDy);
 
 }
@@ -103,42 +103,42 @@ function handleAsteroids() { //moving & drawing asteroids as score goes up, ever
 function updateUnlocks() {
     const HISCORE = localScores[0];
     //check scores
-    if (!unlocks.includes("Sprites/snakeSS1.png") && HISCORE >= 100) {
-        unlocks.push("Sprites/snakeSS1.png");
+    if (!unlocks.includes("assets/sprites/snakeSS1.png") && HISCORE >= 100) {
+        unlocks.push("assets/sprites/snakeSS1.png");
     }
-    if (!unlocks.includes("Sprites/alphaInvertedSS1.png") && HISCORE >= 150) {
-        unlocks.push("Sprites/alphaInvertedSS1.png");
+    if (!unlocks.includes("assets/sprites/alphaInvertedSS1.png") && HISCORE >= 150) {
+        unlocks.push("assets/sprites/alphaInvertedSS1.png");
     }
-    if (!unlocks.includes("Sprites/asteroidSS1.png") && HISCORE >= 250) {
-        unlocks.push("Sprites/asteroidSS1.png");
+    if (!unlocks.includes("assets/sprites/asteroidSS1.png") && HISCORE >= 250) {
+        unlocks.push("assets/sprites/asteroidSS1.png");
     }
     //update skins to be Unlocked or Greyed
-    if (unlocks.includes("Sprites/snakeSS1.png")) {
+    if (unlocks.includes("assets/sprites/snakeSS1.png")) {
         uiElements.snakeSkin.classList.remove("greyed");
-        uiElements.snakeSkin.src = "Sprites/shipSnake.png"; //html image
+        uiElements.snakeSkin.src = "assets/sprites/shipSnake.png"; //html image
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
         uiElements.snakeSkin.classList.add("greyed");
-        uiElements.snakeSkin.src = "Sprites/shipSnakeLocked.png";
+        uiElements.snakeSkin.src = "assets/sprites/shipSnakeLocked.png";
     }
-    if (unlocks.includes("Sprites/alphaInvertedSS1.png")) {
+    if (unlocks.includes("assets/sprites/alphaInvertedSS1.png")) {
         uiElements.invertedSkin.classList.remove("greyed");
-        uiElements.invertedSkin.src = "Sprites/shipAlphaInverted.png";
+        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInverted.png";
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
         uiElements.invertedSkin.classList.add("greyed");
-        uiElements.invertedSkin.src = "Sprites/shipAlphaInvertedLocked.png";
+        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInvertedLocked.png";
     }
-    if (unlocks.includes("Sprites/asteroidSS1.png")) {
+    if (unlocks.includes("assets/sprites/asteroidSS1.png")) {
         uiElements.asteroidSkin.classList.remove("greyed");
-        uiElements.asteroidSkin.src = "Sprites/asteroid.png";
+        uiElements.asteroidSkin.src = "assets/sprites/asteroid.png";
         window.localStorage.setItem('unlocks', JSON.stringify(unlocks));
     }
     else {
         uiElements.asteroidSkin.classList.add("greyed");
-        uiElements.asteroidSkin.src = "Sprites/AsteroidLocked.png";
+        uiElements.asteroidSkin.src = "assets/sprites/AsteroidLocked.png";
     }
 }
 
