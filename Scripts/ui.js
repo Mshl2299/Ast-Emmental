@@ -168,13 +168,12 @@ function openMenu(button, screen) {
     }
     else if (!button.classList.contains('greyed')) {
         if (screen.classList.contains('skins-menu-screen') && screen.classList.contains('hidden')) {
-            ship.x = 100; //move ship to side to see skins
-            ship.y = canvas.height / 2 - ship.height / 2;
-            ship.frameX = 0;
-            ship.frameY = 0;
+            ship.displayOnSide();
+            ship.exploding = false;
+
             updateUnlocks();
         } else if (!screen.classList.contains('hidden')) {
-            ship.resetPos();
+            ship.reset();
         }
         screen.classList.toggle('hidden'); //toggles screen
         clickSound.play();
@@ -267,7 +266,7 @@ const musicData = {
             title: 'Lunar Arrow',
             artist: 'mmry',
             url: 'https://soundcloud.com/mmry/',
-            src: 'Audio/lunarArrowmmry.mp3'
+            src: 'assets/audio/lunarArrowmmry.mp3'
         },
     ],
     page2: [

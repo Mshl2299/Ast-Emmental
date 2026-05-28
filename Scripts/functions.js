@@ -52,7 +52,8 @@ function detectAllCollisions() {
         changeLevelUp();
         playPop();
 
-        greyAst.generate(); //move to a new location
+        greyAst.generate();
+        ship.setImmune(300);
     }
     if (cheese.exist && detectCircleCollision(ship, cheese, 0)) {
         score += scoreAmt * 5;
@@ -131,21 +132,17 @@ function animate() { //game update
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas to save memory
 
         //display explosion (called on gameOver()) or selected skin
-        if (ship.exploded && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
-            ship.image.src = "BlueExplosion/blue" + ship.explosionFrame.toString() + ".png";
-            if(ship.image.height == 256) {
-                ship.draw(ship.image.src, 0, 0, 256, 256, ship.x - 50, ship.y - 50, ship.width + 100, ship.height + 100);
-            }
-            ship.cycleExplosionFrame();
+        if (ship.exploding && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
+            ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x - 96, ship.y - 96, ship.width, ship.height);
         }
         else if (!uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) {
             ship.speed = 0;
             ship.move();
             ship.image.src = currentSkin;
-            ship.draw(ship.image.src, 67 * ship.frameX, 66 * ship.frameY, 67, 66, ship.x, ship.y, ship.width, ship.height);
+            ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x, ship.y, ship.width, ship.height);
         } else {
             ship.image.src = currentSkin;
-            ship.draw(ship.image.src, 67 * ship.frameX, 66 * ship.frameY, 67, 66, ship.x, ship.y, ship.width, ship.height);
+            ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x, ship.y, ship.width, ship.height);
         }
 
         if (playerControl) {

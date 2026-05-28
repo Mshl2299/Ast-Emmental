@@ -53,6 +53,7 @@ if (!window.localStorage.getItem('menuMusic')) {
 }
 //--------------------------------MUSIC-------------------------
 function changeBkgMusic(source) {
+    bkgMusic.pause();
     bkgMusic.src = source;
     clickSound.play();
 }

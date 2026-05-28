@@ -197,21 +197,51 @@ let ship = {
     y: canvas.height / 2 - 33,
     frameX: 0,
     frameY: 0,
-    radius: 60 / 2,
+    spriteWidth: 67,
+    spriteHeight: 66,
+    radius: 64 / 2,
     speed: currentSpeed,
     direction: "",
     immunity: false,
     breathingRoom: 5,
-    exploded: false,
+    exploding: false,
     explosionInterval: null,
     explosionFrame: 1,
-    draw(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-        this.image.src = img; // TODO remove
+    draw(sX, sY, sW, sH, dX, dY, dW, dH) {
         if (showDebug) { drawCircle("rgb(255,255,255,0.5)", this); };
         ctx.drawImage(this.image, sX, sY, sW, sH, dX, dY, dW, dH);
     },
-    resetPos() { ship.x = canvas.width / 2 - ship.width / 2; ship.y = canvas.height / 2 - ship.height / 2; },
-    getImmunity(duration) { ship.immunity = true; setTimeout(function () { ship.immunity = false }, duration); },
+    resetDimensions() {
+        this.width = 64;
+        this.height = 64;
+        this.spriteWidth = 67;
+        this.spriteHeight = 66;
+
+        this.frameX = 0;
+        this.frameY = 0;
+    },
+    resetExplosion() {
+        clearInterval(this.explosionInterval);
+        this.explosionInterval = null;
+    },
+    reset() { 
+        this.resetDimensions();
+
+        this.x = canvas.width / 2 - this.width / 2; 
+        this.y = canvas.height / 2 - this.height / 2;
+        this.resetExplosion();
+    },
+    displayOnSide() {
+        this.resetDimensions();
+        this.x = 100; //move ship to side to see skins
+        this.y = canvas.height / 2 - this.height / 2;
+        this.resetExplosion();
+    },
+    setImmune(duration) { 
+        this.immunity = true; setTimeout(() => { 
+            this.immunity = false;
+        }, duration);
+    },
     changeSkin(skinName) {
         if (window.localStorage.getItem('unlocks') && JSON.parse(window.localStorage.getItem('unlocks')).includes(skinName)) {
             currentSkin = skinName;
@@ -221,10 +251,10 @@ let ship = {
         window.localStorage.setItem('skinName', JSON.stringify(currentSkin));
         clickSound.play();
     },
-    upPressed() { return ((keys["w"] || keys["ArrowUp"]) && ship.y > sBHeight); },
-    downPressed() { return ((keys["s"] || keys["ArrowDown"]) && ship.y < canvas.height - ship.height); },
-    leftPressed() { return ((keys["a"] || keys["ArrowLeft"]) && ship.x > 0); },
-    rightPressed() { return ((keys["d"] || keys["ArrowRight"]) && ship.x < canvas.width - ship.width); },
+    upPressed() { return ((keys["w"] || keys["ArrowUp"]) && this.y > sBHeight); },
+    downPressed() { return ((keys["s"] || keys["ArrowDown"]) && this.y < canvas.height - this.height); },
+    leftPressed() { return ((keys["a"] || keys["ArrowLeft"]) && this.x > 0); },
+    rightPressed() { return ((keys["d"] || keys["ArrowRight"]) && this.x < canvas.width - this.width); },
     move() {
         if (this.upPressed()) { //up, left right center
             if (this.leftPressed()) {
@@ -268,18 +298,30 @@ let ship = {
             ship.frameY = 0;
         }
     },
-    cycleExplosionFrame() {
-        if (!ship.explosionInterval) {
-            ship.explosionInterval = setInterval(function () {
-                if (ship.explosionFrame < 10) {
-                    ship.explosionFrame++;
+    startExplosion() {
+        this.image.src = "assets/sprites/BlueExplosionSS.png";
+        this.width = 256;
+        this.height = 256;
+        this.spriteWidth = 259;
+        this.spriteHeight = 258;
+
+        this.frameX = 0;
+        this.frameY = 0;
+
+        this.exploding = true;
+
+        if (!this.explosionInterval) {
+            this.explosionInterval = setInterval(() => {
+                this.explosionFrame++;
+                if (this.explosionFrame >= 10) {
+                    this.explosionFrame = 0;
                 }
-                else {
-                    ship.explosionFrame = 1;
-                }
+
+                this.frameX = this.explosionFrame % 5;
+                this.frameY = Math.floor(this.explosionFrame / 5);
             }, 100);
         }
-    }
+    },
 }
 
 // SHIP SPRITE RETRIEVAL (has to be below)
@@ -332,7 +374,6 @@ class Asteroid {
     generate() {
         this.x = Math.random() * (astRangeX) + padding;
         this.y = Math.random() * (astRangeY) + sBHeight + padding;
-        ship.getImmunity(300);
 
         this.genCount = 0;
         this.moving = false;
@@ -396,11 +437,11 @@ function startGame() { //reset values
 
     //Reset ship
     ship.image.src = currentSkin;
-    ship.resetPos();
+    ship.reset();
     currentSpeed = 20;
     ship.speed = currentSpeed;
     ship.immunity = false;
-    ship.exploded = false;
+    ship.exploding = false;
 
     //reset levelup changes
     drawAstArray.forEach(asteroid => {
@@ -429,7 +470,10 @@ function startGame() { //reset values
 
 function gameOver() {
     playerControl = false;
-    ship.exploded = true;
+
+    if (!ship.exploding) {
+        ship.startExplosion();
+    }
     explSound.play();
 
     bkgMusic.pause();
