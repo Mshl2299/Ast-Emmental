@@ -1,5 +1,5 @@
 # :rocket: AST-Emmental :cheese:
-![AstEmmental Title](AstEmmentalTitle.png)
+![AstEmmental Title](assets/images/AstEmmentalTitle.png)
 
 ---
 AST-Emmental is an arcade-style game inspired by classics including Asteroids and Snake. 
