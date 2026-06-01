@@ -1,4 +1,9 @@
 // Represents global variables and configuration settings
-export let CONFIG = {
+export const CONFIG = {
     showDebug: false,
+    superspeed: false,
+    breathingRoom: 5, // collision forgiveness
 }
+
+
+export default { CONFIG };

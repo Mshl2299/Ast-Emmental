@@ -1,9 +1,17 @@
 // Loaded last. Utility and Animation
+import { CONFIG } from "./config.js";
+import { STATE } from "./game/state.js";
+import { ctx, uiElementsHidable } from "./dom.js";
+import { ship, greyAst, cheese, drawAstArray, enemyAstArray, gameOver } from "./setup.js";
+import { UI_DEFAULTS } from "./ui.js";
+import { AUDIO } from "./audio.js";
+import { changeLevelUp, cheeseTolerance } from "./levels.js";
+
 // Collision detection; first "if" is for x-values/domain, second "if" is for y-values/range
 var distanceToPlayer, dX, dY;
 
 function detectCircleCollision(player, obstacle, tolerance) {
-    if (playerControl && !ship.immunity) {
+    if (CONFIG.playerControl && !ship.immunity) {
         dX = (player.x + player.radius) - (obstacle.x + obstacle.radius);
         dY = (player.y + player.radius) - (obstacle.y + obstacle.radius);
         distanceToPlayer = Math.sqrt(dX ** 2 + dY ** 2) - tolerance;
@@ -15,7 +23,7 @@ function detectCircleCollision(player, obstacle, tolerance) {
     }
 }
 
-function detectBorderCollision(obj) {
+export function detectBorderCollision(obj) {
     if (obj.x < 1 - obj.width) { // passing left border
         obj.x = canvas.width;
     }
@@ -29,8 +37,8 @@ function detectBorderCollision(obj) {
         obj.y = 1 - obj.height;
     }
 }
-function detectCheeseBorderCol() { //teleports to middle of screen
-    if (cheese.x < 0 || cheese.x > canvas.width || cheese.y < sBHeight || cheese.y > canvas.height) {
+export function detectCheeseBorderCol() { //teleports to middle of screen
+    if (cheese.x < 0 || cheese.x > canvas.width || cheese.y < UI_DEFAULTS.SCOREBOARD_HEIGHT || cheese.y > canvas.height) {
         cheese.x = 460;
         cheese.y = 310;
     }
@@ -39,82 +47,98 @@ function detectCheeseBorderCol() { //teleports to middle of screen
 function detectAllCollisions() {
     //reds; gameover 
     enemyAstArray.forEach(asteroid => {
-        if (asteroid.exist && asteroid.moving && detectCircleCollision(ship, asteroid, -ship.breathingRoom)) {
+        if (asteroid.exist && asteroid.moving && detectCircleCollision(ship, asteroid, -CONFIG.breathingRoom)) {
             gameOver();
         } else if (asteroid.exist && asteroid.moving && detectCircleCollision(greyAst, asteroid, 0)) {
-            playPop();
+            AUDIO.playSFX('pop');
             greyAst.generate();
         }
     })
     //collectibles
     if (greyAst.exist && detectCircleCollision(ship, greyAst, 0)) {
-        score += scoreAmt;
+        STATE.score += STATE.scoreAmt;
         changeLevelUp();
-        playPop();
+        AUDIO.playSFX('pop');
 
         greyAst.generate();
         ship.setImmune(300);
     }
     if (cheese.exist && detectCircleCollision(ship, cheese, 0)) {
-        score += scoreAmt * 5;
+        STATE.score += STATE.scoreAmt * 5;
         changeLevelUp();
-        playPop();
+        AUDIO.playSFX('pop');
         cheese.exist = false;
 
-        sDCount = 1;
-        ship.speed = currentSpeed * (sDCount / 7);
-        clearInterval(sDInterval);
-        sDInterval = setInterval(sDCounter, 1000);
+        STATE.sDCount = 1;
+        ship.speed = currentSpeed * (STATE.sDCount / 7);
+        clearInterval(STATE.sDInterval);
+        STATE.sDInterval = setInterval(sDCounter, 1000);
     }
 }
 
 
 
-function changeBkgSkin(bkgSkinName) {
+export function changeBkgSkin(bkgSkinName) {
     uiElements.backgroundImg.src = bkgSkinName;
     window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
-    clickSound.play();
+    AUDIO.playSFX('click');
 }
 //slowDown effect
 function sDCounter() {
-    if (sDCount > 2) { //break out of loop FIRST
-        sDCount = 4; // cheeseCD image
+    if (STATE.sDCount > 2) { //break out of loop FIRST
+        STATE.sDCount = 4; // cheeseCD image
         ship.speed = currentSpeed; // speed
-        clearInterval(sDInterval); // interval
+        clearInterval(STATE.sDInterval); // interval
         cheese.generate(); // cheese
-        dingSound.play();
-    } else if (sDCount <= 5) {
+        AUDIO.playSFX('ding');
+    } else if (STATE.sDCount <= 5) {
         //update speed
-        sDCount += 1;
-        ship.speed = currentSpeed * (sDCount / 7);
+        STATE.sDCount += 1;
+        ship.speed = currentSpeed * (STATE.sDCount / 7);
     }
+}
+
+// slowDown effect
+let cheeseCD = new Image();
+cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png";
+let cheeseCDx = 900;
+let cheeseCDy = 80;
+
+function handleAsteroids() { //moving & drawing asteroids as score goes up, every frame
+    drawAstArray.forEach(asteroid => {
+        if (asteroid.exist) {
+            asteroid.update();
+        }
+    });
+    if (cheese.exist) {
+        if (detectCircleCollision(ship, cheese, cheeseTolerance)) {
+            moveToAway(ship, cheese, 0.2); //unique move function
+        }
+    }
+    cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png"; //!!!
+    ctx.drawImage(cheeseCD, cheeseCDx, cheeseCDy);
+
 }
 
 //animation
 //draw functions
-function drawCircle(color, obj) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(obj.x + obj.radius, obj.y + obj.radius, obj.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.closePath();
-}
+
 function drawScore() {
     //Scoreboard rectangle (Drawn after everything so that it's always on top)
     ctx.fillStyle = "#cf8619"; //an orange colour to contrast the blue
-    ctx.fillRect(0, 0, canvas.width, sBHeight);
+    ctx.fillRect(0, 0, canvas.width, UI_DEFAULTS.SCOREBOARD_HEIGHT);
     //Scoreboard border (so there is a nice blue border)
     ctx.beginPath();
     ctx.strokeStyle = "rgb(0, 1, 86)";
     ctx.lineWidth = "5"; //same values as the canvas width & border
-    ctx.rect(0, 0, canvas.width, sBHeight);
+    ctx.rect(0, 0, canvas.width, UI_DEFAULTS.SCOREBOARD_HEIGHT);
     ctx.stroke();
 
     //Score text ("SCORE=___")
     ctx.font = "bold 38px impact";
     ctx.fillStyle = "darkblue";
     ctx.textAlign = "center";
-    ctx.fillText("SCORE = " + score, canvas.width / 2, sBHeight - (sBHeight / 5),);
+    ctx.fillText("SCORE = " + STATE.score, canvas.width / 2, UI_DEFAULTS.SCOREBOARD_HEIGHT - (UI_DEFAULTS.SCOREBOARD_HEIGHT / 5),);
 }
 
 
@@ -138,31 +162,32 @@ function animate() { //game update
         else if (!uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) {
             ship.speed = 0;
             ship.move();
-            ship.image.src = currentSkin;
+            ship.image.src = "assets/sprites/" + ship.currentSkin;
             ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x, ship.y, ship.width, ship.height);
         } else {
-            ship.image.src = currentSkin;
+            ship.image.src = "assets/sprites/" + ship.currentSkin;
             ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x, ship.y, ship.width, ship.height);
         }
 
-        if (playerControl) {
+        if (CONFIG.playerControl) {
             ship.move();
             handleAsteroids(); //grey, red, cheese & plasma asteroids
             detectAllCollisions();
-            if (bkgMusic.ended) {
-                bkgMusic.play();
-            }
-        } else if (userInteracted && (menuMusic.ended || menuMusic.paused)) {
-            menuMusic.play();
+            AUDIO.restartBkgMusic();
+        } else if (CONFIG.userInteracted) {
+            AUDIO.restartMenuMusic();
         }
 
         drawScore();
-        updateVolume(); //sound effects & music volume
+        AUDIO.updateVolume(); //sound effects & music volume
     }
 
     requestAnimationFrame(animate);
 }
 
+
+
 startAnimating(60);
+
 
 console.log("Load Complete: " + Math.round(performance.now()) + " ms");

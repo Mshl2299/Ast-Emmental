@@ -6,190 +6,25 @@ Retrieval
 Sprites
 Start game & Game over
 */
+import { CONFIG } from "./config.js";
+import { STATE, DEFAULT_STATE } from "./game/state.js";
+import { keys } from "./game/input.js";
+import { ctx, uiElements, uiElementsHidable } from "./dom.js";
+import { UI_DEFAULTS } from "./ui.js";
+import { AUDIO } from "./audio.js";
+import { detectBorderCollision } from "./functions.js";
 
-//canvas
-const canvasContainer = document.querySelector('.canvas-container');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext("2d");
-canvas.width = 1000;
-canvas.height = 700;
-
-ctx.imageSmoothingEnabled = false;
-ctx.webkitImageSmoothingEnabled = false;
-ctx.mozImageSmoothingEnabled = false;
-ctx.msImageSmoothingEnabled = false;
-
-//general values
-let sBHeight = 50; //scoreBoard Height
-let padding = 30; //distance from borders for Grey & Red Asteroid generation
-let tolerance = 80; //for cheese movement and range detection
-let auraFct = 1.8;
-let showDebug = false;
-//levels & unlock detections
-let level = 0;
-let hasUnlockedSnake = false; //level-ups to store in localStorage for skin unlocks & sound effect
-let hasUnlockedInverted = false;
-let hasUnlockedAsteroid = false;
-let legendaryScore = false;
-let unlocks = [];
-let defaultUnlocks = ['assets/sprites/alphaSS1.png', 'assets/sprites/betaSS1.png', 'assets/sprites/ufoSS1.png'];
-
-//-------------------------------BUTTONS & SCREENS-------------------------------
-const SCORE_WIDTH = 280;
-const BUTTON_WIDTH = 20;
-const SCORE_WIDTH_ADJUST = 5;
-
-// ALL UI ELEMENTS (listed by Class or by ID)
-// Screens will be hidden on certain game events
-const uiSelectors = [
-    '.background-img',
-    '.how-to-button',
-    '.music-button',
-    '.device-button',
-    '.key-controls',
-    '.skins-button',
-    '.snake-skin',
-    '.inverted-skin',
-    '.asteroid-skin',
-    '.audio-button',
-    '.music-toggle-button',
-    '.sfx-button',
-    '.close-button',
-    '.start-button',
-    '.left-hex-button',
-    '.right-hex-button',
-    '.score-display',
-    '.score-anchor',
-    '#sfx-range',
-    '#music-range',
-    '#final-score-display',
-    '#leaderboard-submit',
-];
-const uiSelectorsHidable = [
-    '.how-to-screen',
-    '.skins-menu-screen',
-    '.audio-menu',
-    '.title-splash',
-    '.game-over-screen',
-    '.end-game-first-text',
-]
-
-const uiElements = {};
-const uiElementsHidable = {};
-
-function kebabToCamel(str) { // TODO: utility .js script
-    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+function drawCircle(color, obj) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(obj.x + obj.radius, obj.y + obj.radius, obj.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.closePath();
 }
-
-uiSelectors.forEach(selector => {
-    const className = selector.substring(1);
-    const variableName = kebabToCamel(className);
-
-    uiElements[variableName] = document.querySelector(selector);
-});
-uiSelectorsHidable.forEach(selector => {
-    const className = selector.substring(1);
-    const variableName = kebabToCamel(className);
-
-    uiElementsHidable[variableName] = document.querySelector(selector);
-}) // TODO: update ui.js to hide correct
-
-let keys = [];
-//style elements
-//'end the current game first!' Flashing text
-let eGTCount = 0;
-let eGTInterval;
-//Highscores menu
-let scoreDisplayOpen = false; //to move the score button & display together
-//Booleans
-let userInteracted = false; //chrome update for bkg music
-let playerControl = false; //for player control & menu control
-
-//-------------------------------BACKGROUNDS-------------------------------
-let bkgArray = [
-    "blueSpace.jpg",
-    "purpleSpace.jpg",
-    "JamesWebb.jpg",
-    "Orbit.jpg",
-    "hatSpace.png",
-    "galaxyAnim.gif",
-    "purpleAnim.gif",
-    "blueNebulaAnim.gif"
-];
-bkgArray.forEach(element => {
-    window[element.slice(0, -4)] = "assets/backgrounds/" + element;
-});
-
-// Persistence
-//-------------------------------RETRIEVAL-----------------------------------
-//BKG RETRIEVAL
-if (window.localStorage.getItem('bkgImg')) {
-    uiElements.backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
-} else {
-    uiElements.backgroundImg.src = blueSpace;
-    window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
-}
-
-//Scores
-let score = 0;
-let scoreAmt = 5;
-let localScores;
-
-function initLocalScores() {
-    localScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-}
-initLocalScores();
-
-function updateScoresHTML() {
-    for (i = 0; i < 10; i++) {
-        if (!localScores[i]) {
-            localScores[i] = 0;
-        }
-        if (document.querySelector('.score0')) {
-            document.querySelector('.score' + i).innerHTML = localScores[i].toString().padStart(3, "0");
-        }
-    }
-}
-
-
-// Retreives local leaderboard from localScores, fill with 0's
-function retrieveLocalScores() {
-    if (window.localStorage.getItem('localScores')) {
-        localScores = JSON.parse(window.localStorage.getItem('localScores'));
-
-        updateScoresHTML();
-
-        console.log("Highscores retrieved. " + window.localStorage.getItem('localScores'));
-    }
-}
-
-// Adds a new score to localScores and updates localStorage
-function handleScore(newScore) {
-    localScores.push(newScore);
-    uiElements.finalScoreDisplay.innerHTML = newScore;
-
-    localScores.sort((a, b) => b - a)
-    while (localScores.length > 10) {
-        localScores.pop();
-    }
-
-    updateScoresHTML();
-    window.localStorage.setItem('localScores', JSON.stringify(localScores));
-
-    updateUnlocks();
-}
-
-document.querySelector("#score-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    uiElementsHidable.gameOverScreen.classList.add('hidden');
-    // TODO: database connection
-});
-
 //-------------------------------SPRITES & OBJECTS----------------------------
 // SHIP
-// TODO: base speed
-let currentSpeed = 3; //speed variable that will change
-let ship = {
+
+export let ship = {
     image: new Image(),
     width: 64,
     height: 64,
@@ -200,15 +35,15 @@ let ship = {
     spriteWidth: 67,
     spriteHeight: 66,
     radius: 64 / 2,
-    speed: currentSpeed,
-    direction: "",
+    speed: null,
+    direction: null,
     immunity: false,
-    breathingRoom: 5,
     exploding: false,
     explosionInterval: null,
     explosionFrame: 1,
+    currentSkin: null,
     draw(sX, sY, sW, sH, dX, dY, dW, dH) {
-        if (showDebug) { drawCircle("rgb(255,255,255,0.5)", this); };
+        if (CONFIG.showDebug) { drawCircle("rgb(255,255,255,0.5)", this); };
         ctx.drawImage(this.image, sX, sY, sW, sH, dX, dY, dW, dH);
     },
     resetDimensions() {
@@ -224,12 +59,15 @@ let ship = {
         clearInterval(this.explosionInterval);
         this.explosionInterval = null;
     },
-    reset() { 
+    reset() {
         this.resetDimensions();
 
-        this.x = canvas.width / 2 - this.width / 2; 
+        this.x = canvas.width / 2 - this.width / 2;
         this.y = canvas.height / 2 - this.height / 2;
         this.resetExplosion();
+    },
+    resetSkin() {
+
     },
     displayOnSide() {
         this.resetDimensions();
@@ -237,21 +75,21 @@ let ship = {
         this.y = canvas.height / 2 - this.height / 2;
         this.resetExplosion();
     },
-    setImmune(duration) { 
-        this.immunity = true; setTimeout(() => { 
+    setImmune(duration) {
+        this.immunity = true; setTimeout(() => {
             this.immunity = false;
         }, duration);
     },
     changeSkin(skinName) {
         if (window.localStorage.getItem('unlocks') && JSON.parse(window.localStorage.getItem('unlocks')).includes(skinName)) {
-            currentSkin = skinName;
+            this.currentSkin = skinName;
         } else if (defaultUnlocks.includes(skinName)) {
-            currentSkin = skinName;
+            this.currentSkin = skinName;
         }
-        window.localStorage.setItem('skinName', JSON.stringify(currentSkin));
-        clickSound.play();
+        window.localStorage.setItem('shipSkin', JSON.stringify(currentSkin));
+        AUDIO.playSFX('click');
     },
-    upPressed() { return ((keys["w"] || keys["ArrowUp"]) && this.y > sBHeight); },
+    upPressed() { return ((keys["w"] || keys["ArrowUp"]) && this.y > UI_DEFAULTS.SCOREBOARD_HEIGHT); },
     downPressed() { return ((keys["s"] || keys["ArrowDown"]) && this.y < canvas.height - this.height); },
     leftPressed() { return ((keys["a"] || keys["ArrowLeft"]) && this.x > 0); },
     rightPressed() { return ((keys["d"] || keys["ArrowRight"]) && this.x < canvas.width - this.width); },
@@ -324,23 +162,35 @@ let ship = {
     },
 }
 
-// SHIP SPRITE RETRIEVAL (has to be below)
-let currentSkin = JSON.parse(window.localStorage.getItem('skinName'))
-if (!currentSkin) {
-    currentSkin = "assets/sprites/alphaSS1.png";
-    window.localStorage.setItem('skinName', JSON.stringify(currentSkin));
-}
-if (JSON.parse(window.localStorage.getItem('unlocks'))) {
-    unlocks = JSON.parse(window.localStorage.getItem('unlocks'));
-    console.log("Unlocked Sprites retrieved.")
-}
-ship.image.src = currentSkin;
+// SHIP SPRITE RETRIEVAL
+function retrieveShipSkin() {
+    if (!ship.currentSkin) {
+        ship.currentSkin = JSON.parse(window.localStorage.getItem('shipSkin'));
 
+        if (!ship.currentSkin) {
+            ship.currentSkin = "alphaSS1.png";
+            window.localStorage.setItem('shipSkin', JSON.stringify(ship.currentSkin));
+        }
+        if (JSON.parse(window.localStorage.getItem('unlocks'))) {
+            STATE.unlocks = JSON.parse(window.localStorage.getItem('unlocks'));
+            console.log("Unlocked Sprites retrieved.")
+        }
+        ship.image.src = "assets/sprites/" + ship.currentSkin;
+    }
+}
+retrieveShipSkin(); // TODO: move to main
+
+const AST_CONFIG = {
+    baseWidth: 48,
+    baseHeight: 48,
+    astGenRangeY: null,
+    astGenRangeX: null,
+    auraFct: 1.8,
+}
+//max - min - height of asteroid so it doesn't clip off
+AST_CONFIG.astGenRangeX = (canvas.height - UI_DEFAULTS.BORDER_PADDING) - (UI_DEFAULTS.SCOREBOARD_HEIGHT + UI_DEFAULTS.BORDER_PADDING) - AST_CONFIG.baseHeight;
+AST_CONFIG.astGenRangeY = (canvas.width - UI_DEFAULTS.BORDER_PADDING) - UI_DEFAULTS.BORDER_PADDING - AST_CONFIG.baseWidth;
 // ASTEROIDS
-let astWidth = 48;
-let astHeight = 48;
-let astRangeY = (canvas.height - padding) - (sBHeight + padding) - astHeight; //max-min -height of asteroid so it doesn't clip off
-let astRangeX = (canvas.width - padding) - padding - astWidth;
 class Asteroid {
     constructor(source, width, height, exist, speed, dirX, dirY, genTime, isEnemy) {
         this.image = new Image();
@@ -368,12 +218,12 @@ class Asteroid {
     spawn() { //first time generated
         if (!this.exist) {
             this.generate();
-            lvlUpSound.play();
+            AUDIO.playSFX('lvlUp');
         }
     }
     generate() {
-        this.x = Math.random() * (astRangeX) + padding;
-        this.y = Math.random() * (astRangeY) + sBHeight + padding;
+        this.x = Math.random() * (AST_CONFIG.astGenRangeX) + UI_DEFAULTS.BORDER_PADDING;
+        this.y = Math.random() * (AST_CONFIG.astGenRangeY) + UI_DEFAULTS.SCOREBOARD_HEIGHT + UI_DEFAULTS.BORDER_PADDING;
 
         this.genCount = 0;
         this.moving = false;
@@ -399,58 +249,78 @@ class Asteroid {
     }
     draw() {
         if (this.isEnemy) {
-            let auraRadius = this.radius * auraFct;
+            let auraRadius = this.radius * AST_CONFIG.auraFct;
             let auraX = this.x - (auraRadius - this.radius);
             let auraY = this.y - (auraRadius - this.radius);
             drawCircle("rgba(255, 0, 0, 0.05)", { x: auraX, y: auraY, radius: auraRadius });
         }
-        if (showDebug) { drawCircle('red', this); };
+        if (CONFIG.showDebug) { drawCircle('red', this); };
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
-let greyAst = new Asteroid("assets/sprites/Asteroid.png", astWidth, astHeight, false, 0, 0, 0, 30)
+export let greyAst = new Asteroid("assets/sprites/Asteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, false, 0, 0, 0, 30)
 // Red Enemies TODO: Factory pattern?
-let redAst = new Asteroid("assets/sprites/redAsteroid.png", astWidth, astHeight, false, 2, -1, 1, 50, true);
-let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 2, astHeight * 2, false, 1.5, -1, -1, 50, true);
-let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 3, astHeight * 3, false, 1, 1, 1, 100, true);
-let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", astWidth * 1.5, astHeight * 1.5, false, 3, 1, -1, 100, true);
+ let redAst = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, false, 2, -1, 1, 50, true);
+ let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 2, AST_CONFIG.baseHeight * 2, false, 1.5, -1, -1, 50, true);
+ let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 3, AST_CONFIG.baseHeight * 3, false, 1, 1, 1, 100, true);
+ let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 1.5, AST_CONFIG.baseHeight * 1.5, false, 3, 1, -1, 100, true);
+export let ASTEROIDS = {
+    redAst: redAst,
+    redAst2: redAst2,
+    redAst3: redAst3,
+    redAst4: redAst4,
+}
 // Yellow Slowdown High Reward
-let cheese = new Asteroid("assets/sprites/cheese.png", astWidth / 2, astHeight / 2, false, 0, 0, 0, 30);
-// slowDown effect
-let cheeseCD = new Image();
-let cheeseCDx = 900;
-let cheeseCDy = 80;
-let sDCount = 1;
-let sDInterval;
-cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(sDCount) + ".png";
+export let cheese = new Asteroid("assets/sprites/cheese.png", AST_CONFIG.baseWidth / 2, AST_CONFIG.baseHeight / 2, false, 0, 0, 0, 30);
+
 // Blue Powerup !!! TODO
 //let plasma = new Asteroid("assets/sprites/cheese.png", astWidth / 3, astHeight / 3, false);
 // shield effect
 
-let drawAstArray = [greyAst, redAst, redAst2, redAst3, redAst4, cheese];
-let enemyAstArray = [redAst, redAst2, redAst3, redAst4];
+export let drawAstArray = [greyAst, redAst, redAst2, redAst3, redAst4, cheese];
+export let enemyAstArray = [redAst, redAst2, redAst3, redAst4];
+
+// Adds a new score to localScores and updates localStorage
+function handleScore(newScore) {
+    localScores.push(newScore);
+    uiElements.finalScoreDisplay.innerHTML = newScore;
+
+    localScores.sort((a, b) => b - a)
+    while (localScores.length > 10) {
+        localScores.pop();
+    }
+
+    updateScoresHTML();
+    window.localStorage.setItem('localScores', JSON.stringify(localScores));
+
+    updateUnlocks();
+}
 
 //start & end functions
 function startGame() { //reset values
-    score = 0;
-    playerControl = true;
+    STATE.score = 0;
+    CONFIG.playerControl = true;
 
     //Reset ship
-    ship.image.src = currentSkin;
+    ship.image.src = "assets/sprites/" + ship.currentSkin;
     ship.reset();
-    currentSpeed = 20;
-    ship.speed = currentSpeed;
+    if (CONFIG.superspeed) {
+        STATE.currentSpeed = 20;
+    } else {
+        STATE.currentSpeed = DEFAULT_STATE.currentSpeed;
+    }
+    ship.speed = STATE.currentSpeed;
     ship.immunity = false;
     ship.exploding = false;
 
     //reset levelup changes
-    drawAstArray.forEach(asteroid => {
+    STATE.drawAstArray.forEach(asteroid => {
         asteroid.exist = false;
     })
-    hasUnlockedSnake = false; //!!!
-    hasUnlockedInverted = false;
-    hasUnlockedAsteroid = false;
-    legendaryScore = false;
+    STATE.hasUnlockedSnake = false;
+    STATE.hasUnlockedInverted = false;
+    STATE.hasUnlockedAsteroid = false;
+    STATE.legendaryScore = false;
 
     //hide ui
     uiElements.startButton.classList.add('hidden');
@@ -462,26 +332,25 @@ function startGame() { //reset values
     uiElements.skinsButton.classList.add('greyed');
     //deviceButton.classList.add('greyed');
     //start the music
-    menuMusic.pause();
-    bkgMusic.play();
+    AUDIO.switchToBkg();
     //generate Asteroid
     greyAst.generate();
 }
 
-function gameOver() {
-    playerControl = false;
 
+export function gameOver() {
+    CONFIG.playerControl = false;
+    
     if (!ship.exploding) {
         ship.startExplosion();
     }
-    explSound.play();
-
-    bkgMusic.pause();
-    menuMusic.play();
-
-    clearInterval(sDInterval);
-    sDCount = 1;
-    handleScore(score);
+    AUDIO.playSFX('explosion');
+    
+    AUDIO.switchToMenu();
+    
+    clearInterval(STATE.sDInterval);
+    STATE.sDCount = 1;
+    handleScore(STATE.score);
     //display UI
     uiElements.startButton.classList.remove('hidden');
     uiElementsHidable.gameOverScreen.classList.remove('hidden');
@@ -491,3 +360,8 @@ function gameOver() {
     uiElements.skinsButton.classList.remove('greyed');
     //deviceButton.classList.remove('greyed');
 }
+
+// TODO: move to inputs/handlers
+uiElements.startButton.addEventListener('click', startGame);
+
+export default { drawAstArray }

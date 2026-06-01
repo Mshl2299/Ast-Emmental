@@ -1,9 +1,30 @@
 //ui elements
+import { CONFIG } from "./config.js";
+import { STATE } from "./game/state.js";
+import { uiElements, uiElementsHidable } from "./dom.js";
+import { keys } from "./game/input.js";
+import kebabToCamel from "./utils.js";
+import { ship, gameOver } from "./setup.js";
+import { AUDIO } from "./audio.js";
+
+export const UI_DEFAULTS = {
+    SCORE_WIDTH: 280,
+    BUTTON_WIDTH: 20, // TODO: unused?
+    SCORE_WIDTH_ADJUST: 5,
+
+    SCOREBOARD_HEIGHT: 50,
+    BORDER_PADDING: 30, // distance from borders for Grey & Red Asteroid generation
+}
+//style elements
+//'end the current game first!' Flashing text
+let eGTCount = 0;
+let eGTInterval;
+//Highscores menu
+let scoreDisplayOpen = false; //to move the score button & display together
 
 function openAudioMenu() {
     uiElementsHidable.audioMenu.classList.toggle('hidden');
-    clickSound.play();
-    //debug
+    AUDIO.playSFX('click');
 }
 function toggleSFX() {
     if (uiElements.sfxRange.value > 0) {
@@ -11,7 +32,7 @@ function toggleSFX() {
     }
     else if (uiElements.sfxRange.value == 0) {
         uiElements.sfxRange.value = 100;
-        clickSound.play();
+        AUDIO.playSFX('click');
     }
 }
 function toggleMusic() {
@@ -20,20 +41,69 @@ function toggleMusic() {
     }
     else if (uiElements.musicRange.value == 0) {
         uiElements.musicRange.value = 100;
-        clickSound.play();
+        AUDIO.playSFX('click');
     }
 }
+
+// TODO: move to input handler
+uiElements.sfxToggleButton.addEventListener('click', toggleSFX);
+uiElements.musicToggleButton.addEventListener('click', toggleMusic);
+
+function updateUnlocks() {
+    const HISCORE = localScores[0];
+    //check scores
+    if (!STATE.unlocks.includes("snakeSS1.png") && HISCORE >= 100) {
+        STATE.unlocks.push("snakeSS1.png");
+    }
+    if (!STATE.unlocks.includes("alphaInvertedSS1.png") && HISCORE >= 150) {
+        STATE.unlocks.push("alphaInvertedSS1.png");
+    }
+    if (!STATE.unlocks.includes("asteroidSS1.png") && HISCORE >= 250) {
+        STATE.unlocks.push("asteroidSS1.png");
+    }
+    //update skins to be Unlocked or Greyed
+    if (STATE.unlocks.includes("snakeSS1.png")) {
+        uiElements.snakeSkin.classList.remove("greyed");
+        uiElements.snakeSkin.src = "assets/sprites/shipSnake.png"; //html image
+        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
+    }
+    else {
+        uiElements.snakeSkin.classList.add("greyed");
+        uiElements.snakeSkin.src = "assets/sprites/shipSnakeLocked.png";
+    }
+    if (STATE.unlocks.includes("alphaInvertedSS1.png")) {
+        uiElements.invertedSkin.classList.remove("greyed");
+        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInverted.png";
+        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
+    }
+    else {
+        uiElements.invertedSkin.classList.add("greyed");
+        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInvertedLocked.png";
+    }
+    if (STATE.unlocks.includes("asteroidSS1.png")) {
+        uiElements.asteroidSkin.classList.remove("greyed");
+        uiElements.asteroidSkin.src = "assets/sprites/asteroid.png";
+        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
+    }
+    else {
+        uiElements.asteroidSkin.classList.add("greyed");
+        uiElements.asteroidSkin.src = "assets/sprites/AsteroidLocked.png";
+    }
+}
+
+uiElements.resetDataButton.addEventListener('click', clearData);
+
 function clearData() {
     window.localStorage.clear();
     initLocalScores();
-    
+
     updateScoresHTML();
 
-    unlocks = [];
-    ship.changeSkin('assets/sprites/alphaSS1.png');
+    STATE.unlocks = [];
+    ship.changeSkin('alphaSS1.png');
     uiElements.backgroundImg.src = blueSpace;
 
-    explSound.play();
+    AUDIO.playSFX('explosion');
     updateUnlocks();
 
     console.log("Data Successfully Cleared.");
@@ -50,7 +120,7 @@ function closeAll() {
 }
 
 //-------------------------HIGHSCORES----------------------------------
-//SCORE RETRIEVAL TODO
+//SCORE RETRIEVAL TODO: refactor, global leaderboard
 const GLOBAL_LB = [
     { name: "PLAYER1", score: 0 },
     { name: "PLAYER2", score: 0 },
@@ -58,7 +128,36 @@ const GLOBAL_LB = [
     { name: "PLAYER4", score: 0 },
     { name: "PLAYER5", score: 0 }
 ]
-retrieveLocalScores();
+
+let localScores;
+
+function initLocalScores() {
+    localScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+}
+initLocalScores(); // TODO: move to main
+
+function updateScoresHTML() {
+    for (let i = 0; i < 10; i++) {
+        if (!localScores[i]) {
+            localScores[i] = 0;
+        }
+        if (document.querySelector('.score0')) {
+            document.querySelector('.score' + i).innerHTML = localScores[i].toString().padStart(3, "0");
+        }
+    }
+}
+
+// Retreives local leaderboard from localScores, fill with 0's
+function retrieveLocalScores() {
+    if (window.localStorage.getItem('localScores')) {
+        localScores = JSON.parse(window.localStorage.getItem('localScores'));
+
+        updateScoresHTML();
+
+        console.log("Highscores retrieved. " + window.localStorage.getItem('localScores'));
+    }
+}
+retrieveLocalScores(); // TODO: move to main
 
 function renderLocalLeaderboard() {
     const container = document.querySelector(".local-scores");
@@ -78,7 +177,7 @@ function renderLocalLeaderboard() {
             container.appendChild(row);
         });
 }
-renderLocalLeaderboard();
+renderLocalLeaderboard(); // TODO: move to main
 
 function renderGlobalLeaderboard() {
     const container = document.querySelector(".global-scores");
@@ -108,7 +207,7 @@ function renderGlobalLeaderboard() {
             container.appendChild(row);
         });
 }
-renderGlobalLeaderboard();
+renderGlobalLeaderboard(); // TODO: move to main
 
 function toggleScores() {
     if (scoreDisplayOpen) {
@@ -119,17 +218,17 @@ function toggleScores() {
     }
 }
 function hideScoreDisplay() {
-    uiElements.scoreAnchor.style.left = `${canvas.width - BUTTON_WIDTH - SCORE_WIDTH_ADJUST}px`;
+    uiElements.scoreAnchor.style.left = `${canvas.width - BUTTON_WIDTH - UI_DEFAULTS.UI_DEFAULTS.SCORE_WIDTH_ADJUST}px`;
     scoreDisplayOpen = false;
-    clickSound.play();
+    AUDIO.playSFX('click');
 }
 function showScoreDisplay() {
-    const SCORE_X = canvas.width - SCORE_WIDTH + SCORE_WIDTH_ADJUST;
+    const SCORE_X = canvas.width - UI_DEFAULTS.SCUI_DEFAULTS.SCORE_WIDTH - UI_DEFAULTS.SCORE_WIDTH_ADJUST;
 
     uiElements.scoreAnchor.style.left = `${SCORE_X}px`;
 
     scoreDisplayOpen = true;
-    clickSound.play();
+    AUDIO.playSFX('click');
 }
 
 //-------------------------OTHER-------------------------------
@@ -154,11 +253,9 @@ function eGTFlash() {
     }
 }
 
-// All event Listeners
-uiElements.startButton.addEventListener('click', startGame);
-//startButton.addEventListener('touchstart', startGame);
-uiElements.closeButton.addEventListener('click', closeAll);
+// TODO: move to inputs/handlers
 
+uiElements.closeButton.addEventListener('click', closeAll);
 uiElements.howToButton.addEventListener('click', () => openMenu(uiElements.howToButton, uiElementsHidable.howToScreen));
 
 // ------------------------
@@ -176,10 +273,13 @@ function openMenu(button, screen) {
             ship.reset();
         }
         screen.classList.toggle('hidden'); //toggles screen
-        clickSound.play();
+        AUDIO.playSFX('click');
     }
 }
 //navigation TODO: improve music menu, refactor
+function showPage(n) {
+    // d
+}
 function prevMusicPage() {
     //if on page 1 go to page 3
     if (!musicItems.musicPage1.classList.contains("hidden")) {
@@ -196,7 +296,7 @@ function prevMusicPage() {
         musicItems.musicPage3.classList.add("hidden");
         musicItems.musicPage2.classList.remove("hidden");
     }
-    clickSound.play();
+    AUDIO.playSFX('click');
 }
 function nextMusicPage() {
     //if on page 1 go to page 2
@@ -214,7 +314,7 @@ function nextMusicPage() {
         musicItems.musicPage3.classList.add("hidden");
         musicItems.musicPage1.classList.remove("hidden");
     }
-    clickSound.play();
+    AUDIO.playSFX('click');
 }
 //--------------
 const musicData = {
@@ -284,12 +384,19 @@ const musicData = {
             url: 'https://cynicmusic.com',
             src: 'assets/audio/ET86cynicmusic.mp3'
         },
+        // {
+        //     icon: '&#11088',
+        //     title: 'Chiptune Adventures',
+        //     artist: 'Juhani Junkala',
+        //     url: 'https://juhanijunkala.com/',
+        //     src: 'assets/audio/chiptunesJJunkala.wav'
+        // },
         {
-            icon: '&#11088',
-            title: 'Chiptune Adventures',
-            artist: 'Juhani Junkala',
-            url: 'https://juhanijunkala.com/',
-            src: 'assets/audio/chiptunesJJunkala.wav'
+            icon: '&#63',
+            title: 'WIP (no sound)',
+            artist: 'N/A',
+            url: '',
+            src: 'assets/audio/pop.ogg'
         },
         {
             icon: '&#128760',
@@ -315,34 +422,87 @@ const musicData = {
     ]
 };
 function createMusicTile(song) {
-    return `
-        <div onclick="changeBkgMusic('${song.src}')" class="music-tile">
-            <h6 class="music-icon">${song.icon}</h6>
-            <h6><u>${song.title}</u></h6>
-            <p><a target="_blank" href="${song.url}"><b><u>${song.artist}</u></b></a></p>
-        </div>
+    const div = document.createElement('div');
+    div.className = 'music-tile';
+    div.innerHTML = `
+        <h6 class="music-icon">${song.icon}</h6>
+        <h6><u>${song.title}</u></h6>
+        <p><a target="_blank" href="${song.url}"><b><u>${song.artist}</u></b></a></p>
     `;
+    div.addEventListener('click', () => AUDIO.changeBkgMusic(song.src));
+    return div;
 }
 
-function createMusicPage(pageNumber) {
-    if (pageNumber == 3) {
+function createMusicPage(pageNumber, isHidden = false) {
+    const pageSongs = musicData[`page${pageNumber}`];
+    const row1Data = pageSongs.slice(0, 3);
+    const row2Data = pageSongs.slice(3, 6);
 
-    } else {
-        const pageSongs = musicData[`page${pageNumber}`];
-        const row1 = pageSongs.slice(0, 3);
-        const row2 = pageSongs.slice(3, 6);
-        return `
-        <div class="flex">
-            ${row1.map(createMusicTile).join('')}
-        </div>
-        <div class="flex">
-            ${row2.map(createMusicTile).join('')}
-        </div>
-    `;
+    const div = document.createElement('div');
+    div.classList.add(`music-page${pageNumber}`);
+    if (isHidden) {
+        div.classList.add('hidden');
     }
+
+    const row1 = document.createElement('div');
+    row1.className = 'flex';
+    row1Data.forEach(song => row1.appendChild(createMusicTile(song)));
+
+    const row2 = document.createElement('div');
+    row2.className = 'flex';
+    row2Data.forEach(song => row2.appendChild(createMusicTile(song)));
+
+    div.appendChild(row1);
+    div.appendChild(row2);
+    return div;
 }
 
-const musicScreen = document.createElement('div');;
+function createMusicCreditsPage(pageNumber) {
+    const div = document.createElement('div');
+    div.classList.add(`music-page${pageNumber}`, 'hidden');
+
+    const heading = document.createElement('h5');
+    heading.innerHTML = '<u>Menu/Loading Music</u>';
+    div.appendChild(heading);
+
+    const makeLinkLine = (label, src, artist, url) => {
+        const p = document.createElement('p');
+        const link = document.createElement('u');
+        link.textContent = label;
+        link.style.cursor = 'pointer';
+        link.addEventListener('click', () => AUDIO.changeMenuMusic(src));
+        p.appendChild(link);
+        p.appendChild(document.createTextNode(` - `));
+
+        const artistName = document.createElement('u');
+        artistName.innerHTML = `<a href=${url}>${artist}</a>`;
+
+
+        p.appendChild(artistName);
+        return p;
+    };
+
+    div.appendChild(makeLinkLine('Deep Sea', 'assets/audio/menuDeepSeaUmplix.mp3', 'Umplix', 'https://opengameart.org/users/umplix'));
+    div.appendChild(makeLinkLine('Magic Space', 'assets/audio/menuMagicSpaceCodeManu.mp3', 'CodeManu', 'https://opengameart.org/users/codemanu'));
+    div.appendChild(makeLinkLine('Loading Screen Loop', 'assets/audio/menuLSLBMorris.wav', 'HaelDB', 'https://www.youtube.com/brandon75689'));
+
+    const checkTheseHeading = document.createElement('h5');
+    checkTheseHeading.innerHTML = '<u>Check these out!</u>';
+    div.appendChild(checkTheseHeading);
+
+    const p1 = document.createElement('p');
+    p1.innerHTML = '<b>PixelSphere</b> by <b>cynicmusic</b>, a free "2d-sidescroller with an <b>interactive</b> musical soundtrack"! <a target="_blank" href="https://pixelsphere.org/">https://pixelsphere.org/</a>';
+    div.appendChild(p1);
+
+    const p2 = document.createElement('p');
+    p2.innerHTML = '<b>Aviary Attorney</b> by <b>SketchyLogic</b>, a paid "~swanderful~ experience", where you play as "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a>';
+    div.appendChild(p2);
+
+    return div;
+}
+
+const musicMount = document.getElementById('music-mount');
+const musicScreen = document.createElement('div'); // needs to exist outside scope
 function initMusicScreen() {
     musicScreen.classList.add('music-screen', 'fs32', 'hidden');
 
@@ -354,29 +514,166 @@ function initMusicScreen() {
         </h2>
     `;
 
-    musicScreen.innerHTML = `
-        ${heading}
-        <div class="music-page1">
-            ${createMusicPage(1)}
-        </div>
-        <div class="music-page2 hidden">
-            ${createMusicPage(2)}
-        </div>
-        <div class="music-page3 hidden">
-            <h5><u>Menu/Loading Music</u></h5>
-            <p><u onclick="changeMenuMusic('assets/audio/menuDeepSeaUmplix.mp3')">Deep Sea</u> - <u>Umplix</u></p>
-            <p><u onclick="changeMenuMusic('assets/audio/menuMagicSpaceCodeManu.mp3')">Magic Space</u> - <u>Code Manu</u></p>
-            <p><u onclick="changeMenuMusic('assets/audio/menuLSLBMorris.wav')">Loading Screen Loop</u> - <u>Brandon Morris</u></p>
-            <h5><u>Check these out!</u></h5>
-            <p><b>PixelSphere</b> by <b>cynicmusic</b>, a free "2d-sidescroller with an <b>interactive</b> musical soundtrack"! <a target="_blank" href="https://pixelsphere.org/">https://pixelsphere.org/</a></p>
-            <p><b>Aviary Attorney</b> by <b>SketchyLogic</b>, a paid "~swanderful~ experience", where you play as "Monsieur Jayjay Falcon, a bird of prey with a good heart and questionable lawyering expertise". <a target="_blank" href="https://aviaryattorney.com/">https://aviaryattorney.com/</a></p>
-        </div>
-    `;
+    const page1 = createMusicPage(1);
+    const page2 = createMusicPage(2, true);
+    const page3 = createMusicCreditsPage(3);
 
-    document.body.appendChild(musicScreen);
+    musicScreen.innerHTML = `
+    ${heading}
+    `;
+    musicScreen.appendChild(page1);
+    musicScreen.appendChild(page2);
+    musicScreen.appendChild(page3);
+
+    musicMount.replaceChildren(musicScreen);
 }
 
-initMusicScreen();
+initMusicScreen(); // TODO: move to main
+
+const SPRITES_PATH = "assets/sprites/";
+
+const SKINS_MAP = {
+    alpha: {
+        unlockedImage: "shipAlpha.png",
+        lockedImage: null,
+        spriteSheet: "alphaSS1.png",
+        isLocked: false,
+        cssClass: "alpha-skin"
+    },
+
+    beta: {
+        unlockedImage: "shipBeta.png",
+        lockedImage: null,
+        spriteSheet: "betaSS1.png",
+        isLocked: false,
+        cssClass: "beta-skin"
+    },
+
+    ufo: {
+        unlockedImage: "shipUFO.png",
+        lockedImage: null,
+        spriteSheet: "ufoSS1.png",
+        isLocked: false,
+        cssClass: "ufo-skin"
+    },
+
+    snake: {
+        unlockedImage: "shipSnake.png",
+        lockedImage: "shipSnakeLocked.png",
+        spriteSheet: "snakeSS1.png",
+        isLocked: true,
+        cssClass: "snake-skin"
+    },
+
+    inverted: {
+        unlockedImage: "shipAlphaInverted.png",
+        lockedImage: "shipAlphaInvertedLocked.png",
+        spriteSheet: "alphaInvertedSS1.png",
+        isLocked: true,
+        cssClass: "inverted-skin"
+    },
+
+    asteroid: {
+        unlockedImage: "Asteroid.png",
+        lockedImage: "AsteroidLocked.png",
+        spriteSheet: "asteroidSS1.png",
+        isLocked: true,
+        cssClass: "asteroid-skin"
+    }
+};
+
+
+/*
+id: string that exists in SKINS_MAP
+ */
+function createSkinImage(id) {
+    const wrap = document.createElement('div');
+    wrap.className = 'flex';
+
+    const img = document.createElement('img');
+    img.draggable = false;
+    const obj = SKINS_MAP[id];
+
+    if (obj.isLocked && obj.lockedImage) {
+        img.src = SPRITES_PATH + obj.lockedImage;
+        img.classList.add('greyed');
+    } else {
+        img.src = SPRITES_PATH + obj.unlockedImage;
+    }
+    
+    img.classList.add('skin');
+    img.classList.add(obj.cssClass);
+    img.addEventListener('click', () => ship.changeSkin(obj.spriteSheet));
+
+    wrap.appendChild(img);
+    return wrap;
+}
+
+const skinsScreen = document.createElement('div'); // needs to exist outside scope
+const skinsMount = document.getElementById('skins-mount');
+function initSkinScreen() {
+    skinsScreen.classList.add('skins-screen', 'fs32', 'hidden');
+
+    const shipSkinContainer = document.createElement('div');
+    shipSkinContainer.className = 'flex';
+
+    SKINS_MAP.keys().forEach((id) => shipSkinContainer.appendChild(createSkinImage(id)));
+
+    skinsScreen.innerHTML = `<h2>SKINS</h2>`;
+    skinsScreen.appendChild(page1);
+    skinsScreen.appendChild(page2);
+    skinsScreen.appendChild(page3);
+
+    skinsMount.replaceChildren(skinsScreen);
+}
+
+initSkinScreen(); // TODO: move to main & call update on the page
+
+// <!--Skins Menu-->
+//         <div class="skins-menu-screen fs32 hidden">
+//             <h2>SKINS</h2>
+//             <div class="flex">
+//                 <div class="flex"><img draggable="false" src="assets/sprites/shipAlpha.png" class="skin"
+//                         onclick="ship.changeSkin('assets/sprites/alphaSS1.png')"></div>
+//                 <div class="flex"><img draggable="false" src="assets/sprites/shipBeta.png" class="skin"
+//                         onclick="ship.changeSkin('assets/sprites/betaSS1.png')"></div>
+//                 <div class="flex"><img draggable="false" src="assets/sprites/shipUFO.png" class="skin"
+//                         onclick="ship.changeSkin('assets/sprites/ufoSS1.png')"></div>
+//                 <div class="flex"><img draggable="false" src="assets/sprites/shipSnakeLocked.png"
+//                         class="skin snake-skin greyed" onclick="ship.changeSkin('assets/sprites/snakeSS1.png')"></div>
+//                 <div class="flex"><img draggable="false" src="assets/sprites/shipAlphaInvertedLocked.png"
+//                         class="skin greyed inverted-skin"
+//                         onclick="ship.changeSkin('assets/sprites/alphaInvertedSS1.png')">
+//                 </div>
+//                 <div class="flex"><img draggable="false" src="assets/sprites/AsteroidLocked.png"
+//                         class="skin greyed asteroid-skin" onclick="ship.changeSkin('assets/sprites/asteroidSS1.png')">
+//                 </div>
+//             </div>
+//             <div class="flex">
+//                 <div class="flex"><img src="assets/backgrounds/blueSpace.jpg" class="bkg"
+//                         onclick="changeBkgSkin(blueSpace)">
+//                 </div>
+//                 <div class="flex"><img src="assets/backgrounds/purpleSpace.jpg" class="bkg"
+//                         onclick="changeBkgSkin(purpleSpace)">
+//                 </div>
+//                 <div class="flex"><img src="assets/backgrounds/JamesWebb.jpg" class="bkg"
+//                         onclick="changeBkgSkin(JamesWebb)">
+//                 </div>
+//             </div>
+//             <div class="flex">
+//                 <div class="flex"><img src="assets/backgrounds/galaxyAnim.gif" class="bkg"
+//                         onclick="changeBkgSkin(galaxyAnim)">
+//                 </div>
+//                 <div class="flex"><img src="assets/backgrounds/purpleAnim.gif" class="bkg"
+//                         onclick="changeBkgSkin(purpleAnim)">
+//                 </div>
+//                 <div class="flex"><img src="assets/backgrounds/blueNebulaAnim.gif" class="bkg"
+//                         onclick="changeBkgSkin(blueNebulaAnim)">
+//                 </div>
+//             </div>
+//         </div>
+
+
 // TODO: get this working dynamically?
 const musicSelectors = [
     '.prev-page-button',
@@ -414,5 +711,5 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
 });
 
 document.addEventListener('click', function () {
-    userInteracted = true;
+    CONFIG.userInteracted = true;
 }); //make chrome happy; no DOM errors when trying to play music before user 

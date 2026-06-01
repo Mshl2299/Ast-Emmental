@@ -47,8 +47,8 @@
             <h4><u>GAME OVER</u></h4>
             <h5>FINAL SCORE: <span id="final-score-display"></span></h5>
             <form id="score-form">
-                <input type="text" id="username" placeholder="NAME" maxlength="12" autocomplete="off"
-                    autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="username" placeholder="NAME" maxlength="12" autocomplete="off" autocorrect="off"
+                    autocapitalize="off" spellcheck="false">
                 <button type="submit" id="leaderboard-submit">Submit</button>
             </form>
         </div>
@@ -75,10 +75,12 @@
                 <li>Welcome to <a>AST-Emmental Mining Company™!</a></br>Your task is to mine asteroids and get rich with
                     a <a>highscore!</a></li>
                 <li>Collect Grey Asteroids // Avoid Red ones</li>
-                <li>Collect the <a style="color: rgb(80, 67, 2);"><u onclick="lvlUpSound.play()">valuable</u></a> (but
+                <li>Collect the <a style="color: rgb(80, 67, 2);"><u onclick="AUDIO.playSFX('lvlUp');">valuable</u></a>
+                    (but
                     heavy) Yellow Asteroids too!</li>
                 <li>Customize <a>MUSIC</a>, <a>SKINS</a> & <a>AUDIO</a> at the top</li>
-                <li>Press the "X" button to <a style="color:darkred;"><u onclick="explSound.play()">RESET</u></a></li>
+                <li>Press the "X" button to <a style="color:darkred;"><u
+                            onclick="AUDIO.playSFX('explosion');">RESET</u></a></li>
                 <li>Unlock new SKINS with scores! Check scores on the right ></li>
                 <li>GitHub page <a href="https://github.com/Mshl2299/Ast-Emmental" target="_blank">Here</a> // Thanks
                     for playing!</li>
@@ -93,51 +95,16 @@
             <button class="audio-button"><img src="assets/images/musicUnmuted.jpg" class="small-icon"></button>
             <button class="close-button fs32">X</button>
         </div>
-        <!--Skins Menu-->
-        <div class="skins-menu-screen fs32 hidden">
-            <h2>SKINS</h2>
-            <div class="flex">
-                <div class="flex"><img draggable="false" src="assets/sprites/shipAlpha.png" class="skin"
-                        onclick="ship.changeSkin('assets/sprites/alphaSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="assets/sprites/shipBeta.png" class="skin"
-                        onclick="ship.changeSkin('assets/sprites/betaSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="assets/sprites/shipUFO.png" class="skin"
-                        onclick="ship.changeSkin('assets/sprites/ufoSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="assets/sprites/shipSnakeLocked.png"
-                        class="skin snake-skin greyed" onclick="ship.changeSkin('assets/sprites/snakeSS1.png')"></div>
-                <div class="flex"><img draggable="false" src="assets/sprites/shipAlphaInvertedLocked.png"
-                        class="skin greyed inverted-skin" onclick="ship.changeSkin('assets/sprites/alphaInvertedSS1.png')">
-                </div>
-                <div class="flex"><img draggable="false" src="assets/sprites/AsteroidLocked.png"
-                        class="skin greyed asteroid-skin" onclick="ship.changeSkin('assets/sprites/asteroidSS1.png')"></div>
-            </div>
-            <div class="flex">
-                <div class="flex"><img src="assets/backgrounds/blueSpace.jpg" class="bkg" onclick="changeBkgSkin(blueSpace)">
-                </div>
-                <div class="flex"><img src="assets/backgrounds/purpleSpace.jpg" class="bkg"
-                        onclick="changeBkgSkin(purpleSpace)">
-                </div>
-                <div class="flex"><img src="assets/backgrounds/JamesWebb.jpg" class="bkg" onclick="changeBkgSkin(JamesWebb)">
-                </div>
-            </div>
-            <div class="flex">
-                <div class="flex"><img src="assets/backgrounds/galaxyAnim.gif" class="bkg" onclick="changeBkgSkin(galaxyAnim)">
-                </div>
-                <div class="flex"><img src="assets/backgrounds/purpleAnim.gif" class="bkg" onclick="changeBkgSkin(purpleAnim)">
-                </div>
-                <div class="flex"><img src="assets/backgrounds/blueNebulaAnim.gif" class="bkg"
-                        onclick="changeBkgSkin(blueNebulaAnim)">
-                </div>
-            </div>
-        </div>
+        
+        <div id="skins-mount"></div>
+        <div id="music-mount"></div>
         <!--Audio Menu-->
         <div class="audio-menu fs32 hidden">
             <div class="flex">
-                <div class="flex"><img src="assets/images/audioUnmuted.png" class="small-icon border sfx-button"
-                        onclick="toggleSFX()"></div>
-                <div class="flex"><img src="assets/images/musicUnmuted.jpg" class="small-icon border music-toggle-button"
-                        onclick="toggleMusic()">
+                <div class="flex"><img src="assets/images/audioUnmuted.png" class="small-icon border sfx-toggle-button">
                 </div>
+                <div class="flex"><img src="assets/images/musicUnmuted.jpg"
+                        class="small-icon border music-toggle-button"></div>
             </div>
             </br>
             <div class="flex">
@@ -149,15 +116,15 @@
                 </div>
             </div>
             </br>
-            <h6 class="reset-data-button" onclick="clearData()">RESET DATA</h6>
+            <h6 class="reset-data-button">RESET DATA</h6>
         </div>
         <!--End of Canvas Container div-->
     </div>
-    <script src="Scripts/setup.js"></script>
-    <script src="Scripts/audio.js"></script>
-    <script src="Scripts/levels.js"></script>
-    <script src="Scripts/ui.js"></script>
-    <script src="Scripts/functions.js"></script>
+    <script src="scripts/setup.js" type="module"></script>
+    <script src="scripts/audio.js" type="module"></script>
+    <script src="scripts/levels.js" type="module"></script>
+    <script src="scripts/ui.js" type="module"></script>
+    <script src="scripts/functions.js" type="module"></script>
 </body>
 
 </html>
