@@ -1,5 +1,6 @@
 // Handles UI element selection & DOM
-import kebabToCamel from "./utils.js"
+import kebabToCamel from "./utils.js";
+import { AUDIO } from "./audio.js";
 
 //canvas
 // const canvasContainer = document.querySelector('.canvas-container');
@@ -22,9 +23,6 @@ const uiSelectors = [
     '.device-button',
     '.key-controls',
     '.skins-button',
-    '.snake-skin',
-    '.inverted-skin',
-    '.asteroid-skin',
     '.audio-button',
     '.music-toggle-button',
     '.sfx-toggle-button',
@@ -42,7 +40,6 @@ const uiSelectors = [
 ];
 const uiSelectorsHidable = [
     '.how-to-screen',
-    '.skins-menu-screen',
     '.audio-menu',
     '.title-splash',
     '.game-over-screen',
@@ -65,33 +62,20 @@ uiSelectorsHidable.forEach(selector => {
     uiElementsHidable[variableName] = document.querySelector(selector);
 }) // TODO: update ui.js to hide correct
 
-
-// Persistence TODO: move to dedicated
-//-------------------------------RETRIEVAL-----------------------------------
-let bkgArray = [
-    "blueSpace.jpg",
-    "purpleSpace.jpg",
-    "JamesWebb.jpg",
-    "Orbit.jpg",
-    "hatSpace.png",
-    "galaxyAnim.gif",
-    "purpleAnim.gif",
-    "blueNebulaAnim.gif"
-];
-bkgArray.forEach(element => {
-    window[element.slice(0, -4)] = "assets/backgrounds/" + element;
-});
-
-//BKG RETRIEVAL
-if (window.localStorage.getItem('bkgImg')) {
-    uiElements.backgroundImg.src = JSON.parse(window.localStorage.getItem('bkgImg'));
-} else {
-    uiElements.backgroundImg.src = blueSpace;
-    window.localStorage.setItem('bkgImg', JSON.stringify(uiElements.backgroundImg.src));
+export function addUIElement(name, element) {
+    uiElements[kebabToCamel(name)] = element;
 }
+
+export function addUIElementHidable(name, element) {
+    uiElementsHidable[kebabToCamel(name)] = element;
+}
+
+
+
 
 document.querySelector("#score-form").addEventListener("submit", (e) => {
     e.preventDefault();
     uiElementsHidable.gameOverScreen.classList.add('hidden');
+    AUDIO.playSFX('click');
     // TODO: database connection
 });

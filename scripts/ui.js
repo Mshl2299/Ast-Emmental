@@ -1,7 +1,7 @@
 //ui elements
 import { CONFIG } from "./config.js";
-import { STATE } from "./game/state.js";
-import { uiElements, uiElementsHidable } from "./dom.js";
+import { STATE, DEFAULT_STATE } from "./game/state.js";
+import { uiElements, uiElementsHidable, addUIElement, addUIElementHidable } from "./dom.js";
 import { keys } from "./game/input.js";
 import kebabToCamel from "./utils.js";
 import { ship, gameOver } from "./setup.js";
@@ -49,59 +49,28 @@ function toggleMusic() {
 uiElements.sfxToggleButton.addEventListener('click', toggleSFX);
 uiElements.musicToggleButton.addEventListener('click', toggleMusic);
 
-function updateUnlocks() {
-    const HISCORE = localScores[0];
-    //check scores
-    if (!STATE.unlocks.includes("snakeSS1.png") && HISCORE >= 100) {
-        STATE.unlocks.push("snakeSS1.png");
+uiElements.resetDataButton.addEventListener('click', () => {
+    if (uiElements.resetDataButton.classList.contains('greyed')) {
+        showEndGameFirstText();
+    } else if (!uiElements.resetDataButton.classList.contains('greyed')) {
+        clearData();
     }
-    if (!STATE.unlocks.includes("alphaInvertedSS1.png") && HISCORE >= 150) {
-        STATE.unlocks.push("alphaInvertedSS1.png");
-    }
-    if (!STATE.unlocks.includes("asteroidSS1.png") && HISCORE >= 250) {
-        STATE.unlocks.push("asteroidSS1.png");
-    }
-    //update skins to be Unlocked or Greyed
-    if (STATE.unlocks.includes("snakeSS1.png")) {
-        uiElements.snakeSkin.classList.remove("greyed");
-        uiElements.snakeSkin.src = "assets/sprites/shipSnake.png"; //html image
-        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
-    }
-    else {
-        uiElements.snakeSkin.classList.add("greyed");
-        uiElements.snakeSkin.src = "assets/sprites/shipSnakeLocked.png";
-    }
-    if (STATE.unlocks.includes("alphaInvertedSS1.png")) {
-        uiElements.invertedSkin.classList.remove("greyed");
-        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInverted.png";
-        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
-    }
-    else {
-        uiElements.invertedSkin.classList.add("greyed");
-        uiElements.invertedSkin.src = "assets/sprites/shipAlphaInvertedLocked.png";
-    }
-    if (STATE.unlocks.includes("asteroidSS1.png")) {
-        uiElements.asteroidSkin.classList.remove("greyed");
-        uiElements.asteroidSkin.src = "assets/sprites/asteroid.png";
-        window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
-    }
-    else {
-        uiElements.asteroidSkin.classList.add("greyed");
-        uiElements.asteroidSkin.src = "assets/sprites/AsteroidLocked.png";
-    }
-}
+});
 
-uiElements.resetDataButton.addEventListener('click', clearData);
+function resetBkgImg() {
+    uiElements.backgroundImg.src = BKG_PATH + BKG_SKINS_MAP['blueSpace'].unlockedImage;
+    window.localStorage.setItem('bkgImg', JSON.stringify('blueSpace'));
+}
 
 function clearData() {
     window.localStorage.clear();
-    initLocalScores();
 
     updateScoresHTML();
 
-    STATE.unlocks = [];
-    ship.changeSkin('alphaSS1.png');
-    uiElements.backgroundImg.src = blueSpace;
+    STATE.unlocks = DEFAULT_STATE.unlocks;
+    STATE.score = DEFAULT_STATE.score;
+    ship.resetSkin();
+    resetBkgImg();
 
     AUDIO.playSFX('explosion');
     updateUnlocks();
@@ -116,7 +85,7 @@ function closeAll() {
         uiElementsHidable[key].classList.add('hidden');
     }
 
-    randomizeMenuMusic();
+    AUDIO.randomizeMenuMusic();
 }
 
 //-------------------------HIGHSCORES----------------------------------
@@ -129,20 +98,13 @@ const GLOBAL_LB = [
     { name: "PLAYER5", score: 0 }
 ]
 
-let localScores;
-
-function initLocalScores() {
-    localScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-}
-initLocalScores(); // TODO: move to main
-
-function updateScoresHTML() {
+export function updateScoresHTML() {
     for (let i = 0; i < 10; i++) {
-        if (!localScores[i]) {
-            localScores[i] = 0;
+        if (!STATE.scores[i]) {
+            STATE.scores[i] = 0;
         }
         if (document.querySelector('.score0')) {
-            document.querySelector('.score' + i).innerHTML = localScores[i].toString().padStart(3, "0");
+            document.querySelector('.score' + i).innerHTML = STATE.scores[i].toString().padStart(3, "0");
         }
     }
 }
@@ -150,20 +112,21 @@ function updateScoresHTML() {
 // Retreives local leaderboard from localScores, fill with 0's
 function retrieveLocalScores() {
     if (window.localStorage.getItem('localScores')) {
-        localScores = JSON.parse(window.localStorage.getItem('localScores'));
+        STATE.scores = JSON.parse(window.localStorage.getItem('localScores'));
 
         updateScoresHTML();
 
-        console.log("Highscores retrieved. " + window.localStorage.getItem('localScores'));
+        console.log("Highscores retrieved. " + STATE.scores);
     }
 }
+
 retrieveLocalScores(); // TODO: move to main
 
 function renderLocalLeaderboard() {
     const container = document.querySelector(".local-scores");
     container.innerHTML = "";
 
-    localScores
+    STATE.scores
         .sort((a, b) => b - a)
         .forEach((player, index) => {
             const row = document.createElement("div");
@@ -218,12 +181,12 @@ function toggleScores() {
     }
 }
 function hideScoreDisplay() {
-    uiElements.scoreAnchor.style.left = `${canvas.width - BUTTON_WIDTH - UI_DEFAULTS.UI_DEFAULTS.SCORE_WIDTH_ADJUST}px`;
+    uiElements.scoreAnchor.style.left = `${canvas.width - UI_DEFAULTS.BUTTON_WIDTH - UI_DEFAULTS.SCORE_WIDTH_ADJUST}px`;
     scoreDisplayOpen = false;
     AUDIO.playSFX('click');
 }
 function showScoreDisplay() {
-    const SCORE_X = canvas.width - UI_DEFAULTS.SCUI_DEFAULTS.SCORE_WIDTH - UI_DEFAULTS.SCORE_WIDTH_ADJUST;
+    const SCORE_X = canvas.width - UI_DEFAULTS.SCORE_WIDTH - UI_DEFAULTS.SCORE_WIDTH_ADJUST;
 
     uiElements.scoreAnchor.style.left = `${SCORE_X}px`;
 
@@ -232,6 +195,7 @@ function showScoreDisplay() {
 }
 
 //-------------------------OTHER-------------------------------
+// TODO: refactor into a custom Display Alert
 function showEndGameFirstText() {
     clearInterval(eGTInterval);
     eGTCount = 0;
@@ -276,6 +240,7 @@ function openMenu(button, screen) {
         AUDIO.playSFX('click');
     }
 }
+
 //navigation TODO: improve music menu, refactor
 function showPage(n) {
     // d
@@ -485,6 +450,7 @@ function createMusicCreditsPage(pageNumber) {
     div.appendChild(makeLinkLine('Deep Sea', 'assets/audio/menuDeepSeaUmplix.mp3', 'Umplix', 'https://opengameart.org/users/umplix'));
     div.appendChild(makeLinkLine('Magic Space', 'assets/audio/menuMagicSpaceCodeManu.mp3', 'CodeManu', 'https://opengameart.org/users/codemanu'));
     div.appendChild(makeLinkLine('Loading Screen Loop', 'assets/audio/menuLSLBMorris.wav', 'HaelDB', 'https://www.youtube.com/brandon75689'));
+    div.appendChild(makeLinkLine('Stage Select', 'assets/audio/stageSelectJJunkala.wav', 'Juhani Junkala', 'https://juhanijunkala.com/'));
 
     const checkTheseHeading = document.createElement('h5');
     checkTheseHeading.innerHTML = '<u>Check these out!</u>';
@@ -530,9 +496,12 @@ function initMusicScreen() {
 
 initMusicScreen(); // TODO: move to main
 
-const SPRITES_PATH = "assets/sprites/";
 
-const SKINS_MAP = {
+
+// ----------------------------- SKINS ------------------------------------------
+
+export const SPRITES_PATH = "assets/sprites/";
+export const SKINS_MAP = {
     alpha: {
         unlockedImage: "shipAlpha.png",
         lockedImage: null,
@@ -582,10 +551,88 @@ const SKINS_MAP = {
     }
 };
 
+export const BKG_PATH = "assets/backgrounds/";
+export const BKG_SKINS_MAP = {
+    blueSpace: {
+        display: true,
+        unlockedImage: "blueSpace.jpg",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "blue-space"
+    },
+    hatSpace: {
+        display: false,
+        unlockedImage: "hatSpace.png",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "hat-space"
+    },
+    purpleSpace: {
+        display: false,
+        unlockedImage: "purpleSpace.jpg",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "purple-space"
+    },
+    jamesWebb: {
+        display: true,
+        unlockedImage: "JamesWebb.jpg",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "james-webb"
+    },
+    orbit: {
+        display: true,
+        unlockedImage: "Orbit.jpg",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "orbit"
+    },
 
-/*
-id: string that exists in SKINS_MAP
- */
+    // Animated
+    galaxyAnim: {
+        display: true,
+        unlockedImage: "galaxyAnim.gif",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "galaxy-anim"
+    },
+    purpleAnim: {
+        display: true,
+        unlockedImage: "purpleAnim.gif",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "purple-anim"
+    },
+    blueNebulaAnim: {
+        display: true,
+        unlockedImage: "blueNebulaAnim.gif",
+        lockedImage: null,
+        isLocked: false,
+        cssClass: "blue-nebula-anim"
+    },
+};
+
+// Persistence TODO: move to dedicated?
+
+//BKG RETRIEVAL
+function retrieveBackground() {
+    if (window.localStorage.getItem('bkgImg')) {
+        const id = JSON.parse(window.localStorage.getItem('bkgImg'));
+        uiElements.backgroundImg.src = BKG_PATH + BKG_SKINS_MAP[id].unlockedImage;
+    } else {
+        resetBkgImg();
+    }
+}
+retrieveBackground(); // TODO: move to persistence/main
+
+export function changeBkgSkin(bkgId) {
+    uiElements.backgroundImg.src = BKG_PATH + BKG_SKINS_MAP[bkgId].unlockedImage;
+    window.localStorage.setItem('bkgImg', JSON.stringify(bkgId));
+    AUDIO.playSFX('click');
+}
+
+// id: a SKINS_MAP key as string, i.e. 'alpha'
 function createSkinImage(id) {
     const wrap = document.createElement('div');
     wrap.className = 'flex';
@@ -596,82 +643,113 @@ function createSkinImage(id) {
 
     if (obj.isLocked && obj.lockedImage) {
         img.src = SPRITES_PATH + obj.lockedImage;
-        img.classList.add('greyed');
     } else {
         img.src = SPRITES_PATH + obj.unlockedImage;
     }
-    
+
     img.classList.add('skin');
     img.classList.add(obj.cssClass);
-    img.addEventListener('click', () => ship.changeSkin(obj.spriteSheet));
+    img.addEventListener('click', () => ship.changeSkin(id));
 
     wrap.appendChild(img);
+    addUIElement(obj.cssClass, img);
+    return wrap;
+}
+
+// id: a BKG_SKINS_MAP key as string, i.e. 'blueSpace'
+function createBkgImage(id) {
+    const wrap = document.createElement('div');
+    wrap.className = 'flex';
+
+    const img = document.createElement('img');
+    img.draggable = false;
+    const obj = BKG_SKINS_MAP[id];
+
+    if (obj.isLocked && obj.lockedImage) {
+        img.src = BKG_PATH + obj.lockedImage;
+    } else {
+        img.src = BKG_PATH + obj.unlockedImage;
+    }
+
+    img.classList.add('bkg');
+    img.classList.add(obj.cssClass);
+    img.addEventListener('click', () => changeBkgSkin(id));
+
+    wrap.appendChild(img);
+    addUIElement(obj.cssClass, img);
     return wrap;
 }
 
 const skinsScreen = document.createElement('div'); // needs to exist outside scope
 const skinsMount = document.getElementById('skins-mount');
 function initSkinScreen() {
-    skinsScreen.classList.add('skins-screen', 'fs32', 'hidden');
+    skinsScreen.classList.add('skins-menu-screen', 'fs32', 'hidden');
+    skinsScreen.innerHTML = `<h2>SKINS</h2>`;
 
     const shipSkinContainer = document.createElement('div');
     shipSkinContainer.className = 'flex';
+    Object.keys(SKINS_MAP).forEach((id) => shipSkinContainer.appendChild(createSkinImage(id)));
+    skinsScreen.appendChild(shipSkinContainer);
 
-    SKINS_MAP.keys().forEach((id) => shipSkinContainer.appendChild(createSkinImage(id)));
+    const bkgSkinContainer = document.createElement('div');
+    bkgSkinContainer.className = 'flex';
+    bkgSkinContainer.style.flexWrap = 'wrap';
+    Object.keys(BKG_SKINS_MAP).forEach((id) => {
+        if (BKG_SKINS_MAP[id].display) {
+            bkgSkinContainer.appendChild(createBkgImage(id));
+        }
+    });
+    skinsScreen.appendChild(bkgSkinContainer);
 
-    skinsScreen.innerHTML = `<h2>SKINS</h2>`;
-    skinsScreen.appendChild(page1);
-    skinsScreen.appendChild(page2);
-    skinsScreen.appendChild(page3);
+    const backgroundWarning = document.createElement('p');
+    backgroundWarning.innerHTML = '<u>CAUTION: some backgrounds may give you motion sickness</u>';
+    skinsScreen.appendChild(backgroundWarning);
 
     skinsMount.replaceChildren(skinsScreen);
+    addUIElementHidable('skinsMenuScreen', skinsScreen); // TODO: good way to do this? Run dom.js after?
 }
 
 initSkinScreen(); // TODO: move to main & call update on the page
 
-// <!--Skins Menu-->
-//         <div class="skins-menu-screen fs32 hidden">
-//             <h2>SKINS</h2>
-//             <div class="flex">
-//                 <div class="flex"><img draggable="false" src="assets/sprites/shipAlpha.png" class="skin"
-//                         onclick="ship.changeSkin('assets/sprites/alphaSS1.png')"></div>
-//                 <div class="flex"><img draggable="false" src="assets/sprites/shipBeta.png" class="skin"
-//                         onclick="ship.changeSkin('assets/sprites/betaSS1.png')"></div>
-//                 <div class="flex"><img draggable="false" src="assets/sprites/shipUFO.png" class="skin"
-//                         onclick="ship.changeSkin('assets/sprites/ufoSS1.png')"></div>
-//                 <div class="flex"><img draggable="false" src="assets/sprites/shipSnakeLocked.png"
-//                         class="skin snake-skin greyed" onclick="ship.changeSkin('assets/sprites/snakeSS1.png')"></div>
-//                 <div class="flex"><img draggable="false" src="assets/sprites/shipAlphaInvertedLocked.png"
-//                         class="skin greyed inverted-skin"
-//                         onclick="ship.changeSkin('assets/sprites/alphaInvertedSS1.png')">
-//                 </div>
-//                 <div class="flex"><img draggable="false" src="assets/sprites/AsteroidLocked.png"
-//                         class="skin greyed asteroid-skin" onclick="ship.changeSkin('assets/sprites/asteroidSS1.png')">
-//                 </div>
-//             </div>
-//             <div class="flex">
-//                 <div class="flex"><img src="assets/backgrounds/blueSpace.jpg" class="bkg"
-//                         onclick="changeBkgSkin(blueSpace)">
-//                 </div>
-//                 <div class="flex"><img src="assets/backgrounds/purpleSpace.jpg" class="bkg"
-//                         onclick="changeBkgSkin(purpleSpace)">
-//                 </div>
-//                 <div class="flex"><img src="assets/backgrounds/JamesWebb.jpg" class="bkg"
-//                         onclick="changeBkgSkin(JamesWebb)">
-//                 </div>
-//             </div>
-//             <div class="flex">
-//                 <div class="flex"><img src="assets/backgrounds/galaxyAnim.gif" class="bkg"
-//                         onclick="changeBkgSkin(galaxyAnim)">
-//                 </div>
-//                 <div class="flex"><img src="assets/backgrounds/purpleAnim.gif" class="bkg"
-//                         onclick="changeBkgSkin(purpleAnim)">
-//                 </div>
-//                 <div class="flex"><img src="assets/backgrounds/blueNebulaAnim.gif" class="bkg"
-//                         onclick="changeBkgSkin(blueNebulaAnim)">
-//                 </div>
-//             </div>
-//         </div>
+// Update skins to be Unlocked or Greyed
+function updateSkinUnlocks() {
+    window.localStorage.setItem('unlocks', JSON.stringify(DEFAULT_STATE.unlocks));
+
+    Object.keys(SKINS_MAP).forEach((id) => {
+        const obj = SKINS_MAP[id];
+        if (!obj.lockedImage) return;
+
+        const elem = uiElements[kebabToCamel(obj.cssClass)];
+        if (STATE.unlocks.includes(id)) {
+            elem.classList.remove("greyed");
+            elem.src = SPRITES_PATH + SKINS_MAP[id].unlockedImage;
+            window.localStorage.setItem('unlocks', JSON.stringify(STATE.unlocks));
+        } else {
+            elem.classList.add("greyed");
+            elem.src = SPRITES_PATH + SKINS_MAP[id].lockedImage;
+        }
+    });
+}
+
+export function updateUnlocks() {
+    let highestScore = STATE.scores[0];
+    if (CONFIG.unlockAll) {
+        highestScore = 1000000;
+    } else if (!CONFIG.unlockAll) {
+        STATE.unlocks = DEFAULT_STATE.unlocks;
+    }
+
+    if (!STATE.unlocks.includes("snake") && highestScore >= 100) {
+        STATE.unlocks.push("snake");
+    }
+    if (!STATE.unlocks.includes("inverted") && highestScore >= 150) {
+        STATE.unlocks.push("inverted");
+    }
+    if (!STATE.unlocks.includes("asteroid") && highestScore >= 250) {
+        STATE.unlocks.push("asteroid");
+    }
+    updateSkinUnlocks();
+}
 
 
 // TODO: get this working dynamically?
@@ -710,6 +788,14 @@ window.addEventListener("keyup", function (e) { //deletes any keys in the array 
     delete keys[e.key];
 });
 
-document.addEventListener('click', function () {
-    CONFIG.userInteracted = true;
-}); //make chrome happy; no DOM errors when trying to play music before user 
+function onFirstInteraction() {
+    AUDIO.retrieveAudioSettings(); // TODO: move to main
+    if (!AUDIO.triedPlayingMenu) {
+        AUDIO.menuMusic.play().catch(() => console.log("error playing menu music"));
+        AUDIO.triedPlayingMenu = true;
+    }
+    STATE.userInteracted = true;
+
+    document.removeEventListener('click', onFirstInteraction);
+}
+document.addEventListener('click', onFirstInteraction);

@@ -10,13 +10,13 @@ const SOUNDS = {
     explosion: "assets/audio/explosion.wav",
 };
 
-
 export const AUDIO = {
     bkgMusic: new Audio(),
     menuMusic: new Audio(),
     menuMusicNumber: 0,
+    triedPlayingMenu: false,
 
-    // Use: AUDIO.playSFX('id');
+    // Usage: AUDIO.playSFX('id');
     sfxVolume: 1,
     playSFX(id) {
         const audio = new Audio(SOUNDS[id]);
@@ -25,8 +25,8 @@ export const AUDIO = {
     },
 
     // Retrieve and apply audio settings from localStorage
-    // uiElements should contain: sfxRange, musicRange, sfxButton, musicToggleButton
-    retrieveAudioSettings(uiElements = {}) {
+    // uiElements should contain: sfxRange, musicRange, sfxToggleButton, musicToggleButton
+    retrieveAudioSettings() {
         // SFX volume
         if (window.localStorage.getItem("sfxRange")) {
             uiElements.sfxRange.value = JSON.parse(window.localStorage.getItem("sfxRange"));
@@ -78,14 +78,6 @@ export const AUDIO = {
         this.playSFX('click');
     },
 
-    restartBkgMusic() {
-        if (this.bkgMusic.ended) this.bkgMusic.play();
-    },
-
-    restartMenuMusic() {
-        if (this.menuMusic.ended || this.menuMusic.paused) this.menuMusic.play();
-    },
-
     switchToMenu() {
         this.bkgMusic.pause();
         this.menuMusic.play();
@@ -119,7 +111,8 @@ export const AUDIO = {
     },
 
     // Update volumes and UI; expects uiElements as in retrieveAudioSettings
-    updateVolume(uiElements = {}) {
+    // Called every frame
+    updateVolume() {
         const sfxVal = Number(uiElements.sfxRange?.value ?? 100);
         const musicVal = Number(uiElements.musicRange?.value ?? 50);
 
@@ -128,8 +121,8 @@ export const AUDIO = {
         this.menuMusic.volume = musicVal / 200;
 
         if (uiElements.sfxRange) {
-            if (sfxVal > 0) uiElements.sfxButton.src = "assets/images/audioUnmuted.png";
-            else uiElements.sfxButton.src = "assets/images/audioMuted.png";
+            if (sfxVal > 0) uiElements.sfxToggleButton.src = "assets/images/audioUnmuted.png";
+            else uiElements.sfxToggleButton.src = "assets/images/audioMuted.png";
         }
 
         if (uiElements.musicRange) {
@@ -141,5 +134,8 @@ export const AUDIO = {
         window.localStorage.setItem("musicRange", JSON.stringify(String(musicVal)));
     },
 };
+
+AUDIO.bkgMusic.loop = true;
+AUDIO.menuMusic.loop = true;
 
 export default AUDIO;

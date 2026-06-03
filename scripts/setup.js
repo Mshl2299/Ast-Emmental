@@ -10,7 +10,7 @@ import { CONFIG } from "./config.js";
 import { STATE, DEFAULT_STATE } from "./game/state.js";
 import { keys } from "./game/input.js";
 import { ctx, uiElements, uiElementsHidable } from "./dom.js";
-import { UI_DEFAULTS } from "./ui.js";
+import { UI_DEFAULTS, SPRITES_PATH, SKINS_MAP, updateScoresHTML, updateUnlocks } from "./ui.js";
 import { AUDIO } from "./audio.js";
 import { detectBorderCollision } from "./functions.js";
 
@@ -41,7 +41,7 @@ export let ship = {
     exploding: false,
     explosionInterval: null,
     explosionFrame: 1,
-    currentSkin: null,
+    currentSkin: null, // stores a skinId
     draw(sX, sY, sW, sH, dX, dY, dW, dH) {
         if (CONFIG.showDebug) { drawCircle("rgb(255,255,255,0.5)", this); };
         ctx.drawImage(this.image, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -67,7 +67,7 @@ export let ship = {
         this.resetExplosion();
     },
     resetSkin() {
-
+        this.changeSkin('alpha');
     },
     displayOnSide() {
         this.resetDimensions();
@@ -80,13 +80,15 @@ export let ship = {
             this.immunity = false;
         }, duration);
     },
-    changeSkin(skinName) {
-        if (window.localStorage.getItem('unlocks') && JSON.parse(window.localStorage.getItem('unlocks')).includes(skinName)) {
-            this.currentSkin = skinName;
-        } else if (defaultUnlocks.includes(skinName)) {
-            this.currentSkin = skinName;
+
+    // Takes a string skinId (key of SKINS_MAP) like 'alpha' and sets the current Skin
+    changeSkin(skinId) { // TODO: load entire state rather than individual parts
+        if (!window.localStorage.getItem('unlocks')) return;
+        if (JSON.parse(window.localStorage.getItem('unlocks')).includes(skinId) ||
+            DEFAULT_STATE.unlocks.includes(skinId) || CONFIG.unlockAll) {
+            this.currentSkin = skinId;
         }
-        window.localStorage.setItem('shipSkin', JSON.stringify(currentSkin));
+        window.localStorage.setItem('shipSkin', JSON.stringify(this.currentSkin)); // TODO: move out
         AUDIO.playSFX('click');
     },
     upPressed() { return ((keys["w"] || keys["ArrowUp"]) && this.y > UI_DEFAULTS.SCOREBOARD_HEIGHT); },
@@ -168,14 +170,14 @@ function retrieveShipSkin() {
         ship.currentSkin = JSON.parse(window.localStorage.getItem('shipSkin'));
 
         if (!ship.currentSkin) {
-            ship.currentSkin = "alphaSS1.png";
+            ship.currentSkin = 'alpha';
             window.localStorage.setItem('shipSkin', JSON.stringify(ship.currentSkin));
         }
         if (JSON.parse(window.localStorage.getItem('unlocks'))) {
             STATE.unlocks = JSON.parse(window.localStorage.getItem('unlocks'));
             console.log("Unlocked Sprites retrieved.")
         }
-        ship.image.src = "assets/sprites/" + ship.currentSkin;
+        ship.image.src = "assets/sprites/" + SKINS_MAP[ship.currentSkin].spriteSheet;
     }
 }
 retrieveShipSkin(); // TODO: move to main
@@ -188,8 +190,8 @@ const AST_CONFIG = {
     auraFct: 1.8,
 }
 //max - min - height of asteroid so it doesn't clip off
-AST_CONFIG.astGenRangeX = (canvas.height - UI_DEFAULTS.BORDER_PADDING) - (UI_DEFAULTS.SCOREBOARD_HEIGHT + UI_DEFAULTS.BORDER_PADDING) - AST_CONFIG.baseHeight;
-AST_CONFIG.astGenRangeY = (canvas.width - UI_DEFAULTS.BORDER_PADDING) - UI_DEFAULTS.BORDER_PADDING - AST_CONFIG.baseWidth;
+AST_CONFIG.astGenRangeY = (canvas.height - UI_DEFAULTS.BORDER_PADDING) - (UI_DEFAULTS.SCOREBOARD_HEIGHT + UI_DEFAULTS.BORDER_PADDING) - AST_CONFIG.baseHeight;
+AST_CONFIG.astGenRangeX = (canvas.width - UI_DEFAULTS.BORDER_PADDING) - UI_DEFAULTS.BORDER_PADDING - AST_CONFIG.baseWidth;
 // ASTEROIDS
 class Asteroid {
     constructor(source, width, height, exist, speed, dirX, dirY, genTime, isEnemy) {
@@ -260,10 +262,10 @@ class Asteroid {
 }
 export let greyAst = new Asteroid("assets/sprites/Asteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, false, 0, 0, 0, 30)
 // Red Enemies TODO: Factory pattern?
- let redAst = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, false, 2, -1, 1, 50, true);
- let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 2, AST_CONFIG.baseHeight * 2, false, 1.5, -1, -1, 50, true);
- let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 3, AST_CONFIG.baseHeight * 3, false, 1, 1, 1, 100, true);
- let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 1.5, AST_CONFIG.baseHeight * 1.5, false, 3, 1, -1, 100, true);
+let redAst = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, false, 2, -1, 1, 50, true);
+let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 2, AST_CONFIG.baseHeight * 2, false, 1.5, -1, -1, 50, true);
+let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 3, AST_CONFIG.baseHeight * 3, false, 1, 1, 1, 100, true);
+let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 1.5, AST_CONFIG.baseHeight * 1.5, false, 3, 1, -1, 100, true);
 export let ASTEROIDS = {
     redAst: redAst,
     redAst2: redAst2,
@@ -280,20 +282,24 @@ export let cheese = new Asteroid("assets/sprites/cheese.png", AST_CONFIG.baseWid
 export let drawAstArray = [greyAst, redAst, redAst2, redAst3, redAst4, cheese];
 export let enemyAstArray = [redAst, redAst2, redAst3, redAst4];
 
-// Adds a new score to localScores and updates localStorage
+// Adds a new score to STATE.scores and updates localStorage
 function handleScore(newScore) {
-    localScores.push(newScore);
+    STATE.scores.push(newScore);
     uiElements.finalScoreDisplay.innerHTML = newScore;
 
-    localScores.sort((a, b) => b - a)
-    while (localScores.length > 10) {
-        localScores.pop();
+    STATE.scores.sort((a, b) => b - a)
+    while (STATE.scores.length > 10) {
+        STATE.scores.pop();
     }
 
     updateScoresHTML();
-    window.localStorage.setItem('localScores', JSON.stringify(localScores));
+    window.localStorage.setItem('localScores', JSON.stringify(STATE.scores));
 
     updateUnlocks();
+}
+
+if (CONFIG.scoreOverride) { // TODO: move to main
+    STATE.scoreAmt = CONFIG.scoreOverride;
 }
 
 //start & end functions
@@ -302,7 +308,7 @@ function startGame() { //reset values
     CONFIG.playerControl = true;
 
     //Reset ship
-    ship.image.src = "assets/sprites/" + ship.currentSkin;
+    ship.image.src = SPRITES_PATH + SKINS_MAP[ship.currentSkin].spriteSheet;
     ship.reset();
     if (CONFIG.superspeed) {
         STATE.currentSpeed = 20;
@@ -317,10 +323,6 @@ function startGame() { //reset values
     STATE.drawAstArray.forEach(asteroid => {
         asteroid.exist = false;
     })
-    STATE.hasUnlockedSnake = false;
-    STATE.hasUnlockedInverted = false;
-    STATE.hasUnlockedAsteroid = false;
-    STATE.legendaryScore = false;
 
     //hide ui
     uiElements.startButton.classList.add('hidden');
@@ -330,6 +332,7 @@ function startGame() { //reset values
     uiElements.howToButton.classList.add('greyed');
     uiElements.musicButton.classList.add('greyed');
     uiElements.skinsButton.classList.add('greyed');
+    uiElements.resetDataButton.classList.add('greyed');
     //deviceButton.classList.add('greyed');
     //start the music
     AUDIO.switchToBkg();
@@ -340,14 +343,14 @@ function startGame() { //reset values
 
 export function gameOver() {
     CONFIG.playerControl = false;
-    
+
     if (!ship.exploding) {
         ship.startExplosion();
     }
     AUDIO.playSFX('explosion');
-    
+
     AUDIO.switchToMenu();
-    
+
     clearInterval(STATE.sDInterval);
     STATE.sDCount = 1;
     handleScore(STATE.score);
@@ -358,6 +361,7 @@ export function gameOver() {
     uiElements.howToButton.classList.remove('greyed');
     uiElements.musicButton.classList.remove('greyed');
     uiElements.skinsButton.classList.remove('greyed');
+    uiElements.resetDataButton.classList.remove('greyed');
     //deviceButton.classList.remove('greyed');
 }
 

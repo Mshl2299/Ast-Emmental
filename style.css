@@ -7,8 +7,6 @@
     box-sizing: border-box;
     background-color: transparent;
     border: none;
-    /* border-radius: 12px; */
-    /* overflow: hidden; */
     outline: none;
     user-select: none;
 }
@@ -17,7 +15,8 @@ p {
     font-size: 18px;
 }
 
-h2 { /*menu titles*/
+h2 {
+    /*menu titles*/
     font-family: impact;
     font-weight: thin;
     font-size: 50px;
@@ -25,13 +24,15 @@ h2 { /*menu titles*/
     text-decoration: underline;
 }
 
-h5 { /*final score*/
+h5 {
+    /*final score*/
     font-weight: thin;
     font-size: 40px;
     border: none;
 }
 
-h6 { /*music*/
+h6 {
+    /*music*/
     padding: 2px;
     margin: 3px;
 }
@@ -105,6 +106,7 @@ hr {
     transform: rotate(-90deg);
     overflow: visible;
 }
+
 .slider:hover {
     opacity: 1;
 }
@@ -117,6 +119,7 @@ hr {
     background: darkblue;
     cursor: pointer;
 }
+
 .slider::-moz-range-thumb {
     width: 30px;
     height: 30px;
@@ -132,6 +135,7 @@ hr {
     padding: 5px;
     margin: 2px;
 }
+
 .medium-icon {
     height: 120px;
     width: 200px;
@@ -151,9 +155,11 @@ hr {
     left: 50%;
     transform: translate(-50%, -40%);
 }
+
 .title {
     width: 100%;
 }
+
 .title-splash {
     height: 180px;
     width: 420px;
@@ -168,6 +174,7 @@ hr {
     opacity: 1;
     transition: 0.6s;
 }
+
 .title-splash:hover {
     opacity: 0.2;
     transition: 0.6s;
@@ -183,6 +190,7 @@ hr {
     transition: 0.3s;
     opacity: 0.8;
 }
+
 /* Right trapezoid button & scores */
 .right-hex-button {
     width: 20px;
@@ -195,9 +203,10 @@ hr {
     background: none;
     margin-right: 0;
     border-radius: 0;
-    
+
     overflow: visible;
 }
+
 .right-hex-button:hover {
     background: none;
     border-right: 20px solid #d28f29;
@@ -214,10 +223,11 @@ hr {
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    padding: 0 10px;
-    
+    padding: 0px 5px 5px 5px;
+
     overflow: hidden;
 }
+
 .highscore-title {
     font-size: 28px;
     font-weight: bolder;
@@ -232,7 +242,7 @@ hr {
 
 .score-list {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
 
     display: flex;
@@ -240,13 +250,21 @@ hr {
 
     min-height: 0;
 }
+
+
 .score-list::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
+
+.score-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 8px #0093c4;
+}
+
 .score-list::-webkit-scrollbar-thumb {
-    background: darkblue;
-    border-radius: 4px;
+    background: linear-gradient(darkblue, #7d59ff);
+    border-radius: 10px;
 }
+
 .local-scores {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -265,15 +283,17 @@ hr {
     top: 0;
     z-index: 10;
     font-weight: bold;
-    background:#0093c4
+    background: #0093c4
 }
+
 .player-card {
     display: grid;
     grid-template-columns: 40px 70px 1fr;
 
-    font-size: 24px;
+    font-size: 28px;
     letter-spacing: -1.5px;
 }
+
 .player-name {
     text-align: right;
     min-width: 0;
@@ -282,6 +302,7 @@ hr {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+
 .player-score {
     text-align: left;
 }
@@ -306,6 +327,7 @@ hr {
     opacity: 0.88;
     overflow: visible;
 }
+
 .left-hex-button:hover {
     background: none;
     border-left: 20px solid #d28f29;
@@ -344,13 +366,15 @@ hr {
 /* Score submission form */
 #score-form {
     display: flex;
-    align-items:flex-start;
+    align-items: flex-start;
     justify-content: center;
     width: 300px;
     margin: auto;
     padding: 5px;
 }
-#username, #leaderboard-submit {
+
+#username,
+#leaderboard-submit {
     font-size: 20px;
     font-weight: lighter;
     color: white;
@@ -359,12 +383,13 @@ hr {
     padding: 8px 15px;
     margin: 5px;
 }
+
 #username {
     width: 180px;
 }
 
 .background-img {
-    width:1000px; 
-    height:700px; 
+    width: 1000px;
+    height: 700px;
     margin-top: 50px;
 }
