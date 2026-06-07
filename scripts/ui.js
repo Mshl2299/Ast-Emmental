@@ -3,7 +3,7 @@ import { CONFIG } from "./config.js";
 import { STATE, DEFAULT_STATE } from "./game/state.js";
 import { uiElements, uiElementsHidable, addUIElement, addUIElementHidable } from "./dom.js";
 import { kebabToCamel } from "./utils.js";
-import { ship, SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
+import { SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
 import { gameOver } from "./setup.js";
 import { AUDIO } from "./audio.js";
 
@@ -69,7 +69,7 @@ function clearData() {
 
     STATE.unlocks = DEFAULT_STATE.unlocks;
     STATE.score = DEFAULT_STATE.score;
-    ship.resetSkin();
+    STATE.ship.resetSkin();
     resetBkgImg();
 
     AUDIO.playSFX('explosion');
@@ -228,12 +228,12 @@ function openMenu(button, screen) {
     }
     else if (!button.classList.contains('greyed')) {
         if (screen.classList.contains('skins-menu-screen') && screen.classList.contains('hidden')) {
-            ship.displayOnSide();
-            ship.exploding = false;
+            STATE.ship.displayOnSide();
+            STATE.ship.exploding = false;
 
             updateUnlocks();
         } else if (!screen.classList.contains('hidden')) {
-            ship.reset();
+            STATE.ship.reset();
         }
         screen.classList.toggle('hidden'); //toggles screen
         AUDIO.playSFX('click');
@@ -582,7 +582,7 @@ function createSkinImage(id) {
 
     img.classList.add('skin');
     img.classList.add(obj.cssClass);
-    img.addEventListener('click', () => ship.changeSkin(id));
+    img.addEventListener('click', () => STATE.ship.changeSkin(id));
 
     wrap.appendChild(img);
     addUIElement(obj.cssClass, img);

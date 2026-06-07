@@ -1,6 +1,4 @@
 import { STATE, DEFAULT_STATE } from "./game/state.js";
-import { ship } from "./entities/entities.js";
-import { cheese, ASTEROIDS } from "./setup.js";
 import { AUDIO } from "./audio.js";
 
 //Changes to ship & asteroids as score increases
@@ -8,18 +6,18 @@ let phases = [5, 10, 15, 25, 50, 75, 100, 150, 250, 500, 1000];
 let speeds = [DEFAULT_STATE.speed, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const GAME_PHASES_CONFIG = [
-    { scoreThresh: phases[0], newSpeed: speeds[1], action: () => ASTEROIDS.redAst.spawn() },   // 5+
-    { scoreThresh: phases[1], newSpeed: speeds[2], action: () => ASTEROIDS.redAst2.spawn() },  // 10+
-    { scoreThresh: phases[2], newSpeed: speeds[3], action: () => ASTEROIDS.redAst3.spawn() },  // 15+
+    { scoreThresh: phases[0], newSpeed: speeds[1], action: () => STATE.asteroids.redAst1.spawn() },   // 5+
+    { scoreThresh: phases[1], newSpeed: speeds[2], action: () => STATE.asteroids.redAst2.spawn() },  // 10+
+    { scoreThresh: phases[2], newSpeed: speeds[3], action: () => STATE.asteroids.redAst3.spawn() },  // 15+
     { // 25+
         scoreThresh: phases[3],
         newSpeed: speeds[4],
-        action: () => { if (!STATE.sDInterval) cheese.spawn(); }
+        action: () => { if (!STATE.sDInterval) STATE.asteroids.cheese.spawn(); }
     },
     { // 50+
         scoreThresh: phases[4],
         newSpeed: speeds[5],
-        action: () => { if (!STATE.sDInterval) ASTEROIDS.redAst4.spawn(); }
+        action: () => { if (!STATE.sDInterval) STATE.asteroids.redAst4.spawn(); }
     },
     { // 75+
         scoreThresh: phases[5],
@@ -75,7 +73,7 @@ const GAME_PHASES_CONFIG = [
 
 function updateStateAndShipSpeed(speed) {
     STATE.currentSpeed = speed;
-    ship.speed = STATE.currentSpeed;
+    STATE.ship.speed = STATE.currentSpeed;
 }
 
 // Advances game phase based on STATE.score

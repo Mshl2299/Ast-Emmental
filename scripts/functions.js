@@ -1,19 +1,19 @@
 // Loaded last. Utility and Animation
 import { CONFIG } from "./config.js";
 import { STATE } from "./game/state.js";
-import { ctx, uiElementsHidable } from "./dom.js";
-import { ship, SKINS_MAP } from "./entities/entities.js";
-import { greyAst, cheese, gameOver } from "./setup.js";
+import { ctx, canvas, uiElementsHidable } from "./dom.js";
+import { SKINS_MAP } from "./entities/entities.js";
+import { gameOver } from "./setup.js";
 import { UI_DEFAULTS } from "./ui.js";
 import { AUDIO } from "./audio.js";
 import { changeLevelUp } from "./levels.js";
 
 function detectCircleCollision(player, obstacle, tolerance) {
-    if (CONFIG.playerControl && !ship.immunity) {
+    if (STATE.playerControl && !STATE.ship.immunity) {
         const dX = (player.x + player.radius) - (obstacle.x + obstacle.radius);
         const dY = (player.y + player.radius) - (obstacle.y + obstacle.radius);
         const distanceToPlayer = Math.sqrt(dX ** 2 + dY ** 2) - tolerance;
-        //pythagoras: (player centerX - obstacle centerX)^2 + (player centerY - obstacle centerY)^2
+        // pythagoras: (player centerX - obstacle centerX)^2 + (player centerY - obstacle centerY)^2
         if (distanceToPlayer <= player.radius + obstacle.radius) {
             return true;
         }
@@ -22,69 +22,60 @@ function detectCircleCollision(player, obstacle, tolerance) {
 }
 
 export function detectBorderCollision(obj) {
-    if (obj.x < 1 - obj.width) { // passing left border
+    if (obj.x < 1 - obj.size) { // passing left border
         obj.x = canvas.width;
     }
     if (obj.x > canvas.width) { // passing right border
-        obj.x = 1 - obj.width;
+        obj.x = 1 - obj.size;
     }
-    if (obj.y < 1 - obj.height) { // passing top border
+    if (obj.y < 1 - obj.size) { // passing top border
         obj.y = canvas.height;
     }
     if (obj.y > canvas.height) { // passing bottom border
-        obj.y = 1 - obj.height;
-    }
-}
-export function detectCheeseBorderCol() { //teleports to middle of screen
-    if (cheese.x < 0 || cheese.x > canvas.width || cheese.y < UI_DEFAULTS.SCOREBOARD_HEIGHT || cheese.y > canvas.height) {
-        cheese.x = 460;
-        cheese.y = 310;
+        obj.y = 1 - obj.size;
     }
 }
 
-export let cheeseTolerance = 80; //for cheese movement and range detection
-export function moveToAway(player, obstacle, speedFactor) {
-    // positive speedFactor is away, negative speedFactor is towards
-    const dX = (player.x + player.radius) - (obstacle.x + obstacle.radius);
-    const dY = (player.y + player.radius) - (obstacle.y + obstacle.radius);
-    //ship is on right
-    if (dX > cheeseTolerance / 4) { obstacle.x -= player.speed * speedFactor; }
-    //ship is on left
-    else if (dX < -cheeseTolerance / 4) { obstacle.x += player.speed * speedFactor; }
-    //ship is below
-    if (dY > cheeseTolerance / 4) { obstacle.y -= player.speed * speedFactor; }
-    //ship is above
-    else if (dY < -cheeseTolerance / 4) { obstacle.y += player.speed * speedFactor; }
-    detectCheeseBorderCol();
+
+// Move towards or away the player given tolerance, object and speed
+// Positive speed is away, negative speed is towards
+export function moveInRange(tolerance, obstacle, speed) {
+    const dX = (STATE.ship.x + STATE.ship.radius) - (obstacle.x + obstacle.radius);
+    const dY = (STATE.ship.y + STATE.ship.radius) - (obstacle.y + obstacle.radius);
+    
+    if (dX > tolerance / 4) { obstacle.x -=  speed; }
+    else if (dX < -tolerance / 4) { obstacle.x +=  speed; }
+    if (dY > tolerance / 4) { obstacle.y -=  speed; }
+    else if (dY < -tolerance / 4) { obstacle.y +=  speed; }
 }
 
 function detectAllCollisions() {
     //reds; gameover 
-    STATE.enemyAstArray.forEach(asteroid => {
-        if (asteroid.exist && asteroid.moving && detectCircleCollision(ship, asteroid, -CONFIG.breathingRoom)) {
+    STATE.enemyAsteroids.forEach(asteroid => {
+        if (asteroid.exist && asteroid.moving && detectCircleCollision(STATE.ship, asteroid, -CONFIG.breathingRoom)) {
             gameOver();
-        } else if (asteroid.exist && asteroid.moving && detectCircleCollision(greyAst, asteroid, 0)) {
+        } else if (asteroid.exist && asteroid.moving && detectCircleCollision(STATE.asteroids.greyAst, asteroid, 0)) {
             AUDIO.playSFX('pop');
-            greyAst.generate();
+            STATE.asteroids.greyAst.generate();
         }
     })
     //collectibles
-    if (greyAst.exist && detectCircleCollision(ship, greyAst, 0)) {
+    if (STATE.asteroids.greyAst.exist && detectCircleCollision(STATE.ship, STATE.asteroids.greyAst, 0)) {
         STATE.score += STATE.scoreAmt; // TODO: move to asteroids themselves
         changeLevelUp();
         AUDIO.playSFX('pop');
-
-        greyAst.generate();
-        ship.setImmune(300);
+        
+        STATE.asteroids.greyAst.generate();
+        STATE.ship.setImmune(300);
     }
-    if (cheese.exist && detectCircleCollision(ship, cheese, 0)) {
+    if (STATE.asteroids.cheese.exist && detectCircleCollision(STATE.ship, STATE.asteroids.cheese, 0)) {
         STATE.score += STATE.scoreAmt * 5;
         changeLevelUp();
         AUDIO.playSFX('pop');
-        cheese.exist = false;
-
+        STATE.asteroids.cheese.exist = false;
+        
         STATE.sDCount = 1;
-        ship.speed = STATE.currentSpeed * (STATE.sDCount / 7);
+        STATE.ship.speed = STATE.currentSpeed * (STATE.sDCount / 7);
         clearInterval(STATE.sDInterval);
         STATE.sDInterval = setInterval(sDCounter, 1000);
     }
@@ -94,14 +85,14 @@ function detectAllCollisions() {
 function sDCounter() {
     if (STATE.sDCount > 2) { //break out of loop FIRST
         STATE.sDCount = 4; // cheeseCD image
-        ship.speed = STATE.currentSpeed; // speed
+        STATE.ship.speed = STATE.currentSpeed; // speed
         clearInterval(STATE.sDInterval); // interval
-        cheese.generate(); // cheese
+        STATE.asteroids.cheese.generate(); // cheese
         AUDIO.playSFX('ding');
     } else if (STATE.sDCount <= 5) {
         //update speed
         STATE.sDCount += 1;
-        ship.speed = STATE.currentSpeed * (STATE.sDCount / 7);
+        STATE.ship.speed = STATE.currentSpeed * (STATE.sDCount / 7);
     }
 }
 
@@ -110,38 +101,41 @@ let cheeseCD = new Image();
 cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png";
 let cheeseCDx = 900;
 let cheeseCDy = 80;
+export let cheeseTolerance = 80; //for cheese movement and range detection
 
-function handleAsteroids() { //moving & drawing asteroids as score goes up, every frame
-    STATE.drawAstArray.forEach(asteroid => {
+function handleAsteroids() { // moving & drawing asteroids as score goes up, every frame
+    Object.values(STATE.asteroids).forEach(asteroid => {
         if (asteroid.exist) {
             asteroid.update();
         }
     });
-    if (cheese.exist) {
-        if (detectCircleCollision(ship, cheese, cheeseTolerance)) {
-            moveToAway(ship, cheese, 0.2); //unique move function
+
+    if (STATE.asteroids.cheese.exist) {
+        if (detectCircleCollision(STATE.ship, STATE.asteroids.cheese, cheeseTolerance)) {
+            moveInRange(cheeseTolerance, STATE.asteroids.cheese, STATE.ship.speed * 0.2);
+            STATE.asteroids.cheese.detectBorderCollision();
         }
     }
-    cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png"; //!!!
+    cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png"; // TODO: sprite sheet
     ctx.drawImage(cheeseCD, cheeseCDx, cheeseCDy);
 
 }
 
-//animation
-//draw functions
+// animation
+// draw functions
 
 function drawScore() {
-    //Scoreboard rectangle (Drawn after everything so that it's always on top)
+    // Scoreboard rectangle (Drawn after everything so that it's always on top)
     ctx.fillStyle = "#cf8619"; //an orange colour to contrast the blue
     ctx.fillRect(0, 0, canvas.width, UI_DEFAULTS.SCOREBOARD_HEIGHT);
-    //Scoreboard border (so there is a nice blue border)
+    // Scoreboard border (so there is a nice blue border)
     ctx.beginPath();
     ctx.strokeStyle = "rgb(0, 1, 86)";
     ctx.lineWidth = "5"; //same values as the canvas width & border
     ctx.rect(0, 0, canvas.width, UI_DEFAULTS.SCOREBOARD_HEIGHT);
     ctx.stroke();
 
-    //Score text ("SCORE=___")
+    // Score text ("SCORE=___")
     ctx.font = "bold 38px impact";
     ctx.fillStyle = "darkblue";
     ctx.textAlign = "center";
@@ -163,21 +157,22 @@ function animate() { //game update
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas to save memory
 
         //display explosion (called on gameOver()) or selected skin
-        if (ship.exploding && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { //required for UI to work when opening skin menu
-            ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x - 96, ship.y - 96, ship.width, ship.height);
+        if (STATE.ship.exploding && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { // required for UI to work when opening skin menu
+            // TODO: make a built-in draw function for ship
+            STATE.ship.draw(STATE.ship.spriteWidth * STATE.ship.frameX, STATE.ship.spriteHeight * STATE.ship.frameY, STATE.ship.spriteWidth, STATE.ship.spriteHeight, STATE.ship.x - 96, STATE.ship.y - 96, STATE.ship.width, STATE.ship.height);
         }
         else {
             if (!uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { // allow rotation in Skins menu
-                ship.speed = 0;
-                ship.move();
+                STATE.ship.speed = 0;
+                STATE.ship.move();
             }
-            ship.image.src = "assets/sprites/" + SKINS_MAP[ship.currentSkin].spriteSheet;
-            ship.draw(ship.spriteWidth * ship.frameX, ship.spriteHeight * ship.frameY, ship.spriteWidth, ship.spriteHeight, ship.x, ship.y, ship.width, ship.height);
+            STATE.ship.image.src = "assets/sprites/" + SKINS_MAP[STATE.ship.currentSkin].spriteSheet;
+            STATE.ship.draw(STATE.ship.spriteWidth * STATE.ship.frameX, STATE.ship.spriteHeight * STATE.ship.frameY, STATE.ship.spriteWidth, STATE.ship.spriteHeight, STATE.ship.x, STATE.ship.y, STATE.ship.width, STATE.ship.height);
         }
 
-        if (CONFIG.playerControl) {
-            ship.move();
-            handleAsteroids(); //grey, red, cheese & plasma asteroids
+        if (STATE.playerControl) {
+            STATE.ship.move();
+            handleAsteroids(); // grey, red, cheese & plasma asteroids
             detectAllCollisions();
         }
 

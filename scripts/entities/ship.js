@@ -1,4 +1,4 @@
-// Represents a Player Ship, including movement and rendering
+// Represents a Player Ship, including movement and rendering logic
 
 // TODO: decouple more
 import { canvas, ctx } from "../dom.js";
@@ -10,12 +10,22 @@ import { SPRITES_PATH, SKINS_MAP } from "./entities.js";
 
 const EXPLOSION_PATH = "assets/sprites/BlueExplosionSS.png";
 
+const SHIP_CONFIG = {
+    baseWidth: 64,
+    baseHeight: 64,
+    ssWidth: 67,
+    ssHeight: 66,
+}
+
 class Ship {
     // Construct a Ship object given parameters as JSON, centered on the canvas.
     // Requires valid skinId (key of SKINS_MAP) and speed
-    constructor({skinId, speed, width = 64, height = 64, spriteWidth = 67, spriteHeight = 66,
-        showHitbox = false, allSkinsUnlocked = false,} = {}
-    ) {
+    constructor({
+        skinId, speed,
+        width = SHIP_CONFIG.baseWidth, height = SHIP_CONFIG.baseHeight,
+        spriteWidth = SHIP_CONFIG.ssWidth, spriteHeight = SHIP_CONFIG.ssHeight,
+        showHitbox = false, allSkinsUnlocked = false,
+    } = {}) {
         this.currentSkin = skinId;
         this.image = new Image();
         this.image.src = SPRITES_PATH + SKINS_MAP[skinId].spriteSheet;
@@ -24,7 +34,7 @@ class Ship {
         this.height = height;
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
-        
+
         this.x = canvas.width / 2 - this.width / 2;
         this.y = canvas.height / 2 - this.height / 2;
         this.radius = this.width / 2;
@@ -47,7 +57,7 @@ class Ship {
         const stored = window.localStorage.getItem('unlocks');
         if (!stored) return;
         const unlocked = JSON.parse(stored);
-        
+
         if (unlocked.includes(skinId) || this.allSkinsUnlocked) {
             this.currentSkin = skinId;
             window.localStorage.setItem('shipSkin', JSON.stringify(this.currentSkin));
@@ -118,7 +128,7 @@ class Ship {
                 this.frameX = 3; this.frameY = 1;
             } else if (this.rightPressed()) {   // UP RIGHT
                 this.x += diag; this.y -= diag;
-                this.frameX = 0;  this.frameY = 1;
+                this.frameX = 0; this.frameY = 1;
             } else {                            // UP
                 this.y -= s;
                 this.frameX = 0; this.frameY = 0;

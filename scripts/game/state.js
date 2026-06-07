@@ -24,9 +24,9 @@ export const STATE = {
     scores: [], // to be overriden
 
     // instances
-    ship: null, // TODO: set with entities/ship.js
-    drawAstArray: [],
-    enemyAstArray: [],
+    ship: null,
+    asteroids: {},
+    enemyAsteroids: [],
 
     // timers / intervals / cooldowns
     sDCount: 1,
