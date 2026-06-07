@@ -2,7 +2,6 @@
 import { CONFIG } from "./config.js";
 import { STATE, DEFAULT_STATE } from "./game/state.js";
 import { uiElements, uiElementsHidable, addUIElement, addUIElementHidable } from "./dom.js";
-import { keys } from "./game/input.js";
 import { kebabToCamel } from "./utils.js";
 import { ship, SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
 import { gameOver } from "./setup.js";
@@ -219,7 +218,6 @@ function eGTFlash() {
 }
 
 // TODO: move to inputs/handlers
-
 uiElements.closeButton.addEventListener('click', closeAll);
 uiElements.howToButton.addEventListener('click', () => openMenu(uiElements.howToButton, uiElementsHidable.howToScreen));
 
@@ -242,47 +240,11 @@ function openMenu(button, screen) {
     }
 }
 
-//navigation TODO: improve music menu, refactor
-function showPage(n) {
-    // d
-}
-function prevMusicPage() {
-    //if on page 1 go to page 3
-    if (!musicItems.musicPage1.classList.contains("hidden")) {
-        musicItems.musicPage1.classList.add("hidden");
-        musicItems.musicPage3.classList.remove("hidden");
-    }
-    //if on page 2 go to page 1
-    else if (!musicItems.musicPage2.classList.contains("hidden")) {
-        musicItems.musicPage2.classList.add("hidden");
-        musicItems.musicPage1.classList.remove("hidden");
-    }
-    //if on page 3 go to page 2
-    else if (!musicItems.musicPage3.classList.contains("hidden")) {
-        musicItems.musicPage3.classList.add("hidden");
-        musicItems.musicPage2.classList.remove("hidden");
-    }
-    AUDIO.playSFX('click');
-}
-function nextMusicPage() {
-    //if on page 1 go to page 2
-    if (!musicItems.musicPage1.classList.contains("hidden")) {
-        musicItems.musicPage1.classList.add("hidden");
-        musicItems.musicPage2.classList.remove("hidden");
-    }
-    //if on page 2 go to page 3
-    else if (!musicItems.musicPage2.classList.contains("hidden")) {
-        musicItems.musicPage2.classList.add("hidden");
-        musicItems.musicPage3.classList.remove("hidden");
-    }
-    //if on page 3 go to page 1
-    else if (!musicItems.musicPage3.classList.contains("hidden")) {
-        musicItems.musicPage3.classList.add("hidden");
-        musicItems.musicPage1.classList.remove("hidden");
-    }
-    AUDIO.playSFX('click');
-}
-//--------------
+
+// ------------------------------------- MUSIC MENU ------------------------------------
+let musicPages = [];
+let currMusicPage = 1;
+
 const musicData = {
     page1: [
         {
@@ -387,6 +349,18 @@ const musicData = {
         },
     ]
 };
+
+function showPage(pageNum) {
+    const max = musicPages.length;
+    if (pageNum < 1) pageNum = max;
+    if (pageNum > max) pageNum = 1;
+    currMusicPage = pageNum;
+    uiElementsHidable.musicMenuScreen.querySelectorAll('.music-page')
+        .forEach((element, idx) => {
+            element.classList.toggle('hidden', (idx + 1) !== currMusicPage);
+        });
+}
+
 function createMusicTile(song) {
     const div = document.createElement('div');
     div.className = 'music-tile';
@@ -399,14 +373,33 @@ function createMusicTile(song) {
     return div;
 }
 
-function createMusicPage(pageNumber, isHidden = false) {
+function createMusicHeader() {
+    const header = document.createElement('h2');
+    const prevButton = document.createElement('button');
+    prevButton.classList.add('prev-page-button');
+    prevButton.textContent = "◀";
+    prevButton.addEventListener('click', () => showPage(currMusicPage - 1));
+
+    const nextButton = document.createElement('button');
+    nextButton.classList.add('next-page-button');
+    nextButton.textContent = "▶";
+    nextButton.addEventListener('click', () => showPage(currMusicPage + 1));
+
+    header.append(prevButton);
+    header.append(' MUSIC ');
+    header.append(nextButton);
+    return header;
+}
+
+function createMusicPage(pageNumber, show = false) {
+    musicPages.push(pageNumber);
     const pageSongs = musicData[`page${pageNumber}`];
     const row1Data = pageSongs.slice(0, 3);
     const row2Data = pageSongs.slice(3, 6);
 
     const div = document.createElement('div');
-    div.classList.add(`music-page${pageNumber}`);
-    if (isHidden) {
+    div.classList.add('music-page');
+    if (!show) {
         div.classList.add('hidden');
     }
 
@@ -424,8 +417,9 @@ function createMusicPage(pageNumber, isHidden = false) {
 }
 
 function createMusicCreditsPage(pageNumber) {
+    musicPages.push(pageNumber);
     const div = document.createElement('div');
-    div.classList.add(`music-page${pageNumber}`, 'hidden');
+    div.classList.add('music-page', 'hidden');
 
     const heading = document.createElement('h5');
     heading.innerHTML = '<u>Menu/Loading Music</u>';
@@ -469,41 +463,27 @@ function createMusicCreditsPage(pageNumber) {
 }
 
 const musicMount = document.getElementById('music-mount');
-const musicScreen = document.createElement('div'); // needs to exist outside scope
 function initMusicScreen() {
+    const musicScreen = document.createElement('div');
     musicScreen.classList.add('music-screen', 'fs32', 'hidden');
 
-    const heading = `
-        <h2>
-            <button class="prev-page-button">◀</button> 
-            MUSIC 
-            <button class="next-page-button">▶</button>
-        </h2>
-    `;
-
-    const page1 = createMusicPage(1);
-    const page2 = createMusicPage(2, true);
+    const header = createMusicHeader();
+    const page1 = createMusicPage(1, true);
+    const page2 = createMusicPage(2);
     const page3 = createMusicCreditsPage(3);
 
-    musicScreen.innerHTML = `
-    ${heading}
-    `;
+    musicScreen.appendChild(header);
     musicScreen.appendChild(page1);
     musicScreen.appendChild(page2);
     musicScreen.appendChild(page3);
 
     musicMount.replaceChildren(musicScreen);
+    addUIElementHidable('musicMenuScreen', musicScreen);
 }
 
 initMusicScreen(); // TODO: move to main
 
-
-
-// ----------------------------- SKINS ------------------------------------------
-
-
-
-
+// ----------------------------- SKINS MENU ------------------------------------------
 export const BKG_PATH = "assets/backgrounds/";
 export const BKG_SKINS_MAP = {
     blueSpace: {
@@ -566,7 +546,7 @@ export const BKG_SKINS_MAP = {
     },
 };
 
-// Persistence TODO: move to dedicated?
+// Persistence TODO: move to dedicated module
 
 //BKG RETRIEVAL
 function retrieveBackground() {
@@ -633,9 +613,9 @@ function createBkgImage(id) {
     return wrap;
 }
 
-const skinsScreen = document.createElement('div'); // needs to exist outside scope
 const skinsMount = document.getElementById('skins-mount');
 function initSkinScreen() {
+    const skinsScreen = document.createElement('div'); // needs to exist outside scope
     skinsScreen.classList.add('skins-menu-screen', 'fs32', 'hidden');
     skinsScreen.innerHTML = `<h2>SKINS</h2>`;
 
@@ -704,42 +684,12 @@ export function updateUnlocks() {
     updateSkinUnlocks();
 }
 
-
-// TODO: get this working dynamically?
-const musicSelectors = [
-    '.prev-page-button',
-    '.next-page-button',
-    '.music-page1',
-    '.music-page2',
-    '.music-page3',
-];
-const musicItems = {};
-
-musicSelectors.forEach(selector => {
-    const className = selector.substring(1);
-    const variableName = kebabToCamel(className);
-
-    musicItems[variableName] = document.querySelector(selector);
-});
-
-uiElements.musicButton.addEventListener('click', () => openMenu(uiElements.musicButton, musicScreen));
-musicItems.prevPageButton.addEventListener('click', prevMusicPage);
-musicItems.nextPageButton.addEventListener('click', nextMusicPage);
-
-//deviceButton.addEventListener('click', changeDevice);
+uiElements.musicButton.addEventListener('click', () => openMenu(uiElements.musicButton, uiElementsHidable.musicMenuScreen));
 uiElements.skinsButton.addEventListener('click', () => openMenu(uiElements.skinsButton, uiElementsHidable.skinsMenuScreen));
 uiElements.audioButton.addEventListener('click', openAudioMenu);
+//deviceButton.addEventListener('click', changeDevice);
 
 uiElements.scoreAnchor.addEventListener('click', toggleScores);
-
-//keyboard
-window.addEventListener("keydown", function (e) { //creates an array to detect keys
-    keys[e.key] = true;
-    //console.log(e.key);
-});
-window.addEventListener("keyup", function (e) { //deletes any keys in the array to save memory
-    delete keys[e.key];
-});
 
 function onFirstInteraction() {
     AUDIO.retrieveAudioSettings(); // TODO: move to main
