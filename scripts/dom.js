@@ -1,10 +1,10 @@
 // Handles UI element selection & DOM
-import kebabToCamel from "./utils.js";
+import { kebabToCamel } from "./utils.js";
 import { AUDIO } from "./audio.js";
 
 //canvas
 // const canvasContainer = document.querySelector('.canvas-container');
-const canvas = document.getElementById('canvas');
+export const canvas = document.getElementById('canvas');
 export const ctx = canvas.getContext("2d");
 canvas.width = 1000;
 canvas.height = 700;

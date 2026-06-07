@@ -3,8 +3,9 @@ import { CONFIG } from "./config.js";
 import { STATE, DEFAULT_STATE } from "./game/state.js";
 import { uiElements, uiElementsHidable, addUIElement, addUIElementHidable } from "./dom.js";
 import { keys } from "./game/input.js";
-import kebabToCamel from "./utils.js";
-import { ship, gameOver } from "./setup.js";
+import { kebabToCamel } from "./utils.js";
+import { ship, SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
+import { gameOver } from "./setup.js";
 import { AUDIO } from "./audio.js";
 
 export const UI_DEFAULTS = {
@@ -500,56 +501,8 @@ initMusicScreen(); // TODO: move to main
 
 // ----------------------------- SKINS ------------------------------------------
 
-export const SPRITES_PATH = "assets/sprites/";
-export const SKINS_MAP = {
-    alpha: {
-        unlockedImage: "shipAlpha.png",
-        lockedImage: null,
-        spriteSheet: "alphaSS1.png",
-        isLocked: false,
-        cssClass: "alpha-skin"
-    },
 
-    beta: {
-        unlockedImage: "shipBeta.png",
-        lockedImage: null,
-        spriteSheet: "betaSS1.png",
-        isLocked: false,
-        cssClass: "beta-skin"
-    },
 
-    ufo: {
-        unlockedImage: "shipUFO.png",
-        lockedImage: null,
-        spriteSheet: "ufoSS1.png",
-        isLocked: false,
-        cssClass: "ufo-skin"
-    },
-
-    snake: {
-        unlockedImage: "shipSnake.png",
-        lockedImage: "shipSnakeLocked.png",
-        spriteSheet: "snakeSS1.png",
-        isLocked: true,
-        cssClass: "snake-skin"
-    },
-
-    inverted: {
-        unlockedImage: "shipAlphaInverted.png",
-        lockedImage: "shipAlphaInvertedLocked.png",
-        spriteSheet: "alphaInvertedSS1.png",
-        isLocked: true,
-        cssClass: "inverted-skin"
-    },
-
-    asteroid: {
-        unlockedImage: "Asteroid.png",
-        lockedImage: "AsteroidLocked.png",
-        spriteSheet: "asteroidSS1.png",
-        isLocked: true,
-        cssClass: "asteroid-skin"
-    }
-};
 
 export const BKG_PATH = "assets/backgrounds/";
 export const BKG_SKINS_MAP = {

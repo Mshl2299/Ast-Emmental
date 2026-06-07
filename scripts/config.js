@@ -1,7 +1,7 @@
 // Represents global variables and configuration settings
 
 export const CONFIG = {
-    showDebug: false,
+    showHitboxes: false,
     superspeed: false,
     unlockAll: false,
     godmode: false,

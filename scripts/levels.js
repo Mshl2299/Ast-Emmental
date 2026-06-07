@@ -1,5 +1,6 @@
 import { STATE, DEFAULT_STATE } from "./game/state.js";
-import { ship, cheese, ASTEROIDS } from "./setup.js";
+import { ship } from "./entities/entities.js";
+import { cheese, ASTEROIDS } from "./setup.js";
 import { AUDIO } from "./audio.js";
 
 //Changes to ship & asteroids as score increases
@@ -77,15 +78,19 @@ function updateStateAndShipSpeed(speed) {
     ship.speed = STATE.currentSpeed;
 }
 
+// Advances game phase based on STATE.score
 export function changeLevelUp() {
     for (let i = 0; i < GAME_PHASES_CONFIG.length; i++) {
         const config = GAME_PHASES_CONFIG[i];
 
         if (STATE.score >= config.scoreThresh) {
-            if (STATE.sDInterval) return; // currently in slowdown
             const newSpeed = config.newSpeed;
-            if (newSpeed && (STATE.currentSpeed < newSpeed)) {
-                updateStateAndShipSpeed(newSpeed);
+            if (STATE.sDInterval) {
+                STATE.currentSpeed = newSpeed;
+            } else {
+                if (newSpeed && (STATE.currentSpeed < newSpeed)) {
+                    updateStateAndShipSpeed(newSpeed);
+                }
             }
             if (typeof config.action === 'function') config.action();
         }

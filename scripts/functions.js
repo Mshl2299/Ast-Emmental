@@ -2,8 +2,9 @@
 import { CONFIG } from "./config.js";
 import { STATE } from "./game/state.js";
 import { ctx, uiElementsHidable } from "./dom.js";
-import { ship, greyAst, cheese, drawAstArray, enemyAstArray, gameOver } from "./setup.js";
-import { UI_DEFAULTS, SKINS_MAP } from "./ui.js";
+import { ship, SKINS_MAP } from "./entities/entities.js";
+import { greyAst, cheese, gameOver } from "./setup.js";
+import { UI_DEFAULTS } from "./ui.js";
 import { AUDIO } from "./audio.js";
 import { changeLevelUp } from "./levels.js";
 
@@ -59,7 +60,7 @@ export function moveToAway(player, obstacle, speedFactor) {
 
 function detectAllCollisions() {
     //reds; gameover 
-    enemyAstArray.forEach(asteroid => {
+    STATE.enemyAstArray.forEach(asteroid => {
         if (asteroid.exist && asteroid.moving && detectCircleCollision(ship, asteroid, -CONFIG.breathingRoom)) {
             gameOver();
         } else if (asteroid.exist && asteroid.moving && detectCircleCollision(greyAst, asteroid, 0)) {
@@ -111,7 +112,7 @@ let cheeseCDx = 900;
 let cheeseCDy = 80;
 
 function handleAsteroids() { //moving & drawing asteroids as score goes up, every frame
-    drawAstArray.forEach(asteroid => {
+    STATE.drawAstArray.forEach(asteroid => {
         if (asteroid.exist) {
             asteroid.update();
         }

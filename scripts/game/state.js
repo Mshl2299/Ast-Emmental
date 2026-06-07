@@ -1,5 +1,7 @@
-// Runtime state variables
+// Runtime state variables & State retrieval
 // import { STATE } from "./game/state.js";
+
+// TODO: bake default skins using SKINS_MAP so you don't need to store values in DEFAULT_STATE
 export const DEFAULT_STATE = {
     score: 0,
     scoreAmt: 1,
@@ -33,3 +35,11 @@ export const STATE = {
     // misc runtime flags
     playerImmune: false,
 };
+
+// TODO: call in main
+export function retrieveUnlocks() {
+    const stored = window.localStorage.getItem('unlocks');
+    if (!stored) return;
+    STATE.unlocks = JSON.parse(stored);
+    console.log("Unlocked Sprites retrieved.")
+}
