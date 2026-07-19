@@ -52,6 +52,7 @@ class Ship {
     }
 
     // Sets current skin given string (key of SKINS_MAP, ie 'alpha') if unlocked or config allows
+    // and updates actual ship image
     // TODO: Move to unified retireval/decouple from window.localStorage and AUDIO
     changeSkin(skinId) {
         const stored = window.localStorage.getItem('unlocks');
@@ -60,6 +61,7 @@ class Ship {
 
         if (unlocked.includes(skinId) || this.allSkinsUnlocked) {
             this.currentSkin = skinId;
+            this.image.src = SPRITES_PATH + SKINS_MAP[this.currentSkin].spriteSheet;
             window.localStorage.setItem('shipSkin', JSON.stringify(this.currentSkin));
             AUDIO.playSFX('click');
         }

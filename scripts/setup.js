@@ -7,7 +7,7 @@ Sprites
 Start game & Game over
 */
 import { CONFIG } from "./config.js";
-import { STATE, DEFAULT_STATE } from "./game/state.js";
+import { STATE, resetStartState } from "./game/state.js";
 import { uiElements, uiElementsHidable } from "./dom.js";
 import { updateScoresHTML, updateUnlocks } from "./ui.js";
 import { SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
@@ -37,11 +37,10 @@ if (CONFIG.scoreOverride) { // TODO: move to main
 
 //start & end functions
 function startGame() { //reset values
-    STATE.score = 0;
-    //reset levelup changes
-    Object.values(STATE.asteroids).forEach(asteroid => {
-        asteroid.exist = false;
-    })    
+    if (!STATE.userInteracted) {
+        return
+    };
+    resetStartState();
     
     //Reset ship
     STATE.ship.image.src = SPRITES_PATH + SKINS_MAP[STATE.ship.currentSkin].spriteSheet;
@@ -49,13 +48,7 @@ function startGame() { //reset values
 
     if (CONFIG.superspeed) {
         STATE.currentSpeed = 20;
-    } else {
-        STATE.currentSpeed = DEFAULT_STATE.currentSpeed;
     }
-    STATE.ship.speed = STATE.currentSpeed;
-    STATE.ship.immunity = false;
-    STATE.ship.exploding = false;
-    
     
     //hide ui
     uiElements.startButton.classList.add('hidden');
@@ -69,10 +62,8 @@ function startGame() { //reset values
     //deviceButton.classList.add('greyed');
 
     AUDIO.switchToBkg();
-    STATE.asteroids.greyAst.generate();
-
+    STATE.asteroids.friend.greyAst.generate();
     STATE.playerControl = true;
-    console.log(STATE)
 }
 
 
@@ -87,6 +78,7 @@ export function gameOver() {
     AUDIO.switchToMenu();
 
     clearInterval(STATE.sDInterval);
+    STATE.sDInterval = null;
     STATE.sDCount = 1;
     handleScore(STATE.score);
     //display UI

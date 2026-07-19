@@ -50,44 +50,45 @@ export function moveInRange(tolerance, obstacle, speed) {
 }
 
 function detectAllCollisions() {
-    //reds; gameover 
-    STATE.enemyAsteroids.forEach(asteroid => {
+    // enemies trigger gameover
+    Object.values(STATE.asteroids.enemy).forEach(asteroid => {
         if (asteroid.exist && asteroid.moving && detectCircleCollision(STATE.ship, asteroid, -CONFIG.breathingRoom)) {
             gameOver();
-        } else if (asteroid.exist && asteroid.moving && detectCircleCollision(STATE.asteroids.greyAst, asteroid, 0)) {
+        } else if (asteroid.exist && asteroid.moving && detectCircleCollision(STATE.asteroids.friend.greyAst, asteroid, 0)) {
             AUDIO.playSFX('pop');
-            STATE.asteroids.greyAst.generate();
+            STATE.asteroids.friend.greyAst.generate();
         }
     })
-    //collectibles
-    if (STATE.asteroids.greyAst.exist && detectCircleCollision(STATE.ship, STATE.asteroids.greyAst, 0)) {
-        STATE.score += STATE.scoreAmt; // TODO: move to asteroids themselves
+    // friends give points
+    if (STATE.asteroids.friend.greyAst.exist && detectCircleCollision(STATE.ship, STATE.asteroids.friend.greyAst, 0)) {
+        STATE.score += STATE.scoreAmt; // TODO: refactor
         changeLevelUp();
         AUDIO.playSFX('pop');
         
-        STATE.asteroids.greyAst.generate();
+        STATE.asteroids.friend.greyAst.generate();
         STATE.ship.setImmune(300);
     }
-    if (STATE.asteroids.cheese.exist && detectCircleCollision(STATE.ship, STATE.asteroids.cheese, 0)) {
+    if (STATE.asteroids.friend.cheese.exist && detectCircleCollision(STATE.ship, STATE.asteroids.friend.cheese, 0)) {
         STATE.score += STATE.scoreAmt * 5;
         changeLevelUp();
         AUDIO.playSFX('pop');
-        STATE.asteroids.cheese.exist = false;
+        STATE.asteroids.friend.cheese.exist = false;
         
         STATE.sDCount = 1;
         STATE.ship.speed = STATE.currentSpeed * (STATE.sDCount / 7);
+
         clearInterval(STATE.sDInterval);
         STATE.sDInterval = setInterval(sDCounter, 1000);
     }
 }
 
-//slowDown effect
+// Slow down effect & cheese regeneration
 function sDCounter() {
-    if (STATE.sDCount > 2) { //break out of loop FIRST
-        STATE.sDCount = 4; // cheeseCD image
-        STATE.ship.speed = STATE.currentSpeed; // speed
-        clearInterval(STATE.sDInterval); // interval
-        STATE.asteroids.cheese.generate(); // cheese
+    if (STATE.sDCount > 2) {
+        STATE.sDCount = 4;
+        STATE.ship.speed = STATE.currentSpeed;
+        clearInterval(STATE.sDInterval);
+        STATE.asteroids.friend.cheese.generate();
         AUDIO.playSFX('ding');
     } else if (STATE.sDCount <= 5) {
         //update speed
@@ -104,16 +105,18 @@ let cheeseCDy = 80;
 export let cheeseTolerance = 80; //for cheese movement and range detection
 
 function handleAsteroids() { // moving & drawing asteroids as score goes up, every frame
-    Object.values(STATE.asteroids).forEach(asteroid => {
-        if (asteroid.exist) {
-            asteroid.update();
-        }
+    Object.keys(STATE.asteroids).forEach(category => {
+        Object.values(STATE.asteroids[category]).forEach(asteroid => {
+            if (asteroid && asteroid.exist) {
+                asteroid.update();
+            }
+        });
     });
 
-    if (STATE.asteroids.cheese.exist) {
-        if (detectCircleCollision(STATE.ship, STATE.asteroids.cheese, cheeseTolerance)) {
-            moveInRange(cheeseTolerance, STATE.asteroids.cheese, STATE.ship.speed * 0.2);
-            STATE.asteroids.cheese.detectBorderCollision();
+    if (STATE.asteroids.friend.cheese.exist) {
+        if (detectCircleCollision(STATE.ship, STATE.asteroids.friend.cheese, cheeseTolerance)) {
+            moveInRange(cheeseTolerance, STATE.asteroids.friend.cheese, STATE.ship.speed * 0.2);
+            STATE.asteroids.friend.cheese.detectBorderCollision();
         }
     }
     cheeseCD.src = "assets/sprites/cheeseCooldown" + JSON.stringify(STATE.sDCount) + ".png"; // TODO: sprite sheet
@@ -156,17 +159,15 @@ function animate() { //game update
         then = now - (elapsed % fpsInterval); //reset timer
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas to save memory
 
-        //display explosion (called on gameOver()) or selected skin
+        // display explosion (called on gameOver()) or selected skin (allowing rotation)
         if (STATE.ship.exploding && uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { // required for UI to work when opening skin menu
-            // TODO: make a built-in draw function for ship
+            // TODO: make a built-in draw function for ship explosion
             STATE.ship.draw(STATE.ship.spriteWidth * STATE.ship.frameX, STATE.ship.spriteHeight * STATE.ship.frameY, STATE.ship.spriteWidth, STATE.ship.spriteHeight, STATE.ship.x - 96, STATE.ship.y - 96, STATE.ship.width, STATE.ship.height);
-        }
-        else {
+        } else {
             if (!uiElementsHidable.skinsMenuScreen.classList.contains('hidden')) { // allow rotation in Skins menu
                 STATE.ship.speed = 0;
                 STATE.ship.move();
             }
-            STATE.ship.image.src = "assets/sprites/" + SKINS_MAP[STATE.ship.currentSkin].spriteSheet;
             STATE.ship.draw(STATE.ship.spriteWidth * STATE.ship.frameX, STATE.ship.spriteHeight * STATE.ship.frameY, STATE.ship.spriteWidth, STATE.ship.spriteHeight, STATE.ship.x, STATE.ship.y, STATE.ship.width, STATE.ship.height);
         }
 
@@ -177,7 +178,7 @@ function animate() { //game update
         }
 
         drawScore();
-        AUDIO.updateVolume(); //sound effects & music volume
+        AUDIO.updateVolume(); // sound effects & music volume
     }
 
     requestAnimationFrame(animate);

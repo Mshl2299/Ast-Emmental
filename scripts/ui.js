@@ -67,8 +67,7 @@ function clearData() {
 
     updateScoresHTML();
 
-    STATE.unlocks = DEFAULT_STATE.unlocks;
-    STATE.score = DEFAULT_STATE.score;
+    Object.assign(STATE, DEFAULT_STATE);
     STATE.ship.resetSkin();
     resetBkgImg();
 

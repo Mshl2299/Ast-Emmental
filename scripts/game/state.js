@@ -1,7 +1,8 @@
 // Runtime state variables & State retrieval
 // import { STATE } from "./game/state.js";
 
-// TODO: bake default skins using SKINS_MAP so you don't need to store values in DEFAULT_STATE
+// TODO: bake default skin unlocks using SKINS_MAP so you don't need to store values in DEFAULT_STATE
+// Values that override on data reset
 export const DEFAULT_STATE = {
     score: 0,
     scoreAmt: 1,
@@ -25,8 +26,7 @@ export const STATE = {
 
     // instances
     ship: null,
-    asteroids: {},
-    enemyAsteroids: [],
+    asteroids: { friend: {}, enemy: {} },
 
     // timers / intervals / cooldowns
     sDCount: 1,
@@ -42,4 +42,26 @@ export function retrieveUnlocks() {
     if (!stored) return;
     STATE.unlocks = JSON.parse(stored);
     console.log("Unlocked Sprites retrieved.")
+}
+
+// Resets the state to be ready for new game start
+// Ship image resets done outside
+export function resetStartState() {
+    STATE.score = 0;
+    STATE.level = 0;
+
+    //reset levelup changes
+    Object.keys(STATE.asteroids).forEach(category => {
+        Object.values(STATE.asteroids[category]).forEach(asteroid => {
+            if (asteroid) {
+                asteroid.exist = false;
+            }
+        });
+    });
+    console.log(STATE); //DEBUG
+
+    STATE.currentSpeed = DEFAULT_STATE.currentSpeed;
+    STATE.ship.speed = STATE.currentSpeed;
+    STATE.ship.immunity = false;
+    STATE.ship.exploding = false;
 }

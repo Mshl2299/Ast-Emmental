@@ -119,42 +119,25 @@ const ship = new Ship({
     allSkinsUnlocked: CONFIG.unlockAll
 });
 
-let greyAst = new Asteroid(AST_DATA.greyAst);
-let cheese = new Cheese(AST_DATA.cheese);
-// let plasma = new Asteroid(AST_DATA.plasma);
-let redAst1 = new Asteroid(AST_DATA.redAst1);
-let redAst2 = new Asteroid(AST_DATA.redAst2);
-let redAst3 = new Asteroid(AST_DATA.redAst3);
-let redAst4 = new Asteroid(AST_DATA.redAst4);
+var astObs = {
+    greyAst: new Asteroid(AST_DATA.greyAst),
+    cheese: new Cheese(AST_DATA.cheese),
+    // plasma: new Asteroid(AST_DATA.plasma),
+    redAst1: new Asteroid(AST_DATA.redAst1),
+    redAst2: new Asteroid(AST_DATA.redAst2),
+    redAst3: new Asteroid(AST_DATA.redAst3),
+    redAst4: new Asteroid(AST_DATA.redAst4)
+};
 
 STATE.ship = ship;
-STATE.asteroids = {
-    greyAst: greyAst,
-    cheese: cheese,
-    redAst1: redAst1,
-    redAst2: redAst2,
-    redAst3: redAst3,
-    redAst4: redAst4
-};
 
 Object.keys(AST_DATA).forEach(key => {
     if (AST_DATA[key].isEnemy) {
-        STATE.enemyAsteroids.push(STATE.asteroids[key]);
+        STATE.asteroids.enemy[key] = astObs[key];
+    } else {
+        STATE.asteroids.friend[key] = astObs[key];
     }
 });
-
-// export let greyAst = new Asteroid("assets/sprites/Asteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, 0, 0, 0, 30)
-
-// let redAst = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth, AST_CONFIG.baseHeight, 2, -1, 1, 50, true);
-// let redAst2 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 2, AST_CONFIG.baseHeight * 2, 1.5, -1, -1, 50, true);
-// let redAst3 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 3, AST_CONFIG.baseHeight * 3, 1, 1, 1, 100, true);
-// let redAst4 = new Asteroid("assets/sprites/redAsteroid.png", AST_CONFIG.baseWidth * 1.5, AST_CONFIG.baseHeight * 1.5, 3, 1, -1, 100, true);
-// Yellow Slowdown High Reward
-// export let cheese = new Asteroid("assets/sprites/cheese.png", AST_CONFIG.baseWidth / 2, AST_CONFIG.baseHeight / 2, 0, 0, 0, 30);
-
-// Blue Powerup !!! TODO
-//let plasma = new Asteroid("assets/sprites/cheese.png", astWidth / 3, astHeight / 3, false);
-// shield effect
 
 // SHIP SPRITE RETRIEVAL
 function retrieveShipSkin() {
