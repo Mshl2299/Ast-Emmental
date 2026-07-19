@@ -5,8 +5,8 @@ import { canvas, ctx } from "../dom.js";
 import { detectBorderCollision } from "../functions.js";
 import { drawCircle } from "../utils.js";
 import { AUDIO } from "../audio.js";
-import { SPRITES_PATH } from "./entities.js";
-import { UI_DEFAULTS } from "../ui.js";
+import { SPRITES_PATH } from "../ui/skins.js";
+import { UI_DEFAULTS } from "../ui/ui.js";
 import { CONFIG } from "../config.js";
 
 export const AST_CONFIG = {

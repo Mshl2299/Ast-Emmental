@@ -5,7 +5,7 @@ export const CONFIG = {
     superspeed: false,
     unlockAll: false,
     godmode: false,
-    scoreOverride: null, // set to null if no override
+    scoreOverride: 100, // set to null if no override
     breathingRoom: 5, // collision forgiveness
 }
 

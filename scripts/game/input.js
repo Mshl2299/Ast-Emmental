@@ -1,4 +1,4 @@
-// Keyboard and touch handlers
+// Keyboard, mouse/touch handlers
 // DOM EventListeners should be in dom.js
 
 // Keyboard inputs

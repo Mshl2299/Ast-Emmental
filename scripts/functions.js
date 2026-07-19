@@ -2,9 +2,8 @@
 import { CONFIG } from "./config.js";
 import { STATE } from "./game/state.js";
 import { ctx, canvas, uiElementsHidable } from "./dom.js";
-import { SKINS_MAP } from "./entities/entities.js";
 import { gameOver } from "./setup.js";
-import { UI_DEFAULTS } from "./ui.js";
+import { UI_DEFAULTS } from "./ui/ui.js";
 import { AUDIO } from "./audio.js";
 import { changeLevelUp } from "./levels.js";
 
@@ -147,7 +146,7 @@ function drawScore() {
 
 
 let now, then, elapsed, fpsInterval, startTime;
-function startAnimating(fps) {
+export function startAnimating(fps) {
     fpsInterval = 1000 / fps;
     then = Date.now();
     animate();
@@ -183,10 +182,3 @@ function animate() { //game update
 
     requestAnimationFrame(animate);
 }
-
-
-
-startAnimating(60);
-
-
-console.log("Load Complete: " + Math.round(performance.now()) + " ms");

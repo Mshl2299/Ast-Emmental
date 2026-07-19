@@ -24,45 +24,6 @@ export const AUDIO = {
         audio.play();
     },
 
-    // Retrieve and apply audio settings from localStorage
-    // uiElements should contain: sfxRange, musicRange, sfxToggleButton, musicToggleButton
-    retrieveAudioSettings() {
-        // SFX volume
-        if (window.localStorage.getItem("sfxRange")) {
-            uiElements.sfxRange.value = JSON.parse(window.localStorage.getItem("sfxRange"));
-        } else {
-            uiElements.sfxRange.value = "100";
-            window.localStorage.setItem("sfxRange", JSON.stringify(uiElements.sfxRange.value));
-        }
-
-        // MUSIC volume
-        if (window.localStorage.getItem("musicRange")) {
-            uiElements.musicRange.value = JSON.parse(window.localStorage.getItem("musicRange"));
-        } else {
-            uiElements.musicRange.value = "50";
-            window.localStorage.setItem("musicRange", JSON.stringify(uiElements.musicRange.value));
-        }
-
-        // BKG MUSIC
-        if (!window.localStorage.getItem("bkgMusic")) {
-            this.bkgMusic.src = "assets/audio/rainingBitsGundatsch.ogg";
-            window.localStorage.setItem("bkgMusic", JSON.stringify(this.bkgMusic.src));
-        } else {
-            this.bkgMusic.src = JSON.parse(window.localStorage.getItem("bkgMusic"));
-        }
-
-        // MENU MUSIC
-        if (!window.localStorage.getItem("menuMusic")) {
-            this.randomizeMenuMusic();
-            window.localStorage.setItem("menuMusic", JSON.stringify(this.menuMusic.src));
-        } else {
-            this.menuMusic.src = JSON.parse(window.localStorage.getItem("menuMusic"));
-        }
-
-        // Apply initial volumes and UI icons
-        this.updateVolume(uiElements);
-    },
-
     // Change background music source
     changeBkgMusic(source) {
         this.bkgMusic.pause();
@@ -111,10 +72,10 @@ export const AUDIO = {
     },
 
     // Update volumes and UI; expects uiElements as in retrieveAudioSettings
-    // Called every frame
+    // Called every frame, TODO: fix audio settings persistence
     updateVolume() {
         const sfxVal = Number(uiElements.sfxRange?.value ?? 100);
-        const musicVal = Number(uiElements.musicRange?.value ?? 50);
+        const musicVal = Number(uiElements.musicRange?.value ?? 50); // TODO
 
         this.sfxVolume = sfxVal / 100;
         this.bkgMusic.volume = musicVal / 180;
@@ -129,9 +90,6 @@ export const AUDIO = {
             if (musicVal > 0) uiElements.musicToggleButton.src = "assets/images/musicUnmuted.jpg";
             else uiElements.musicToggleButton.src = "assets/images/musicMuted.png";
         }
-
-        window.localStorage.setItem("sfxRange", JSON.stringify(String(sfxVal)));
-        window.localStorage.setItem("musicRange", JSON.stringify(String(musicVal)));
     },
 };
 

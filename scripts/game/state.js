@@ -15,7 +15,6 @@ export const DEFAULT_STATE = {
 export const STATE = {
     score: 0,
     scoreAmt: 1,
-    level: 0,
     currentSpeed: 3, // speed variable that will change TODO: base speed
 
     userInteracted: false, // audio autoplay
@@ -30,25 +29,16 @@ export const STATE = {
 
     // timers / intervals / cooldowns
     sDCount: 1,
-    sDInterval: null,      // slowdown cooldown interval id
+    sDInterval: null, // slowdown cooldown interval id
 
     // misc runtime flags
-    playerImmune: false,
+    playerImmune: false, // TODO: use? remove?
 };
 
-// TODO: call in main
-export function retrieveUnlocks() {
-    const stored = window.localStorage.getItem('unlocks');
-    if (!stored) return;
-    STATE.unlocks = JSON.parse(stored);
-    console.log("Unlocked Sprites retrieved.")
-}
-
 // Resets the state to be ready for new game start
-// Ship image resets done outside
+// Ship image resets done separately
 export function resetStartState() {
     STATE.score = 0;
-    STATE.level = 0;
 
     //reset levelup changes
     Object.keys(STATE.asteroids).forEach(category => {
@@ -58,7 +48,6 @@ export function resetStartState() {
             }
         });
     });
-    console.log(STATE); //DEBUG
 
     STATE.currentSpeed = DEFAULT_STATE.currentSpeed;
     STATE.ship.speed = STATE.currentSpeed;

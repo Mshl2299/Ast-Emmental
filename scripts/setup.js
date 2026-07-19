@@ -9,9 +9,10 @@ Start game & Game over
 import { CONFIG } from "./config.js";
 import { STATE, resetStartState } from "./game/state.js";
 import { uiElements, uiElementsHidable } from "./dom.js";
-import { updateScoresHTML, updateUnlocks } from "./ui.js";
-import { SPRITES_PATH, SKINS_MAP } from "./entities/entities.js";
+import { updateScoresHTML, updateUnlocks } from "./ui/ui.js";
+import { SPRITES_PATH, SKINS_MAP } from "./ui/skins.js";
 import { AUDIO } from "./audio.js";
+import { storeLocalScores } from "./persistence.js";
 
 //-------------------------------SPRITES & OBJECTS----------------------------
 
@@ -26,17 +27,13 @@ function handleScore(newScore) {
     }
 
     updateScoresHTML();
-    window.localStorage.setItem('localScores', JSON.stringify(STATE.scores));
+    storeLocalScores();
 
     updateUnlocks();
 }
 
-if (CONFIG.scoreOverride) { // TODO: move to main
-    STATE.scoreAmt = CONFIG.scoreOverride;
-}
-
 //start & end functions
-function startGame() { //reset values
+export function startGame() { //reset values
     if (!STATE.userInteracted) {
         return
     };
@@ -91,6 +88,3 @@ export function gameOver() {
     uiElements.resetDataButton.classList.remove('greyed');
     //deviceButton.classList.remove('greyed');
 }
-
-// TODO: move to inputs/handlers
-uiElements.startButton.addEventListener('click', startGame);

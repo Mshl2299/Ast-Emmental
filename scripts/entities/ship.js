@@ -2,11 +2,13 @@
 
 // TODO: decouple more
 import { canvas, ctx } from "../dom.js";
-import { UI_DEFAULTS } from "../ui.js";
+import { UI_DEFAULTS } from "../ui/ui.js";
 import { AUDIO } from "../audio.js";
 import { keys } from "../game/input.js"
 import { drawCircle } from "../utils.js";
-import { SPRITES_PATH, SKINS_MAP } from "./entities.js";
+import { SPRITES_PATH, SKINS_MAP } from "../ui/skins.js";
+import { STATE } from "../game/state.js";
+import { storeShipSkin, retrieveUnlocks } from "../persistence.js";
 
 const EXPLOSION_PATH = "assets/sprites/BlueExplosionSS.png";
 
@@ -52,17 +54,14 @@ class Ship {
     }
 
     // Sets current skin given string (key of SKINS_MAP, ie 'alpha') if unlocked or config allows
-    // and updates actual ship image
-    // TODO: Move to unified retireval/decouple from window.localStorage and AUDIO
+    // and updates actual ship image TODO: refactor out of ship
     changeSkin(skinId) {
-        const stored = window.localStorage.getItem('unlocks');
-        if (!stored) return;
-        const unlocked = JSON.parse(stored);
+        retrieveUnlocks();
 
-        if (unlocked.includes(skinId) || this.allSkinsUnlocked) {
+        if (STATE.unlocks.includes(skinId) || this.allSkinsUnlocked) {
             this.currentSkin = skinId;
             this.image.src = SPRITES_PATH + SKINS_MAP[this.currentSkin].spriteSheet;
-            window.localStorage.setItem('shipSkin', JSON.stringify(this.currentSkin));
+            storeShipSkin(this.currentSkin);
             AUDIO.playSFX('click');
         }
     }
