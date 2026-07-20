@@ -7,7 +7,7 @@ import { DEFAULT_STATE, STATE } from '../game/state.js';
 
 const AST_DATA = {
     greyAst: {
-        type: 'gray',
+        type: 'grey',
         sizeFct: 1,
         speed: null,
         spawnTime: 30,

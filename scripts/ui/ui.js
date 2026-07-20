@@ -4,7 +4,7 @@
 // Eventual backend connection?
 import { CONFIG } from "../config.js";
 import { STATE, DEFAULT_STATE } from "../game/state.js";
-import { uiElements, uiElementsHidable } from "../dom.js";
+import { uiElements, uiElementsHidable, addUIElementHidable } from "../dom.js";
 import { startGame, gameOver } from "../setup.js";
 import { AUDIO } from "../audio.js";
 import { initMusicScreen } from "./music.js";
@@ -238,6 +238,68 @@ export function updateUnlocks() {
     updateSkinUnlocks();
 }
 
+function createHowToDescription() {
+
+}
+
+const howToMount = document.getElementById('how-to-mount');
+function initHowToScreen() {
+    const howToScreen = document.createElement('div');
+    howToScreen.classList.add('how-to-screen', 'fs32', 'hidden');
+
+    const header = document.createElement('h2');
+    header.innerHTML = 'HOW TO PLAY';
+
+    const controls = document.createElement('div');
+    controls.classList.add('flex', 'key-controls');
+    controls.innerHTML = `
+        <div class="flex"><img draggable="false" src="assets/images/WASDkeys.jpg" class="medium-icon"></div>
+        <button class="or-text">OR</button>
+        <div class="flex"><img draggable="false" src="assets/images/ArrowKeys.jpg" class="medium-icon"></div>
+    `;
+
+    const desc = document.createElement('div');
+    desc.innerHTML = `
+        <ul style="overflow: visible; margin-left: 30px;">
+            <li>
+                Welcome to <a>AST-Emmental Mining Company™!</a></br>
+                Your task is to mine asteroids and get rich with a <a>highscore!</a>
+            </li>
+            <li>Collect Grey Asteroids // Avoid Red ones</li>
+            <li>
+                Collect the <a style="color: rgb(80, 67, 2);">
+                    <u id="valuable-link">valuable</u>
+                </a>
+                (but heavy) Yellow Asteroids too!
+            </li>
+            <li>Customize <a>MUSIC</a>, <a>SKINS</a> & <a>AUDIO</a> at the top</li>
+            <li>
+                Press the "X" button to <a style="color:darkred;">
+                    <u id="reset-link">RESET</u>
+                </a>
+            </li>
+            <li>Unlock new SKINS with scores! Check scores on the right ></li>
+            <li>GitHub page <a href="https://github.com/Mshl2299/Ast-Emmental" target="_blank">Here</a> // Thanks
+                for playing!</li>
+        </ul>
+    `;
+
+    desc.querySelector("#valuable-link").addEventListener("click", () => {
+        AUDIO.playSFX('lvlUp');
+    });
+    desc.querySelector("#reset-link").addEventListener("click", () => {
+        AUDIO.playSFX('explosion');
+    });
+
+
+    howToScreen.appendChild(header);
+    howToScreen.appendChild(controls);
+    howToScreen.appendChild(desc);
+
+    howToMount.replaceChildren(howToScreen);
+    addUIElementHidable('howToScreen', howToScreen);
+}
+
 function onFirstInteraction() {
     if (!AUDIO.triedPlayingMenu) {
         AUDIO.menuMusic.play().catch(() => console.log("error playing menu music"));
@@ -256,10 +318,10 @@ document.querySelector("#score-form").addEventListener("submit", (e) => {
 });
 
 
-
 // All initialization & Event Listeners
 initMusicScreen();
 initSkinScreen();
+initHowToScreen();
 
 renderLocalLeaderboard();
 renderGlobalLeaderboard();
