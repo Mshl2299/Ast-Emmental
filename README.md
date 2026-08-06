@@ -3,7 +3,7 @@
 
 ---
 AST-Emmental is an arcade-style game inspired by classics including Asteroids and Snake. 
-This game, coded mostly from scratch in HTML/CSS/JS was made as part of my Capstone Project.
+This game was coded from scratch in HTML/CSS/JS, with original ship sprites, and backgrounds and audio borrowed online.
 
 ## Issues, bugs, feedback, suggestions :ant:
 Please go to the **Issues** tab if you experience any major bugs, and press "New Issue" if you do not see your bug already there.
@@ -14,9 +14,9 @@ Feedback and suggestions are very welcome! Please head over to the **Discussions
 ## How to Play :video_game:
 Head over to this link: 
 # [AST-Emmental](https://mshl2299.github.io/Ast-Emmental/) 
-Check out the "**How To**" menu, and mute audio in the **audio menu** (music notes)!\
+Check out the "**How To**" menu for how to play, and mute audio in the **audio menu** (music notes)\
 If something isn't working, feel free to send a message in the Discussion tab.\
-***Note: Mobile is not supported. Firefox works the best, followed by Chrome. Other browsers not tested***
+***Note: Mobile is not supported. Some browsers not tested, recommend one of Firefox, Brave, or Chrome.***
 
 ### Thanks for checking my game out! :star:
 
@@ -24,4 +24,4 @@ If something isn't working, feel free to send a message in the Discussion tab.\
 
 ## Connect with Me: :speech_balloon:
 Discord: mshl86\
-YouTube: https://www.youtube.com/@FlyingLimbus\
+YouTube: https://www.youtube.com/@FlyingLimbus
